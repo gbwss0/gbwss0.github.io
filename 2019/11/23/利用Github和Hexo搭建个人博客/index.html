@@ -46,20 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。  准备工作Git既然是基于Github的，那么肯定要用到git，看了些资料了解了一下，其实实现原理十分暴力，GitHub提供了一个功能叫 github.io，用">
+  <meta name="description" content="之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。">
 <meta name="keywords" content="分享">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用Github和Hexo搭建自己的博客">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。  准备工作Git既然是基于Github的，那么肯定要用到git，看了些资料了解了一下，其实实现原理十分暴力，GitHub提供了一个功能叫 github.io，用">
+<meta property="og:description" content="之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;MbhwDK.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;Mbhdu6.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;MbhfDf.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;MbhDED.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;Mbh5VS.md.png">
-<meta property="og:updated_time" content="2019-11-23T15:14:35.397Z">
+<meta property="og:updated_time" content="2019-11-23T15:24:16.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2019&#x2F;11&#x2F;23&#x2F;MbhwDK.md.png">
 
@@ -200,7 +200,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2019-11-23 16:16:55 / Modified: 23:14:35" itemprop="dateCreated datePublished" datetime="2019-11-23T16:16:55+08:00">2019-11-23</time>
+              <time title="Created: 2019-11-23 16:16:55 / Modified: 23:24:16" itemprop="dateCreated datePublished" datetime="2019-11-23T16:16:55+08:00">2019-11-23</time>
             </span>
 
           
@@ -215,7 +215,7 @@
 
       
         <p>之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。</p>
-<hr>
+<a id="more"></a>
 <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p>既然是基于Github的，那么肯定要用到git，看了些资料了解了一下，其实实现原理十分暴力，GitHub提供了一个功能叫 <code>github.io</code>，用官网的一句话来形容 Websites for you and your projects.而我们只要把我们的静态页面push上去，就是完事了。</p>
 <h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>安装Git的过程就不再赘述了，macos可以通过homebrew安装比较方便一点，有Xcode的话直接用Xcode集成的就好，<code>xcode-select install Command Line Tools</code>即可</p>
 <h2 id="Nodejs"><a href="#Nodejs" class="headerlink" title="Nodejs"></a>Nodejs</h2><p>Hexo只能通过npm安装，npm是随同NodeJS一起安装的包管理工具，只要安装NodeJS即可</p>

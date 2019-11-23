@@ -191,7 +191,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2019-11-23 16:16:55 / Modified: 23:14:35" itemprop="dateCreated datePublished" datetime="2019-11-23T16:16:55+08:00">2019-11-23</time>
+              <time title="Created: 2019-11-23 16:16:55 / Modified: 23:24:16" itemprop="dateCreated datePublished" datetime="2019-11-23T16:16:55+08:00">2019-11-23</time>
             </span>
 
           
@@ -206,30 +206,14 @@
 
       
           <p>之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。</p>
-<hr>
-<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p>既然是基于Github的，那么肯定要用到git，看了些资料了解了一下，其实实现原理十分暴力，GitHub提供了一个功能叫 <code>github.io</code>，用官网的一句话来形容 Websites for you and your projects.而我们只要把我们的静态页面push上去，就是完事了。</p>
-<h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><p>安装Git的过程就不再赘述了，macos可以通过homebrew安装比较方便一点，有Xcode的话直接用Xcode集成的就好，<code>xcode-select install Command Line Tools</code>即可</p>
-<h2 id="Nodejs"><a href="#Nodejs" class="headerlink" title="Nodejs"></a>Nodejs</h2><p>Hexo只能通过npm安装，npm是随同NodeJS一起安装的包管理工具，只要安装NodeJS即可</p>
-<h3 id="安装NodeJS"><a href="#安装NodeJS" class="headerlink" title="安装NodeJS"></a>安装NodeJS</h3><p>安装NodeJS很容易，可以去官网下载，也可用homebrew安装。</p>
-<h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo官网就一句话 A fast, simple &amp; powerful blog framework<br>然后底下是他的使用方式</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">npm install</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>小记：这里我根据网上的其他教程安装<code>hexo</code>一直失败，根据官网的说明，安装<code>hexo-cli</code>一次成功</p>
-</blockquote>
-<p><a href="https://imgchr.com/i/MbhwDK" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/23/MbhwDK.md.png" alt="MbhwDK.md.png"></a></p>
-<p>安装完成并完成初始化，可以使用命令<code>hexo s</code>也就是前文中提到的<code>hexo server</code>来在<code>localhost：4000</code> 端口查看本地预览。<br><a href="https://imgchr.com/i/Mbhdu6" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/23/Mbhdu6.md.png" alt="Mbhdu6.md.png"></a></p>
-<h1 id="创建托管博客的仓库"><a href="#创建托管博客的仓库" class="headerlink" title="创建托管博客的仓库"></a>创建托管博客的仓库</h1><h2 id="ssh授权"><a href="#ssh授权" class="headerlink" title="ssh授权"></a>ssh授权</h2><p>要想之后上传顺利，ssh授权不可少</p>
-<p>打开终端输入下面的命令并回车三下<br><code>ssh-keygen -t rsa</code><br>这样就会在<code>./ssh</code>目录下生成id_rsa和id_rsa.pub这两个文件，前者是密钥，后者是公钥，用vim打开id_rsa.pub，复制其中的全部内容，添加到GitHub上，这样本地的id_rsa密钥就可以和GitHub上的id_rsa.pub公钥进行配对，授权成功。<br>SSH key添加之后，就可以在本机git bash中进行测试，输入ssh -T <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>进行测试<br>如果返回<code>Hi username ！You&#39;ve successfully ......</code>说明你已经成功啦！<br>具体的GitHub的ssh授权可以自己去百度一下，我是之前就弄的，也没截图，这里就不细说了。</p>
-<h2 id="建个仓库"><a href="#建个仓库" class="headerlink" title="建个仓库"></a>建个仓库</h2><p>新建一个名为你的用户名<code>username.github.io</code>的仓库，将来你的网站访问地址就是 <a href="http://username.github.io" target="_blank" rel="noopener">http://username.github.io</a> 了</p>
-<blockquote>
-<p>注意：<br>仓库名字必须是：username.github.io，其中username是你的用户名，其他名称无效；<br>这种github.io每个账户只能拥有一个，就是你的 username.github.io</p>
-</blockquote>
-<h1 id="详细配置"><a href="#详细配置" class="headerlink" title="详细配置"></a>详细配置</h1><h2 id="绑定域名"><a href="#绑定域名" class="headerlink" title="绑定域名"></a>绑定域名</h2><p>这里绑定其他域名就是在你购买的域名的提供商哪里添加一下解析<br><a href="https://imgchr.com/i/MbhfDf" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/23/MbhfDf.md.png" alt="MbhfDf.md.png"></a><br>可以用nslookup来看一下ip，然后把它添加解析<br>最后仓库下面创建一个名字为 CNAME的文件 文件内容是你的域名<br>这样我们就可以通过我们自己的域名来访问我们的博客了，当然，原有的username.github.io还是可以继续使用</p>
-<h2 id="上传项目"><a href="#上传项目" class="headerlink" title="上传项目"></a>上传项目</h2><p>前面已经在添加了ssh授权，所以上传就变得十分简单，通过修改_config.yml文件<br>将最底下的deploy的repository修改为你的项目的地址好了<br>注意这里是通过ssh的地址，而不是通常http协议的，如下图<br><a href="https://imgchr.com/i/MbhDED" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/23/MbhDED.md.png" alt="MbhDED.md.png"></a><br>修改后的_config.yml文件<br><a href="https://imgchr.com/i/Mbh5VS" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/11/23/Mbh5VS.md.png" alt="Mbh5VS.md.png"></a><br>保存退出就OK了<br>然后使用<code>hexo d</code>来push你的文件 现在就可以通过username.github.io来看到你的博客啦</p>
-<h2 id="博客美化"><a href="#博客美化" class="headerlink" title="博客美化"></a>博客美化</h2><p>Hexo提供了大量的主题，当然也可以自己编辑和修改，找到自己心仪的主题clone到themes文件夹，然后修改_config.yml文件中的theme属性即可，其他的一些修改也可以在theme中完成。<br>修改完成后使用<code>hexo g</code>构建新文件，然后<code>hexo d</code>上传即可。    </p>
-<h1 id="enjoy-it"><a href="#enjoy-it" class="headerlink" title="enjoy it"></a>enjoy it</h1><p>通过<code>hexo new &#39;your file name&#39;</code>命令来新建md文件<br>开始你的博客之旅吧！</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/23/%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -279,7 +263,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-23 22:05:17" itemprop="dateModified" datetime="2019-11-23T22:05:17+08:00">2019-11-23</time>
+                <time title="Modified: 2019-11-23 23:24:51" itemprop="dateModified" datetime="2019-11-23T23:24:51+08:00">2019-11-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -304,40 +288,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>用来测试<br><code>code test</code><br><a href="www.gbwss.xyz">linktest</a></p>
-<p>###title</p>
-<p><strong>Markdown</strong></p>
-<h3 id="Todo-List"><a href="#Todo-List" class="headerlink" title="Todo List"></a>Todo List</h3><ul>
-<li><input disabled="" type="checkbox"> 好好读书 </li>
-<li><input checked="" disabled="" type="checkbox"> 好好好好读书</li>
-</ul>
-<h3 id="Latex"><a href="#Latex" class="headerlink" title="Latex"></a>Latex</h3><p>$$E=mc^2$$</p>
-<h3 id="高亮一段代码-code"><a href="#高亮一段代码-code" class="headerlink" title="高亮一段代码[^code]"></a>高亮一段代码[^code]</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@requires_authorization</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># A comment</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></span><br></pre></td></tr></table></figure>
-<h3 id="绘制表格"><a href="#绘制表格" class="headerlink" title="绘制表格"></a>绘制表格</h3><table>
-<thead>
-<tr>
-<th>项目</th>
-<th align="right">价格</th>
-<th align="center">数量</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>计算机</td>
-<td align="right">$1600</td>
-<td align="center">5</td>
-</tr>
-<tr>
-<td>手机</td>
-<td align="right">$12</td>
-<td align="center">12</td>
-</tr>
-<tr>
-<td>管线</td>
-<td align="right">$1</td>
-<td align="center">234</td>
-</tr>
-</tbody></table>
-
+          <p>用来测试</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/21/my-first-blog/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -382,6 +341,13 @@
 
               <time title="Created: 2019-11-21 19:47:41" itemprop="dateCreated datePublished" datetime="2019-11-21T19:47:41+08:00">2019-11-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-23 23:25:07" itemprop="dateModified" datetime="2019-11-23T23:25:07+08:00">2019-11-23</time>
+              </span>
 
           
 
@@ -395,19 +361,14 @@
 
       
           <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/21/hello-world/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
