@@ -191,7 +191,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2019-11-27 23:39:24 / Modified: 23:41:05" itemprop="dateCreated datePublished" datetime="2019-11-27T23:39:24+08:00">2019-11-27</time>
+              <time title="Created: 2019-11-27 23:39:24 / Modified: 23:48:48" itemprop="dateCreated datePublished" datetime="2019-11-27T23:39:24+08:00">2019-11-27</time>
             </span>
 
           
@@ -205,23 +205,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>##1.安装显卡驱动<br>由于使用的是Deepin，自带了显卡驱动管理，直接用驱动管理器安装了大黄蜂驱动<br>为了之后的驱动管理，安装NVIDIA-smi</p>
-<blockquote>
-<p>这里其实花了很久，占用了整个配置过程的大部分时间，参考了<a href="http://blog.csdn.net/fdqw_sph/article/details/78745375" target="_blank" rel="noopener">http://blog.csdn.net/fdqw_sph/article/details/78745375</a><br> 成功之后分别运行<code>nvidia-smi</code>，<code>optirun nvidia-smi</code>显示下图就应该可以玩了<br><a href="https://imgchr.com/i/PXtiUs" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/08/29/PXtiUs.png" alt="PXtiUs.png"></a><br>可以看到，为了省电，独显默认是关闭的，在需要使用的时候我们可以手动打开</p>
-</blockquote>
-<p>##2.安装cuda</p>
-<p>在官网下载离线安装包（deb文件）的方式来安装CUDA 9.1</p>
-<p>##3.安装Python<br>通过安装Anaconda 5.1来安装Python，下载地址为 <a href="https://www.anaconda.com/download/#linux" target="_blank" rel="noopener">https://www.anaconda.com/download/#linux</a><br><a href="https://imgchr.com/i/iphnnx" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/09/05/iphnnx.png" alt="iphnnx.png"></a><br>下载下来之后  <code>sh Anaconda2-5.2.0-Linux-x86_64.sh</code></p>
-<p>##4.安装PyTorch</p>
-<p>上述所有内容全部执行成功后，可通过PyTorch给出的命令来安装PyTorch，链接：<a href="http://pytorch.org/" target="_blank" rel="noopener">http://pytorch.org/</a><br><a href="https://imgchr.com/i/iphV39" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/09/05/iphV39.png" alt="iphV39.png"></a><br>因为我是9.1，所以<code>sudo pip install torch torchvision</code></p>
-<blockquote>
-<p>安装 cudnn<br>首先，从官网下载压缩包<code>cudnn-8.0-linux-x64-v6.0.tgz</code><br>下载地址为<a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a><br>这里发现了一个问题，注册NIVIDIA Developer时使用国内的QQmail一直收不到验证邮件，换用Gmail之后秒收<br>下载得到<br><a href="https://imgchr.com/i/PXQ8oV" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/08/29/PXQ8oV.png" alt="PXQ8oV.png"></a><br>使用<code>tgz xvf</code>命令解压后得到一个名为“cuda”的文件夹<br>然后挪过去就可以，但是后来我没用这个，所以这里也就不写了</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>最后记录一下几个常用命令<br>查看cuda版本 <code>nvcc -V</code><br>开显卡 <code>sudo tee /proc/acpi/bbswitch &lt;&lt;&lt; ON</code><br>看显卡 <code>nvidia-smi</code>  <code>optirun nvidia-smi</code></p>
-</blockquote>
-
+          <p>前段时间看到国产操作系统Deepin又出新版本的新闻了，想起来上个假期还在这个系统下做过机器学习环境的配置，发出来分享一下</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/11/27/Deepin%E4%B8%8B%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
