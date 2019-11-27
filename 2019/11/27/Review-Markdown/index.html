@@ -46,28 +46,33 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Gbwss">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="1. 斜体和粗体使用 * 和 ** 表示斜体和粗体。 示例： 这是 斜体，这是 粗体。 2. 分级标题使用 === 表示一级标题，使用 — 表示二级标题。 示例： 1234567这是一个一级标题============================这是一个二级标题--------------------------------------------------### 这是一个三级标题  你也可">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Review Markdown">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;27&#x2F;Review-Markdown&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
+<meta property="og:description" content="1. 斜体和粗体使用 * 和 ** 表示斜体和粗体。 示例： 这是 斜体，这是 粗体。 2. 分级标题使用 === 表示一级标题，使用 — 表示二级标题。 示例： 1234567这是一个一级标题============================这是一个二级标题--------------------------------------------------### 这是一个三级标题  你也可">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https:&#x2F;&#x2F;www.zybuluo.com&#x2F;static&#x2F;img&#x2F;my_head.jpg">
+<meta property="og:updated_time" content="2019-11-27T15:38:33.323Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;www.zybuluo.com&#x2F;static&#x2F;img&#x2F;my_head.jpg">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2019/11/27/Review-Markdown/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Gbwss</title>
+  <title>Review Markdown | Gbwss</title>
   
 
 
@@ -162,84 +167,10 @@
             
 
   <div class="posts-expand">
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/Deepin%E4%B8%8B%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang shushu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gbwss">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/27/Deepin%E4%B8%8B%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Deepin下机器学习环境的配置</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2019-11-27 23:39:24 / Modified: 23:41:05" itemprop="dateCreated datePublished" datetime="2019-11-27T23:39:24+08:00">2019-11-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
       
-          <p>##1.安装显卡驱动<br>由于使用的是Deepin，自带了显卡驱动管理，直接用驱动管理器安装了大黄蜂驱动<br>为了之后的驱动管理，安装NVIDIA-smi</p>
-<blockquote>
-<p>这里其实花了很久，占用了整个配置过程的大部分时间，参考了<a href="http://blog.csdn.net/fdqw_sph/article/details/78745375" target="_blank" rel="noopener">http://blog.csdn.net/fdqw_sph/article/details/78745375</a><br> 成功之后分别运行<code>nvidia-smi</code>，<code>optirun nvidia-smi</code>显示下图就应该可以玩了<br><a href="https://imgchr.com/i/PXtiUs" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/08/29/PXtiUs.png" alt="PXtiUs.png"></a><br>可以看到，为了省电，独显默认是关闭的，在需要使用的时候我们可以手动打开</p>
-</blockquote>
-<p>##2.安装cuda</p>
-<p>在官网下载离线安装包（deb文件）的方式来安装CUDA 9.1</p>
-<p>##3.安装Python<br>通过安装Anaconda 5.1来安装Python，下载地址为 <a href="https://www.anaconda.com/download/#linux" target="_blank" rel="noopener">https://www.anaconda.com/download/#linux</a><br><a href="https://imgchr.com/i/iphnnx" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/09/05/iphnnx.png" alt="iphnnx.png"></a><br>下载下来之后  <code>sh Anaconda2-5.2.0-Linux-x86_64.sh</code></p>
-<p>##4.安装PyTorch</p>
-<p>上述所有内容全部执行成功后，可通过PyTorch给出的命令来安装PyTorch，链接：<a href="http://pytorch.org/" target="_blank" rel="noopener">http://pytorch.org/</a><br><a href="https://imgchr.com/i/iphV39" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/09/05/iphV39.png" alt="iphV39.png"></a><br>因为我是9.1，所以<code>sudo pip install torch torchvision</code></p>
-<blockquote>
-<p>安装 cudnn<br>首先，从官网下载压缩包<code>cudnn-8.0-linux-x64-v6.0.tgz</code><br>下载地址为<a href="https://developer.nvidia.com/cudnn" target="_blank" rel="noopener">https://developer.nvidia.com/cudnn</a><br>这里发现了一个问题，注册NIVIDIA Developer时使用国内的QQmail一直收不到验证邮件，换用Gmail之后秒收<br>下载得到<br><a href="https://imgchr.com/i/PXQ8oV" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2018/08/29/PXQ8oV.png" alt="PXQ8oV.png"></a><br>使用<code>tgz xvf</code>命令解压后得到一个名为“cuda”的文件夹<br>然后挪过去就可以，但是后来我没用这个，所以这里也就不写了</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>最后记录一下几个常用命令<br>查看cuda版本 <code>nvcc -V</code><br>开显卡 <code>sudo tee /proc/acpi/bbswitch &lt;&lt;&lt; ON</code><br>看显卡 <code>nvidia-smi</code>  <code>optirun nvidia-smi</code></p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
   
   
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/Review-Markdown/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -253,8 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/27/Review-Markdown/" class="post-title-link" itemprop="url">Review Markdown</a>
+          Review Markdown
         </h1>
 
         <div class="post-meta">
@@ -279,7 +209,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="1-斜体和粗体"><a href="#1-斜体和粗体" class="headerlink" title="1. 斜体和粗体"></a>1. 斜体和粗体</h3><p>使用 * 和 ** 表示斜体和粗体。</p>
+        <h3 id="1-斜体和粗体"><a href="#1-斜体和粗体" class="headerlink" title="1. 斜体和粗体"></a>1. 斜体和粗体</h3><p>使用 * 和 ** 表示斜体和粗体。</p>
 <p>示例：</p>
 <p>这是 <em>斜体</em>，这是 <strong>粗体</strong>。</p>
 <h3 id="2-分级标题"><a href="#2-分级标题" class="headerlink" title="2. 分级标题"></a>2. 分级标题</h3><p>使用 === 表示一级标题，使用 — 表示二级标题。</p>
@@ -448,311 +378,39 @@
 <p>[^footnote]: 这是一个 <em>注脚</em> 的 <strong>文本</strong>。</p>
 <p>[^footnote2]: 这是另一个 <em>注脚</em> 的 <strong>文本</strong>。</p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/OS-3/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang shushu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gbwss">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/27/OS-3/" class="post-title-link" itemprop="url">OS-3</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2019-11-27 22:23:20 / Modified: 23:31:17" itemprop="dateCreated datePublished" datetime="2019-11-27T22:23:20+08:00">2019-11-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>This is os_3 code</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/27/OS-3/#more" rel="contents">
-                Read more &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/27/OS-3/" rel="next" title="OS-3">
+                  <i class="fa fa-chevron-left"></i> OS-3
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+            <span class="post-nav-divider"></span>
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/23/%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang shushu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gbwss">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/23/%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">利用Github和Hexo搭建自己的博客</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2019-11-23 16:16:55 / Modified: 23:24:16" itemprop="dateCreated datePublished" datetime="2019-11-23T16:16:55+08:00">2019-11-23</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前的自己搭的服务器gg了，一直也没动手继续去恢复一下，前段时间看操作系统教程的时候被NEXT这个主题吸引了，再次萌生了整个博客的想法。之前就有听说过Github可以搭博客，所以这次也打算试一试，刚好手头还有没有过期的域名，顺便绑上用用。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/23/%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/#more" rel="contents">
-                Read more &raquo;
-              </a>
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/27/Deepin%E4%B8%8B%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83%E7%9A%84%E9%85%8D%E7%BD%AE/" rel="prev" title="Deepin下机器学习环境的配置">
+                  Deepin下机器学习环境的配置 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+          </div>
       </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/my-first-blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang shushu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gbwss">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/21/my-first-blog/" class="post-title-link" itemprop="url">My-first-blog</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-21 22:49:04" itemprop="dateCreated datePublished" datetime="2019-11-21T22:49:04+08:00">2019-11-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-23 23:24:51" itemprop="dateModified" datetime="2019-11-23T23:24:51+08:00">2019-11-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/" itemprop="url" rel="index">
-                    <span itemprop="name">默认分类</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用来测试</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/21/my-first-blog/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Wang shushu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Gbwss">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/21/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-11-21 19:47:41" itemprop="dateCreated datePublished" datetime="2019-11-21T19:47:41+08:00">2019-11-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-23 23:25:07" itemprop="dateModified" datetime="2019-11-23T23:25:07+08:00">2019-11-23</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/21/hello-world/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
   </article>
   
   
   
 
   </div>
-
-  
-
 
 
           </div>
@@ -781,6 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-斜体和粗体"><span class="nav-number">1.</span> <span class="nav-text">1. 斜体和粗体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-分级标题"><span class="nav-number">2.</span> <span class="nav-text">2. 分级标题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-外链接"><span class="nav-number">3.</span> <span class="nav-text">3. 外链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-无序列表"><span class="nav-number">4.</span> <span class="nav-text">4. 无序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-有序列表"><span class="nav-number">5.</span> <span class="nav-text">5. 有序列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-文字引用"><span class="nav-number">6.</span> <span class="nav-text">6. 文字引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-行内代码块"><span class="nav-number">7.</span> <span class="nav-text">7. 行内代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-代码块"><span class="nav-number">8.</span> <span class="nav-text">8.  代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-插入图像"><span class="nav-number">9.</span> <span class="nav-text">9.  插入图像</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cmd-Markdown-高阶语法手册"><span class="nav-number"></span> <span class="nav-text">Cmd Markdown 高阶语法手册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内容目录"><span class="nav-number">1.</span> <span class="nav-text">1. 内容目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-标签分类"><span class="nav-number">2.</span> <span class="nav-text">2. 标签分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-删除线"><span class="nav-number">3.</span> <span class="nav-text">3. 删除线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-注脚"><span class="nav-number">4.</span> <span class="nav-text">4. 注脚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-LaTeX-公式"><span class="nav-number">5.</span> <span class="nav-text">5. LaTeX 公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-加强的代码块"><span class="nav-number">6.</span> <span class="nav-text">6. 加强的代码块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-流程图"><span class="nav-number">7.</span> <span class="nav-text">7. 流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例"><span class="nav-number">7.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更多语法参考：流程图语法参考"><span class="nav-number">7.2.</span> <span class="nav-text">更多语法参考：流程图语法参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-序列图"><span class="nav-number">8.</span> <span class="nav-text">8. 序列图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例-1"><span class="nav-number">8.1.</span> <span class="nav-text">示例 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#示例-2"><span class="nav-number">8.2.</span> <span class="nav-text">示例 2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更多语法参考：序列图语法参考"><span class="nav-number">8.3.</span> <span class="nav-text">更多语法参考：序列图语法参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-甘特图"><span class="nav-number">9.</span> <span class="nav-text">9. 甘特图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#更多语法参考：甘特图语法参考"><span class="nav-number">9.1.</span> <span class="nav-text">更多语法参考：甘特图语法参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Mermaid-流程图"><span class="nav-number">10.</span> <span class="nav-text">10. Mermaid 流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#更多语法参考：Mermaid-流程图语法参考"><span class="nav-number">10.1.</span> <span class="nav-text">更多语法参考：Mermaid 流程图语法参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-Mermaid-序列图"><span class="nav-number">11.</span> <span class="nav-text">11. Mermaid 序列图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#更多语法参考：Mermaid-序列图语法参考"><span class="nav-number">11.1.</span> <span class="nav-text">更多语法参考：Mermaid 序列图语法参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-表格支持"><span class="nav-number">12.</span> <span class="nav-text">12. 表格支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-定义型列表"><span class="nav-number">13.</span> <span class="nav-text">13. 定义型列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-Html-标签"><span class="nav-number">14.</span> <span class="nav-text">14. Html 标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-内嵌图标"><span class="nav-number">15.</span> <span class="nav-text">15. 内嵌图标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-待办事宜-Todo-列表"><span class="nav-number">16.</span> <span class="nav-text">16. 待办事宜 Todo 列表</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
