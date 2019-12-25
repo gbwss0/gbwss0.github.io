@@ -191,7 +191,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2019-12-25 20:41:43 / Modified: 20:47:48" itemprop="dateCreated datePublished" datetime="2019-12-25T20:41:43+08:00">2019-12-25</time>
+              <time title="Created: 2019-12-25 20:41:43 / Modified: 20:48:39" itemprop="dateCreated datePublished" datetime="2019-12-25T20:41:43+08:00">2019-12-25</time>
             </span>
 
           
@@ -205,7 +205,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>刚开始因为网络原因 没有选择pip安装anaconda，而是直接去官网下载anaconda的安装包用图形化界面安装 但是在使用中发现会报错zsh: command not found: conda<br>查找资料后发现需要 在 <del>/.bash_profile里加入路径但是发现已经有了<br>然后又说在</del>/.zshrc这个文件里添加export PATH=Users/heihei/anaconda/bin:$PATH<br>（我添加进去还是失败，查找目录根本找不到conda 仔细查看bash文件 最后发现 Anaconda3这个文件夹在根目录里）<br>但是这种操作方式适合于pip安装的conda，而使用图形化界面安装的目录要比当前用户的层级要高 所以要修改的变量地址也不一样 最后修改为/anaconda/bin后，conda —version运行成功</p>
+          <a id="more"></a>
+
+<p>刚开始因为网络原因 没有选择pip安装anaconda，而是直接去官网下载anaconda的安装包用图形化界面安装 但是在使用中发现会报错zsh: command not found: conda<br>查找资料后发现需要 在 <del>/.bash_profile里加入路径但是发现已经有了<br>然后又说在</del>/.zshrc这个文件里添加export PATH=Users/heihei/anaconda/bin:$PATH<br>（我添加进去还是失败，查找目录根本找不到conda 仔细查看bash文件 最后发现 Anaconda3这个文件夹在根目录里）<br>但是这种操作方式适合于pip安装的conda，而使用图形化界面安装的目录要比当前用户的层级要高 所以要修改的变量地址也不一样 最后修改为/anaconda/bin后，conda —version运行成功</p>
 <hr>
 <h4 id="再记一次conda安装经历"><a href="#再记一次conda安装经历" class="headerlink" title="再记一次conda安装经历"></a>再记一次conda安装经历</h4><p>20190909 晴<br>今天又装了一次conda，但是因为系统升级了Catalina，导致下了的pkg无法安装，报系统不符合。Google之后，在GitHub上找到了解决方案，说是用command line installer就可以安装，所以下载了sh文件，按照官网的教程进行了安装。安装之后还是出现了command not found：conda，这次直接查看.zshrc和.bash_profile文件，在bash_profile中看到了conda写入的文件，同时也拷贝到了else<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>将<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>粘贴到了zshrc文件尾<br>然后source .zshrc就好了</p>
 
