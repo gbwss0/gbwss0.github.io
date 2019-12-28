@@ -46,17 +46,17 @@
   };
 </script>
 
-  <meta name="description" content="用来测试">
+  <meta name="description" content="说明：　　[1]校验和覆盖的内容： 　　　　IP校验和：IP首部。 　　　　ICMP校验和：ICMP首部+ICMP数据； 　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP&#x2F;UDP包长)。 计算校验和的步骤：　　[1]把校验和字段设置为0。 　　[2]把需要校验的数据看成以16位为单位的数字组成，依次进行二进制反码求和。 　　[3]把得到的结果存入校">
 <meta property="og:type" content="article">
-<meta property="og:title" content="My-first-blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;21&#x2F;my-first-blog&#x2F;index.html">
+<meta property="og:title" content="关于checksum校验和算法">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;28&#x2F;%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="用来测试">
+<meta property="og:description" content="说明：　　[1]校验和覆盖的内容： 　　　　IP校验和：IP首部。 　　　　ICMP校验和：ICMP首部+ICMP数据； 　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP&#x2F;UDP包长)。 计算校验和的步骤：　　[1]把校验和字段设置为0。 　　[2]把需要校验的数据看成以16位为单位的数字组成，依次进行二进制反码求和。 　　[3]把得到的结果存入校">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-23T15:24:51.706Z">
+<meta property="og:updated_time" content="2019-12-28T13:05:32.674Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/21/my-first-blog/">
+<link rel="canonical" href="http://yoursite.com/2019/12/28/%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>My-first-blog | Gbwss</title>
+  <title>关于checksum校验和算法 | Gbwss</title>
   
 
 
@@ -169,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/my-first-blog/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/28/%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          My-first-blog
+          关于checksum校验和算法
         </h1>
 
         <div class="post-meta">
@@ -191,26 +191,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2019-11-21 22:49:04" itemprop="dateCreated datePublished" datetime="2019-11-21T22:49:04+08:00">2019-11-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-23 23:24:51" itemprop="dateModified" datetime="2019-11-23T23:24:51+08:00">2019-11-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/" itemprop="url" rel="index">
-                    <span itemprop="name">默认分类</span>
-                  </a>
-                </span>
+              <time title="Created: 2019-12-28 20:56:11 / Modified: 21:05:32" itemprop="dateCreated datePublished" datetime="2019-12-28T20:56:11+08:00">2019-12-28</time>
             </span>
 
           
@@ -224,42 +207,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>用来测试</p>
-<a id="more"></a>
-
-<p><code>code test</code><br><a href="www.gbwss.xyz">linktest</a></p>
-<p>###title</p>
-<p><strong>Markdown</strong></p>
-<h3 id="Todo-List"><a href="#Todo-List" class="headerlink" title="Todo List"></a>Todo List</h3><ul>
-<li><input disabled="" type="checkbox"> 好好读书 </li>
-<li><input checked="" disabled="" type="checkbox"> 好好好好读书</li>
-</ul>
-<h3 id="Latex"><a href="#Latex" class="headerlink" title="Latex"></a>Latex</h3><p>$$E=mc^2$$</p>
-<h3 id="高亮一段代码-code"><a href="#高亮一段代码-code" class="headerlink" title="高亮一段代码[^code]"></a>高亮一段代码[^code]</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@requires_authorization</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># A comment</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></span><br></pre></td></tr></table></figure>
-<h3 id="绘制表格"><a href="#绘制表格" class="headerlink" title="绘制表格"></a>绘制表格</h3><table>
-<thead>
-<tr>
-<th>项目</th>
-<th align="right">价格</th>
-<th align="center">数量</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>计算机</td>
-<td align="right">$1600</td>
-<td align="center">5</td>
-</tr>
-<tr>
-<td>手机</td>
-<td align="right">$12</td>
-<td align="center">12</td>
-</tr>
-<tr>
-<td>管线</td>
-<td align="right">$1</td>
-<td align="center">234</td>
-</tr>
-</tbody></table>
+        <h2 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h2><p>　　[1]校验和覆盖的内容：</p>
+<p>　　　　IP校验和：IP首部。</p>
+<p>　　　　ICMP校验和：ICMP首部+ICMP数据；</p>
+<p>　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP/UDP包长)。</p>
+<h2 id="计算校验和的步骤："><a href="#计算校验和的步骤：" class="headerlink" title="计算校验和的步骤："></a>计算校验和的步骤：</h2><p>　　[1]把校验和字段设置为0。</p>
+<p>　　[2]把需要校验的数据看成以16位为单位的数字组成，依次进行二进制反码求和。</p>
+<p>　　[3]把得到的结果存入校验和字段中。</p>
+<p>　　另外UDP、TCP数据报的长度可以为奇数字节，因为计算时是16位为单位，所以此时计算校验和时需要在最后增加一个填充字节0(只是计算校验和用，不发送出去)。</p>
+<h2 id="接收端校验校验和步骤："><a href="#接收端校验校验和步骤：" class="headerlink" title="接收端校验校验和步骤："></a>接收端校验校验和步骤：</h2><p>　　[1]把需要校验的内容(包括校验和字段)看成以16位为单位的数字，依次进行二进制反码求和，如果结果是0表示正确，否则表示错误。</p>
+<h2 id="二进制反码求和步骤："><a href="#二进制反码求和步骤：" class="headerlink" title="二进制反码求和步骤："></a>二进制反码求和步骤：</h2><p>　　[1]二进制反码求和，就是先把这两个数取反，然后求和，如果最高位有进位，则向低位进1。</p>
+<p>　　[2]另外，先取反后相加与先相加后取反，得到的结果是一样的。因此实现代码都是先相加，最后再取反。</p>
+<h2 id="下面我们来写个栗子"><a href="#下面我们来写个栗子" class="headerlink" title="下面我们来写个栗子"></a>下面我们来写个栗子</h2><p>以4bit（计算方便一点，和16bit是一样的）做检验和来验证。 </p>
+<p>假设原始数据为 1100  1010 ｜ 0000（校验位）（初始化为0000）<br>那么把他们按照4bit一组进行按位取反相加。 1100 取反0011 ， 1010 取反是0101，校验位的计算就是 0011加上0101 是1000，填入到校验位上<br>于是发送的数据就是<br>1100  1010 | 1000<br>收到数据后同样进行按位取反相加。0011+0101+0111 =1111；全为1表示正确 。 等于是 自己加上自己的取反， 那么 结果肯定应该是全1 。如果传输正确的话。</p>
+<h2 id="更多思考"><a href="#更多思考" class="headerlink" title="更多思考"></a>更多思考</h2><p>至于我一直百思不解的 那个数据报里面那么多数据加起来肯定是每个位都是1这个问题<br>我们来考虑一种极端情况：<br>0000    0000<br>它的校验和是1111<br>如果最高位需要进位 那么补到最低位上<br>发送过去的 0000 0000 1111 加起来就是1111<br>当然 如果后面再加个不是0000 比如1010<br>1010按位取反是0101<br>加上去那么校验和是0101<br>发送过去的数据是0000 0000 1010 | 0101<br>加起来的和还是1111<br>感觉checksum这个算法设计的太妙了</p>
 
     </div>
 
@@ -273,17 +234,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/21/hello-world/" rel="next" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
+                <a href="/2019/12/26/OS-5/" rel="next" title="OS-5">
+                  <i class="fa fa-chevron-left"></i> OS-5
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/23/%E5%88%A9%E7%94%A8Github%E5%92%8CHexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="prev" title="利用Github和Hexo搭建自己的博客">
-                  利用Github和Hexo搭建自己的博客 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -322,7 +280,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Todo-List"><span class="nav-number">1.</span> <span class="nav-text">Todo List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Latex"><span class="nav-number">2.</span> <span class="nav-text">Latex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高亮一段代码-code"><span class="nav-number">3.</span> <span class="nav-text">高亮一段代码[^code]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绘制表格"><span class="nav-number">4.</span> <span class="nav-text">绘制表格</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明："><span class="nav-number">1.</span> <span class="nav-text">说明：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算校验和的步骤："><span class="nav-number">2.</span> <span class="nav-text">计算校验和的步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接收端校验校验和步骤："><span class="nav-number">3.</span> <span class="nav-text">接收端校验校验和步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二进制反码求和步骤："><span class="nav-number">4.</span> <span class="nav-text">二进制反码求和步骤：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面我们来写个栗子"><span class="nav-number">5.</span> <span class="nav-text">下面我们来写个栗子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多思考"><span class="nav-number">6.</span> <span class="nav-text">更多思考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
