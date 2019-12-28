@@ -46,14 +46,14 @@
   };
 </script>
 
-  <meta name="description" content="校验和覆盖的内容：　　　　IP校验和：IP首部。 　　　　ICMP校验和：ICMP首部+ICMP数据； 　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP&#x2F;UDP包长)。 计算校验和的步骤：　　[1]把校验和字段设置为0。 　　[2]把需要校验的数据看成以16位为单位的数字组成，依次进行二进制反码求和。 　　[3]把得到的结果存入校验和字段中。">
+  <meta name="description" content="今天复习计网的时候看到了UDP头部有差错校验，其中的checksum算法没理的太清楚，索性写一篇博客，顺便回顾一下其他的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于checksum校验和算法">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;28&#x2F;%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="校验和覆盖的内容：　　　　IP校验和：IP首部。 　　　　ICMP校验和：ICMP首部+ICMP数据； 　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP&#x2F;UDP包长)。 计算校验和的步骤：　　[1]把校验和字段设置为0。 　　[2]把需要校验的数据看成以16位为单位的数字组成，依次进行二进制反码求和。 　　[3]把得到的结果存入校验和字段中。">
+<meta property="og:description" content="今天复习计网的时候看到了UDP头部有差错校验，其中的checksum算法没理的太清楚，索性写一篇博客，顺便回顾一下其他的。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-28T13:14:31.215Z">
+<meta property="og:updated_time" content="2019-12-28T15:11:10.976Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/28/%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95/">
@@ -193,7 +193,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2019-12-28 20:56:11 / Modified: 21:14:31" itemprop="dateCreated datePublished" datetime="2019-12-28T20:56:11+08:00">2019-12-28</time>
+              <time title="Created: 2019-12-28 20:56:11 / Modified: 23:11:10" itemprop="dateCreated datePublished" datetime="2019-12-28T20:56:11+08:00">2019-12-28</time>
             </span>
 
           
@@ -207,7 +207,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="校验和覆盖的内容："><a href="#校验和覆盖的内容：" class="headerlink" title="校验和覆盖的内容："></a>校验和覆盖的内容：</h2><p>　　　　IP校验和：IP首部。</p>
+        <p>今天复习计网的时候看到了UDP头部有差错校验，其中的checksum算法没理的太清楚，索性写一篇博客，顺便回顾一下其他的。</p>
+<a id="more"></a>
+
+<h2 id="校验和覆盖的内容："><a href="#校验和覆盖的内容：" class="headerlink" title="校验和覆盖的内容："></a>校验和覆盖的内容：</h2><p>　　　　IP校验和：IP首部。</p>
 <p>　　　　ICMP校验和：ICMP首部+ICMP数据；</p>
 <p>　　　　UDP、TCP校验和：首部+数据+12个字节伪首部(源IP地址、目的IP地址、协议、TCP/UDP包长)。</p>
 <h2 id="计算校验和的步骤："><a href="#计算校验和的步骤：" class="headerlink" title="计算校验和的步骤："></a>计算校验和的步骤：</h2><p>　　[1]把校验和字段设置为0。</p>
