@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Gbwss">
 <meta property="og:description" content="今天复习计网的时候看到了UDP头部有差错校验，其中的checksum算法没理的太清楚，索性写一篇博客，顺便回顾一下其他的。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-28T15:21:26.833Z">
+<meta property="og:updated_time" content="2019-12-29T05:27:40.717Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/28/%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95/">
@@ -191,10 +191,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2019-12-28 20:56:11 / Modified: 23:21:26" itemprop="dateCreated datePublished" datetime="2019-12-28T20:56:11+08:00">2019-12-28</time>
+              <time title="Created: 2019-12-28 20:56:11" itemprop="dateCreated datePublished" datetime="2019-12-28T20:56:11+08:00">2019-12-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-29 13:27:40" itemprop="dateModified" datetime="2019-12-29T13:27:40+08:00">2019-12-29</time>
+              </span>
 
           
 
@@ -217,7 +223,10 @@
 <p>[2]另外，先取反后相加与先相加后取反，得到的结果是一样的。因此实现代码都是先相加，最后再取反。</p>
 <h2 id="下面我们来写个栗子"><a href="#下面我们来写个栗子" class="headerlink" title="下面我们来写个栗子"></a>下面我们来写个栗子</h2><p>以4bit（计算方便一点，和16bit是一样的）做检验和来验证。 </p>
 <p>假设原始数据为 1100  1010 ｜ 0000（校验位）（初始化为0000）<br>那么把他们按照4bit一组进行按位取反相加。 1100 取反0011 ， 1010 取反是0101，校验位的计算就是 0011加上0101 是1000，填入到校验位上<br>于是发送的数据就是<br>1100   1010 | 1000<br>收到数据后同样进行按位取反相加。0011+0101+0111 =1111；全为1表示正确 。 等于是 自己加上自己的取反， 那么 结果肯定应该是全1 。如果传输正确的话。</p>
-<h2 id="更多思考"><a href="#更多思考" class="headerlink" title="更多思考"></a>更多思考</h2><p>至于我一直百思不解的 那个数据报里面那么多数据加起来肯定是每个位都是1这个问题<br>我们来考虑一种极端情况：<br>0000     0000<br>它的校验和是1111<br>如果最高位需要进位 那么补到最低位上<br>发送过去的 0000   0000   1111 加起来就是1111<br>当然 如果后面再加个不是0000 比如1010<br>1010按位取反是0101<br>加上去那么校验和是0101<br>发送过去的数据是0000 0000   1010 | 0101<br>加起来的和还是1111<br>感觉checksum这个算法设计的太妙了</p>
+<h2 id="更多思考"><a href="#更多思考" class="headerlink" title="更多思考"></a>更多思考</h2><p>至于我一直百思不解的 那个数据报里面那么多数据加起来肯定是每个位都是1这个问题<br>我们来考虑一种极端情况：<br>0000     0000<br>它的校验和是1111<br>如果最高位需要进位 那么补到最低位上（回卷）<br>发送过去的 0000   0000   1111 加起来就是1111<br>当然 如果后面再加个不是0000 比如1010<br>1010按位取反是0101<br>加上去那么校验和是0101<br>发送过去的数据是0000 0000   1010 | 0101<br>加起来的和还是1111<br>感觉checksum这个算法设计的太妙了</p>
+<blockquote>
+<p>在实际使用过程中 先把需要校验的数据加起来 然后取反码，这样的效果是一样的，而且还减少了计算量</p>
+</blockquote>
 <h2 id="对了还有一件事"><a href="#对了还有一件事" class="headerlink" title="对了还有一件事"></a>对了还有一件事</h2><p>这里是按位取反 不是反码    </p>
 <h2 id="科普一下原码-反码-补码"><a href="#科普一下原码-反码-补码" class="headerlink" title="科普一下原码 反码 补码"></a>科普一下原码 反码 补码</h2><p>在学习原码, 反码和补码之前, 需要先了解机器数和真值的概念.</p>
 <h3 id="机器数和真值"><a href="#机器数和真值" class="headerlink" title="机器数和真值"></a>机器数和真值</h3><h4 id="机器数"><a href="#机器数" class="headerlink" title="机器数"></a>机器数</h4><p>一个数在计算机中的二进制表示形式,  叫做这个数的机器数。机器数是带符号的，在计算机用一个数的最高位存放符号, 正数为0, 负数为1.</p>
@@ -381,13 +390,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
         <span class="site-state-item-count">2</span>
@@ -420,7 +425,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
