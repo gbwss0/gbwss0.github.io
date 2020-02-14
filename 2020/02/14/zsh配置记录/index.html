@@ -56,7 +56,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jeo26.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jnahn.md.png">
-<meta property="og:updated_time" content="2020-02-14T08:55:16.512Z">
+<meta property="og:updated_time" content="2020-02-14T08:56:35.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
 
@@ -197,7 +197,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-02-14 14:33:47 / Modified: 16:55:16" itemprop="dateCreated datePublished" datetime="2020-02-14T14:33:47+08:00">2020-02-14</time>
+              <time title="Created: 2020-02-14 14:33:47 / Modified: 16:56:35" itemprop="dateCreated datePublished" datetime="2020-02-14T14:33:47+08:00">2020-02-14</time>
             </span>
 
           
@@ -223,7 +223,7 @@
 <h2 id="安装配置-powerlevel9k-主题"><a href="#安装配置-powerlevel9k-主题" class="headerlink" title="安装配置 powerlevel9k 主题"></a>安装配置 powerlevel9k 主题</h2><h3 id="克隆该仓库到-oh-my-zsh-用户自定义主题目录"><a href="#克隆该仓库到-oh-my-zsh-用户自定义主题目录" class="headerlink" title="克隆该仓库到 oh-my-zsh 用户自定义主题目录"></a>克隆该仓库到 oh-my-zsh 用户自定义主题目录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k</span><br></pre></td></tr></table></figure>
 
 <h3 id="修改-zshrc-配置文件，配置该主题"><a href="#修改-zshrc-配置文件，配置该主题" class="headerlink" title="修改 ~/.zshrc 配置文件，配置该主题"></a>修改 ~/.zshrc 配置文件，配置该主题</h3><p><code>ZSH_THEME=&quot;powerlevel9k/powerlevel9k&quot;</code><br>网上有好多建议把这个写在.zshrc最前面<br>完成后<code>source ～/.zshrc·</code>或者重启item2即可</p>
-<h3 id="定制-powerlevel9k-主题"><a href="#定制-powerlevel9k-主题" class="headerlink" title="定制 powerlevel9k 主题"></a>定制 powerlevel9k 主题</h3><p>powerlevel9k 主题的好处就是可以做很多自定义，只需要简单修改 ~/.zshrc 配置即可生效。具体<a href="https://github.com/Powerlevel9k/powerlevel9k#customizing-prompt-segments" target="_blank" rel="noopener">官方文档</a>在此。<br>修改 ~/.zshrc 配置文件，或者直接编辑 ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 也可。   </p>
+<h3 id="定制-powerlevel9k-主题"><a href="#定制-powerlevel9k-主题" class="headerlink" title="定制 powerlevel9k 主题"></a>定制 powerlevel9k 主题</h3><p>powerlevel9k 主题的好处就是可以做很多自定义，只需要简单修改 ~/.zshrc 配置即可生效。具体<a href="https://github.com/Powerlevel9k/powerlevel9k#customizing-prompt-segments" target="_blank" rel="noopener">官方文档</a>在此。<br>修改 ~/.zshrc 配置文件，或者直接编辑 powerlevel9k.zsh-theme 也可。   </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">defined POWERLEVEL9K_LEFT_PROMPT_ELEMENTS || POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda context dir vcs)   </span><br><span class="line"></span><br><span class="line">defined POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS || POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs time)</span><br><span class="line">#上面的代码定义的是左右显示那些信息，powerlevel9k 可定制的肥肠多，小到电池状态，大到连接信息权限都可以显示。</span><br></pre></td></tr></table></figure>
 <p>这是我改完之后的样子，加了个显示当前虚拟环境：<br><a href="https://imgchr.com/i/1jeo26" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/14/1jeo26.md.png" alt="1jeo26.md.png"></a></p>
 <h2 id="安装配置各种插件"><a href="#安装配置各种插件" class="headerlink" title="安装配置各种插件"></a>安装配置各种插件</h2><h3 id="zsh-syntax-highlighting语法高亮插件"><a href="#zsh-syntax-highlighting语法高亮插件" class="headerlink" title="zsh-syntax-highlighting语法高亮插件"></a>zsh-syntax-highlighting语法高亮插件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
