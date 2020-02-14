@@ -46,17 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="嘿嘿 装anconda真有趣">
+  <meta name="description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一次Conda安装报错">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99&#x2F;index.html">
+<meta property="og:title" content="zsh配置记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="嘿嘿 装anconda真有趣">
+<meta property="og:description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-28T15:11:08.235Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jeo26.md.png">
+<meta property="og:updated_time" content="2020-02-14T08:34:07.005Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/25/%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/">
+<link rel="canonical" href="http://yoursite.com/2020/02/14/zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">
 
 
 <script id="page-configurations">
@@ -70,7 +73,7 @@
   };
 </script>
 
-  <title>记一次Conda安装报错 | Gbwss</title>
+  <title>zsh配置记录 | Gbwss</title>
   
 
 
@@ -169,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/14/zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          记一次Conda安装报错
+          zsh配置记录
         </h1>
 
         <div class="post-meta">
@@ -191,16 +194,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2019-12-25 20:41:43" itemprop="dateCreated datePublished" datetime="2019-12-25T20:41:43+08:00">2019-12-25</time>
+              <time title="Created: 2020-02-14 14:33:47 / Modified: 16:34:07" itemprop="dateCreated datePublished" datetime="2020-02-14T14:33:47+08:00">2020-02-14</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-28 23:11:08" itemprop="dateModified" datetime="2019-12-28T23:11:08+08:00">2019-12-28</time>
-              </span>
 
           
 
@@ -213,16 +210,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>嘿嘿 装anconda真有趣</p>
+        <p>记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程</p>
 <a id="more"></a>
 
-
-<h4 id="记一次Conda安装报错"><a href="#记一次Conda安装报错" class="headerlink" title="记一次Conda安装报错"></a>记一次Conda安装报错</h4><p>刚开始因为网络原因 没有选择pip安装anaconda，而是直接去官网下载anaconda的安装包用图形化界面安装 但是在使用中发现会报错zsh: command not found: conda<br>查找资料后发现需要 在 <del>/.bash_profile里加入路径但是发现已经有了<br>然后又说在</del>/.zshrc这个文件里添加export PATH=Users/heihei/anaconda/bin:$PATH<br>（我添加进去还是失败，查找目录根本找不到conda 仔细查看bash文件 最后发现 Anaconda3这个文件夹在根目录里）<br>但是这种操作方式适合于pip安装的conda，而使用图形化界面安装的目录要比当前用户的层级要高 所以要修改的变量地址也不一样 最后修改为/anaconda/bin后，conda —version运行成功</p>
-<hr>
-<h4 id="再记一次conda安装经历"><a href="#再记一次conda安装经历" class="headerlink" title="再记一次conda安装经历"></a>再记一次conda安装经历</h4><p>20190909 晴<br>今天又装了一次conda，但是因为系统升级了Catalina，导致下了的pkg无法安装，报系统不符合。Google之后，在GitHub上找到了解决方案，说是用command line installer就可以安装，所以下载了sh文件，按照官网的教程进行了安装。安装之后还是出现了command not found：conda，这次直接查看.zshrc和.bash_profile文件，在bash_profile中看到了conda写入的文件，同时也拷贝到了else<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>将<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>粘贴到了zshrc文件尾<br>然后source .zshrc就好了</p>
-<hr>
-<h4 id="记录一个小想法"><a href="#记录一个小想法" class="headerlink" title="记录一个小想法"></a>记录一个小想法</h4><p>就是使用pytorch的时候 一般Mac只能在torch.load的时候使用map_location来将GPU转移到CPU上 但是有没有可能 可以将运算任务转移到GPU0：CPU的核心显卡上 这样或许可以提高效率 而且torch官方也提供了这种方法</p>
-
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>今天更新了一下oh-my-zsh，然后补全gg了，咋用咋难受，就索性重新装一下oh-my-zsh</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><blockquote>
+<p>zsh 5.7.1 (Macos Catalina把默认shell从bash换成了zsh，所以相比于之前的macos版本，少了安装zsh这一步)<br>item2（不多说比原生teminal好太多）<br>iterm2 Solarized Dark Higher Contrast 配色方案<br>Meslo LG for Powerline 字体<br><a href="https://imgchr.com/i/1jAxje" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/14/1jAxje.md.png" alt="1jAxje.md.png"></a></p>
+</blockquote>
+<h2 id="安装-Oh-My-Zsh"><a href="#安装-Oh-My-Zsh" class="headerlink" title="安装 Oh-My-Zsh"></a>安装 Oh-My-Zsh</h2><p><code>sh -c &quot;$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;</code></p>
+<h2 id="安装配置-powerlevel9k-主题"><a href="#安装配置-powerlevel9k-主题" class="headerlink" title="安装配置 powerlevel9k 主题"></a>安装配置 powerlevel9k 主题</h2><h3 id="克隆该仓库到-oh-my-zsh-用户自定义主题目录"><a href="#克隆该仓库到-oh-my-zsh-用户自定义主题目录" class="headerlink" title="克隆该仓库到 oh-my-zsh 用户自定义主题目录"></a>克隆该仓库到 oh-my-zsh 用户自定义主题目录</h3><p><code>git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k</code></p>
+<h3 id="修改-zshrc-配置文件，配置该主题"><a href="#修改-zshrc-配置文件，配置该主题" class="headerlink" title="修改 ~/.zshrc 配置文件，配置该主题"></a>修改 ~/.zshrc 配置文件，配置该主题</h3><p><code>ZSH_THEME=&quot;powerlevel9k/powerlevel9k&quot;</code><br>网上有好多建议把这个写在.zshrc最前面<br>完成后<code>source ～/.zshrc·</code>或者重启item2即可</p>
+<h3 id="定制-powerlevel9k-主题"><a href="#定制-powerlevel9k-主题" class="headerlink" title="定制 powerlevel9k 主题"></a>定制 powerlevel9k 主题</h3><p>powerlevel9k 主题的好处就是可以做很多自定义，只需要简单修改 ~/.zshrc 配置即可生效。具体<a href="https://github.com/Powerlevel9k/powerlevel9k#customizing-prompt-segments" target="_blank" rel="noopener">官方文档</a>在此。<br>修改 ~/.zshrc 配置文件，或者直接编辑 ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 也可。<br>`<br>  defined POWERLEVEL9K_LEFT_PROMPT_ELEMENTS || POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda context dir vcs)   </p>
+<p>  defined POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS || POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs time)<br>  #上面的代码定义的是左右显示那些信息，powerlevel9k 可定制的肥肠多，小到电池状态，大到连接信息权限都可以显示。<br>`<br>这是我改完之后的样子，加了个显示当前虚拟环境：<br><a href="https://imgchr.com/i/1jeo26" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/14/1jeo26.md.png" alt="1jeo26.md.png"></a></p>
+<h2 id="安装配置各种插件"><a href="#安装配置各种插件" class="headerlink" title="安装配置各种插件"></a>安装配置各种插件</h2>
     </div>
 
     
@@ -235,17 +235,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/12/20/CSP%E8%AE%B0%E5%BD%952019-12/" rel="next" title="CSP记录2019-12">
-                  <i class="fa fa-chevron-left"></i> CSP记录2019-12
+                <a href="/2019/12/28/%E5%85%B3%E4%BA%8Echecksum%E6%A0%A1%E9%AA%8C%E5%92%8C%E7%AE%97%E6%B3%95/" rel="next" title="关于checksum校验和算法">
+                  <i class="fa fa-chevron-left"></i> 关于checksum校验和算法
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/12/26/OS-5/" rel="prev" title="OS-5">
-                  OS-5 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -284,7 +281,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#记一次Conda安装报错"><span class="nav-number">1.</span> <span class="nav-text">记一次Conda安装报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#再记一次conda安装经历"><span class="nav-number">2.</span> <span class="nav-text">再记一次conda安装经历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录一个小想法"><span class="nav-number">3.</span> <span class="nav-text">记录一个小想法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">1.1.</span> <span class="nav-text">环境准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Oh-My-Zsh"><span class="nav-number">2.</span> <span class="nav-text">安装 Oh-My-Zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置-powerlevel9k-主题"><span class="nav-number">3.</span> <span class="nav-text">安装配置 powerlevel9k 主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#克隆该仓库到-oh-my-zsh-用户自定义主题目录"><span class="nav-number">3.1.</span> <span class="nav-text">克隆该仓库到 oh-my-zsh 用户自定义主题目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-zshrc-配置文件，配置该主题"><span class="nav-number">3.2.</span> <span class="nav-text">修改 ~/.zshrc 配置文件，配置该主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制-powerlevel9k-主题"><span class="nav-number">3.3.</span> <span class="nav-text">定制 powerlevel9k 主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置各种插件"><span class="nav-number">4.</span> <span class="nav-text">安装配置各种插件</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
