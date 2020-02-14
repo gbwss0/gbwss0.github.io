@@ -46,16 +46,17 @@
   };
 </script>
 
-  <meta name="description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程">
+  <meta name="description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh-my-zsh及之后优化过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="zsh配置记录">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程">
+<meta property="og:description" content="记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh-my-zsh及之后优化过程">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jeo26.md.png">
-<meta property="og:updated_time" content="2020-02-14T08:34:07.005Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jnahn.md.png">
+<meta property="og:updated_time" content="2020-02-14T08:45:58.389Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;s2.ax1x.com&#x2F;2020&#x2F;02&#x2F;14&#x2F;1jAxje.md.png">
 
@@ -196,7 +197,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-02-14 14:33:47 / Modified: 16:34:07" itemprop="dateCreated datePublished" datetime="2020-02-14T14:33:47+08:00">2020-02-14</time>
+              <time title="Created: 2020-02-14 14:33:47 / Modified: 16:45:58" itemprop="dateCreated datePublished" datetime="2020-02-14T14:33:47+08:00">2020-02-14</time>
             </span>
 
           
@@ -210,7 +211,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh—my—zsh及之后优化过程</p>
+        <p>记录一下终端的配置过程，由于系统是Catalina，所以只记录安装oh-my-zsh及之后优化过程</p>
 <a id="more"></a>
 
 <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>今天更新了一下oh-my-zsh，然后补全gg了，咋用咋难受，就索性重新装一下oh-my-zsh</p>
@@ -222,7 +223,18 @@
 <h3 id="修改-zshrc-配置文件，配置该主题"><a href="#修改-zshrc-配置文件，配置该主题" class="headerlink" title="修改 ~/.zshrc 配置文件，配置该主题"></a>修改 ~/.zshrc 配置文件，配置该主题</h3><p><code>ZSH_THEME=&quot;powerlevel9k/powerlevel9k&quot;</code><br>网上有好多建议把这个写在.zshrc最前面<br>完成后<code>source ～/.zshrc·</code>或者重启item2即可</p>
 <h3 id="定制-powerlevel9k-主题"><a href="#定制-powerlevel9k-主题" class="headerlink" title="定制 powerlevel9k 主题"></a>定制 powerlevel9k 主题</h3><p>powerlevel9k 主题的好处就是可以做很多自定义，只需要简单修改 ~/.zshrc 配置即可生效。具体<a href="https://github.com/Powerlevel9k/powerlevel9k#customizing-prompt-segments" target="_blank" rel="noopener">官方文档</a>在此。<br>修改 ~/.zshrc 配置文件，或者直接编辑 ~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme 也可。<br>`<br>  defined POWERLEVEL9K_LEFT_PROMPT_ELEMENTS || POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda context dir vcs)   </p>
 <p>  defined POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS || POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs time)<br>  #上面的代码定义的是左右显示那些信息，powerlevel9k 可定制的肥肠多，小到电池状态，大到连接信息权限都可以显示。<br>`<br>这是我改完之后的样子，加了个显示当前虚拟环境：<br><a href="https://imgchr.com/i/1jeo26" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/14/1jeo26.md.png" alt="1jeo26.md.png"></a></p>
-<h2 id="安装配置各种插件"><a href="#安装配置各种插件" class="headerlink" title="安装配置各种插件"></a>安装配置各种插件</h2>
+<h2 id="安装配置各种插件"><a href="#安装配置各种插件" class="headerlink" title="安装配置各种插件"></a>安装配置各种插件</h2><h3 id="zsh-syntax-highlighting语法高亮插件"><a href="#zsh-syntax-highlighting语法高亮插件" class="headerlink" title="zsh-syntax-highlighting语法高亮插件"></a>zsh-syntax-highlighting语法高亮插件</h3><p><code>git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</code></p>
+<h3 id="zsh-autosuggestions自动补全插件"><a href="#zsh-autosuggestions自动补全插件" class="headerlink" title="zsh-autosuggestions自动补全插件"></a>zsh-autosuggestions自动补全插件</h3><p><code>git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions</code></p>
+<h3 id="其他自带插件"><a href="#其他自带插件" class="headerlink" title="其他自带插件"></a>其他自带插件</h3><blockquote>
+<p>extract：通用的解压缩插件，可以解压缩任何后缀的压缩文件，使用方法很简单：x 文件名；</p>
+</blockquote>
+<blockquote>
+<p>z：很智能的目录跳转插件，能记录之前 cd 过哪些目录，然后模糊匹配跳转，不需要输入全路径即可跳转，使用方法：z dir_pattern</p>
+</blockquote>
+<h3 id="配置插件"><a href="#配置插件" class="headerlink" title="配置插件"></a>配置插件</h3><p>下载完插件之后去 ～/.zshrc plugins里面注册一下<br><a href="https://imgchr.com/i/1jnahn" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2020/02/14/1jnahn.md.png" alt="1jnahn.md.png"></a><br>完成后<code>source ～/.zshrc·</code>或者重启item2即可</p>
+<hr>
+<p>这样就得到了一个好用的shell</p>
+
     </div>
 
     
@@ -281,7 +293,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">1.1.</span> <span class="nav-text">环境准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Oh-My-Zsh"><span class="nav-number">2.</span> <span class="nav-text">安装 Oh-My-Zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置-powerlevel9k-主题"><span class="nav-number">3.</span> <span class="nav-text">安装配置 powerlevel9k 主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#克隆该仓库到-oh-my-zsh-用户自定义主题目录"><span class="nav-number">3.1.</span> <span class="nav-text">克隆该仓库到 oh-my-zsh 用户自定义主题目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-zshrc-配置文件，配置该主题"><span class="nav-number">3.2.</span> <span class="nav-text">修改 ~/.zshrc 配置文件，配置该主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制-powerlevel9k-主题"><span class="nav-number">3.3.</span> <span class="nav-text">定制 powerlevel9k 主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置各种插件"><span class="nav-number">4.</span> <span class="nav-text">安装配置各种插件</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">1.1.</span> <span class="nav-text">环境准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Oh-My-Zsh"><span class="nav-number">2.</span> <span class="nav-text">安装 Oh-My-Zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置-powerlevel9k-主题"><span class="nav-number">3.</span> <span class="nav-text">安装配置 powerlevel9k 主题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#克隆该仓库到-oh-my-zsh-用户自定义主题目录"><span class="nav-number">3.1.</span> <span class="nav-text">克隆该仓库到 oh-my-zsh 用户自定义主题目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改-zshrc-配置文件，配置该主题"><span class="nav-number">3.2.</span> <span class="nav-text">修改 ~/.zshrc 配置文件，配置该主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制-powerlevel9k-主题"><span class="nav-number">3.3.</span> <span class="nav-text">定制 powerlevel9k 主题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装配置各种插件"><span class="nav-number">4.</span> <span class="nav-text">安装配置各种插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-syntax-highlighting语法高亮插件"><span class="nav-number">4.1.</span> <span class="nav-text">zsh-syntax-highlighting语法高亮插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zsh-autosuggestions自动补全插件"><span class="nav-number">4.2.</span> <span class="nav-text">zsh-autosuggestions自动补全插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他自带插件"><span class="nav-number">4.3.</span> <span class="nav-text">其他自带插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置插件"><span class="nav-number">4.4.</span> <span class="nav-text">配置插件</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
