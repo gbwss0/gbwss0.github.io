@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="Gbwss">
 <meta property="og:description" content="做服务外包项目需要是用虹软的人脸对比SDK，项目使用Python进行开发，但是网上以及官方社区没有基于Python的3.0版本项目，所以自己根据社区里大佬1.1和2.0的Demo写了一个">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-09T03:22:11.258Z">
+<meta property="og:updated_time" content="2020-04-09T03:28:02.707Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/07/ArcFaceSDK3-0-PythonDemo/">
@@ -199,7 +199,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-09 11:22:11" itemprop="dateModified" datetime="2020-04-09T11:22:11+08:00">2020-04-09</time>
+                <time title="Modified: 2020-04-09 11:28:02" itemprop="dateModified" datetime="2020-04-09T11:28:02+08:00">2020-04-09</time>
               </span>
 
           
@@ -228,29 +228,106 @@
 <table>
 <thead>
 <tr>
-<th>C类型</th>
-<th>Python类型</th>
-<th>ctypes 类型</th>
+<th align="center">C类型</th>
+<th align="center">Python类型</th>
+<th align="center">ctypes 类型</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>短文本</td>
-<td>中等文本</td>
-<td>稍微长一点的文本</td>
+<td align="center">char</td>
+<td align="center">1-character/string</td>
+<td align="center">c_char</td>
 </tr>
 <tr>
-<td>稍微长一点的文本</td>
-<td>短文本</td>
-<td>中等文本</td>
+<td align="center">wchar_t</td>
+<td align="center">1-character/Unicode、string</td>
+<td align="center">c_wchar</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">int/long</td>
+<td align="center">c_byte</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">int/long</td>
+<td align="center">c_ubyte</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">int/long</td>
+<td align="center">c_short</td>
+</tr>
+<tr>
+<td align="center">unsigned short</td>
+<td align="center">int/long</td>
+<td align="center">c_ushort</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">int/long</td>
+<td align="center">C_int</td>
+</tr>
+<tr>
+<td align="center">unsigned int</td>
+<td align="center">int/long</td>
+<td align="center">c_uint</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">int/long</td>
+<td align="center">c_long</td>
+</tr>
+<tr>
+<td align="center">unsigned long</td>
+<td align="center">int/long</td>
+<td align="center">c_ulong</td>
+</tr>
+<tr>
+<td align="center">long long</td>
+<td align="center">int/long</td>
+<td align="center">c_longlong</td>
+</tr>
+<tr>
+<td align="center">unsigned long long</td>
+<td align="center">int/long</td>
+<td align="center">c_ulonglong</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">float</td>
+<td align="center">c_float</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">float</td>
+<td align="center">c_double</td>
+</tr>
+<tr>
+<td align="center">char *(NULL terminated)</td>
+<td align="center">string or none</td>
+<td align="center">c_char_p</td>
+</tr>
+<tr>
+<td align="center">wchar_t *(NULL terminated)</td>
+<td align="center">unicode or none</td>
+<td align="center">c_wchar_p</td>
+</tr>
+<tr>
+<td align="center">void *</td>
+<td align="center">int/long or none</td>
+<td align="center">c_void_p</td>
 </tr>
 </tbody></table>
-<p>｜C类型                     ｜ Python类型                        ｜ctypes 类型｜<br>|:—:                 | :——:                           | :——: ｜<br>｜char                     ｜   1-character/string              ｜ c_char ｜<br>｜wchar_t                  ｜   1-character/Unicode、string     ｜ c_wchar｜<br>｜char                     ｜   int/long                        ｜  c_byte｜<br>｜char                     ｜   int/long                        ｜  c_ubyte｜<br>｜short                    ｜   int/long                        ｜  c_short｜<br>｜unsigned short           ｜   int/long                        ｜  c_ushort｜<br>｜int                      ｜   int/long                        ｜  C_int｜<br>｜unsigned int             ｜   int/long                        ｜  c_uint｜<br>｜long                     ｜   int/long                        ｜  c_long｜<br>｜unsigned long            ｜   int/long                        ｜  c_ulong｜<br>｜long long                ｜   int/long                        ｜  c_longlong｜<br>｜unsigned long long       ｜   int/long                        ｜  c_ulonglong｜<br>｜float                    ｜   float                           ｜  c_float｜<br>｜double                   ｜   float                           ｜  c_double｜<br>｜char *(NULL terminated)  ｜   string or none                  ｜  c_char_p｜<br>｜wchar_t *(NULL terminated)  ｜  unicode or none               ｜  c_wchar_p｜<br>｜void *                   ｜  int/long or none                 ｜  c_void_p｜</p>
 <p>当一个函数期望一个指针作为参数时,可以像这样调用<br>function_main( byref(parameter) ). //</p>
-<p>struct例子<br>下面的例子是定义一个结构<br>C语言例子<br>    struct beer_recipe<br>    {<br>    int amt_barley;<br>    int amt_water;<br>    };</p>
-<p>Python例子<br>class beer_recipe(Structure):<br>    <em>fields</em> = [<br>    (“amt_barley”, c_int),<br>    (“amt_water”, c_int),<br>    ]</p>
-<p>Union结构例子<br>C语言例子<br>    union {<br>    long barley_long;<br>    int barley_int;<br>    char barley_char[8];<br>    }barley_amount;</p>
-<p>Python例子<br>class barley_amount(Union):<br>    <em>fields</em> = [<br>    (“barley_long”, c_long),<br>    (“barley_int”, c_int),<br>    (“barley_char”, c_char * 8),<br>    ]</p>
-<hr>
+<p>struct例子<br>下面的例子是定义一个结构<br>C语言例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct beer_recipe</span><br><span class="line">&#123;</span><br><span class="line">int amt_barley;</span><br><span class="line">int amt_water;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Python例子</p>
+<pre><code>class beer_recipe(Structure):
+    _fields_ = [
+    (&quot;amt_barley&quot;, c_int),
+    (&quot;amt_water&quot;, c_int),
+    ]</code></pre><hr>
 <h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>ArcFaceSDK3.0还加入了很多新功能 比如说1:N的识别等 如果后期继续做相关应该会继续补到function里面</p>
 
     </div>
