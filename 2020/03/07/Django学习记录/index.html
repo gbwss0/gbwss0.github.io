@@ -46,17 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="嘿嘿 装anconda真有趣">
+  <meta name="description" content="学习Django的一些记录">
+<meta name="keywords" content="Python Web">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一次Conda安装报错">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;25&#x2F;%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99&#x2F;index.html">
+<meta property="og:title" content="Django学习记录">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;07&#x2F;Django%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="嘿嘿 装anconda真有趣">
+<meta property="og:description" content="学习Django的一些记录">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-28T15:11:08.235Z">
+<meta property="og:updated_time" content="2020-03-15T06:03:24.948Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/25/%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/">
+<link rel="canonical" href="http://yoursite.com/2020/03/07/Django%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
 
 
 <script id="page-configurations">
@@ -70,7 +71,7 @@
   };
 </script>
 
-  <title>记一次Conda安装报错 | Gbwss</title>
+  <title>Django学习记录 | Gbwss</title>
   
 
 
@@ -169,7 +170,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/%E8%AE%B0%E4%B8%80%E6%AC%A1Conda%E5%AE%89%E8%A3%85%E6%8A%A5%E9%94%99/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/Django%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +183,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          记一次Conda安装报错
+          Django学习记录
         </h1>
 
         <div class="post-meta">
@@ -192,14 +193,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-12-25 20:41:43" itemprop="dateCreated datePublished" datetime="2019-12-25T20:41:43+08:00">2019-12-25</time>
+              <time title="Created: 2020-03-07 19:11:02" itemprop="dateCreated datePublished" datetime="2020-03-07T19:11:02+08:00">2020-03-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-28 23:11:08" itemprop="dateModified" datetime="2019-12-28T23:11:08+08:00">2019-12-28</time>
+                <time title="Modified: 2020-03-15 14:03:24" itemprop="dateModified" datetime="2020-03-15T14:03:24+08:00">2020-03-15</time>
               </span>
 
           
@@ -213,15 +214,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>嘿嘿 装anconda真有趣</p>
+        <p>学习Django的一些记录</p>
 <a id="more"></a>
 
+<h1 id="Django项目"><a href="#Django项目" class="headerlink" title="Django项目"></a>Django项目</h1><h2 id="django-admin"><a href="#django-admin" class="headerlink" title="django-admin"></a>django-admin</h2><p>Type ‘django-admin help <subcommand>‘ for help on a specific subcommand.</p>
+<p>Available subcommands:</p>
+<p>[django]<br>    check<br>    compilemessages<br>    createcachetable<br>    dbshell<br>    diffsettings<br>    dumpdata<br>    flush<br>    inspectdb<br>    loaddata<br>    makemessages<br>    makemigrations<br>    migrate<br>    runserver<br>    sendtestemail<br>    shell<br>    showmigrations<br>    sqlflush<br>    sqlmigrate<br>    sqlsequencereset<br>    squashmigrations<br>    startapp<br>    startproject<br>    test<br>    testserver<br>    …</p>
+<p>for example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin startproject HelloWorld</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ cd HelloWorld/</span><br><span class="line">$ tree</span><br><span class="line">.</span><br><span class="line">|-- HelloWorld  //项目容器</span><br><span class="line">|   |-- __init__.py     </span><br><span class="line">|   |-- settings.       //该 Django 项目的设置/配置。</span><br><span class="line">|   |-- urls.py         //该 Django 项目的 URL 声明，驱动网站的‘目录’</span><br><span class="line">|   `-- wsgi.py         //一个 WSGI 兼容的 Web 服务器的入口，以便运行你的项目。</span><br><span class="line">`-- manage.py       //一个实用的命令行工具，可让你以各种方式与该 Django 项目进行交互。</span><br></pre></td></tr></table></figure>
 
-<h4 id="记一次Conda安装报错"><a href="#记一次Conda安装报错" class="headerlink" title="记一次Conda安装报错"></a>记一次Conda安装报错</h4><p>刚开始因为网络原因 没有选择pip安装anaconda，而是直接去官网下载anaconda的安装包用图形化界面安装 但是在使用中发现会报错zsh: command not found: conda<br>查找资料后发现需要 在 <del>/.bash_profile里加入路径但是发现已经有了<br>然后又说在</del>/.zshrc这个文件里添加export PATH=Users/heihei/anaconda/bin:$PATH<br>（我添加进去还是失败，查找目录根本找不到conda 仔细查看bash文件 最后发现 Anaconda3这个文件夹在根目录里）<br>但是这种操作方式适合于pip安装的conda，而使用图形化界面安装的目录要比当前用户的层级要高 所以要修改的变量地址也不一样 最后修改为/anaconda/bin后，conda —version运行成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 manage.py runserver 0.0.0.0:8000</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>0.0.0.0 让其它电脑可连接到开发服务器，8000 为端口号。如果不说明，那么端口号默认为 8000。<br>然后我们可以通过127.0.0.1:8000来访问</p>
+</blockquote>
 <hr>
-<h4 id="再记一次conda安装经历"><a href="#再记一次conda安装经历" class="headerlink" title="再记一次conda安装经历"></a>再记一次conda安装经历</h4><p>20190909 晴<br>今天又装了一次conda，但是因为系统升级了Catalina，导致下了的pkg无法安装，报系统不符合。Google之后，在GitHub上找到了解决方案，说是用command line installer就可以安装，所以下载了sh文件，按照官网的教程进行了安装。安装之后还是出现了command not found：conda，这次直接查看.zshrc和.bash_profile文件，在bash_profile中看到了conda写入的文件，同时也拷贝到了else<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>将<br>      export PATH=”/Users/wss/anaconda3/bin:$PATH”<br>粘贴到了zshrc文件尾<br>然后source .zshrc就好了</p>
+<h2 id="path-函数"><a href="#path-函数" class="headerlink" title="path() 函数"></a>path() 函数</h2><p>Django path() 可以接收四个参数，分别是两个必选参数：route、view 和两个可选参数：kwargs、name。<br>    path(route, view, kwargs=None, name=None)</p>
+<ul>
+<li>route: 字符串，表示 URL 规则，与之匹配的 URL 会执行对应的第二个参数 view。</li>
+<li>view: 用于执行与正则表达式匹配的 URL 请求。</li>
+<li>kwargs: 视图使用的字典类型的参数。</li>
+<li>name: 用来反向获取 URL。</li>
+</ul>
+<h1 id="Django模板"><a href="#Django模板" class="headerlink" title="Django模板"></a>Django模板</h1><p>模板是一个文本，用于分离文档的表现形式和内容</p>
 <hr>
-<h4 id="记录一个小想法"><a href="#记录一个小想法" class="headerlink" title="记录一个小想法"></a>记录一个小想法</h4><p>就是使用pytorch的时候 一般Mac只能在torch.load的时候使用map_location来将GPU转移到CPU上 但是有没有可能 可以将运算任务转移到GPU0：CPU的核心显卡上 这样或许可以提高效率 而且torch官方也提供了这种方法</p>
 
     </div>
 
@@ -230,21 +246,24 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python-Web/" rel="tag"># Python Web</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/12/20/CSP%E8%AE%B0%E5%BD%952019-12/" rel="next" title="CSP记录2019-12">
-                  <i class="fa fa-chevron-left"></i> CSP记录2019-12
+                <a href="/2020/02/14/zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" rel="next" title="zsh配置记录">
+                  <i class="fa fa-chevron-left"></i> zsh配置记录
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/12/26/OS-5/" rel="prev" title="OS-5">
-                  OS-5 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/03/07/ArcFaceSDK3-0-PythonDemo/" rel="prev" title="ArcFaceSDK3.0 PythonDemo">
+                  ArcFaceSDK3.0 PythonDemo <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -284,7 +303,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#记一次Conda安装报错"><span class="nav-number">1.</span> <span class="nav-text">记一次Conda安装报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#再记一次conda安装经历"><span class="nav-number">2.</span> <span class="nav-text">再记一次conda安装经历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录一个小想法"><span class="nav-number">3.</span> <span class="nav-text">记录一个小想法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django项目"><span class="nav-number">1.</span> <span class="nav-text">Django项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#django-admin"><span class="nav-number">1.1.</span> <span class="nav-text">django-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-函数"><span class="nav-number">1.2.</span> <span class="nav-text">path() 函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Django模板"><span class="nav-number">2.</span> <span class="nav-text">Django模板</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
