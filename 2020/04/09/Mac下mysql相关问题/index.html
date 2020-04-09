@@ -46,12 +46,14 @@
   };
 </script>
 
-  <meta property="og:type" content="article">
+  <meta name="description" content="记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Mac下mysql相关问题">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;09&#x2F;Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98&#x2F;index.html">
 <meta property="og:site_name" content="Gbwss">
+<meta property="og:description" content="记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-09T02:28:43.669Z">
+<meta property="og:updated_time" content="2020-04-09T02:36:00.014Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">
@@ -189,8 +191,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-04-09 10:28:43" itemprop="dateCreated datePublished" datetime="2020-04-09T10:28:43+08:00">2020-04-09</time>
+              <time title="Created: 2020-04-09 10:28:43 / Modified: 10:36:00" itemprop="dateCreated datePublished" datetime="2020-04-09T10:28:43+08:00">2020-04-09</time>
             </span>
 
           
@@ -204,7 +207,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock"><a href="#ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock" class="headerlink" title="ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock"></a>ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock</h2><p><a href="https://blog.csdn.net/qinyibut/article/details/89341469" target="_blank" rel="noopener">参考链接</a></p>
+<p>出现这个问题的原因是因为没有启动mysql服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql.server start</span><br></pre></td></tr></table></figure>
+<p>即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Enter password:</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 8</span><br><span class="line">Server version: 8.0.19 Homebrew</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -263,6 +274,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock"><span class="nav-number">1.</span> <span class="nav-text">ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
