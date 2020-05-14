@@ -64,12 +64,14 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ1KA.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQuCD.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQQvd.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwYL79.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQMgH.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ8bt.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQJVP.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwYL79.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQYUf.png">
-<meta property="og:updated_time" content="2020-05-13T15:04:46.036Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQJVP.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ8bt.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0t0dH.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0tBod.png">
+<meta property="og:updated_time" content="2020-05-14T03:14:54.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Yd75xP.png">
 
@@ -208,10 +210,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-05-13 19:07:04 / Modified: 23:04:46" itemprop="dateCreated datePublished" datetime="2020-05-13T19:07:04+08:00">2020-05-13</time>
+              <time title="Created: 2020-05-13 19:07:04" itemprop="dateCreated datePublished" datetime="2020-05-13T19:07:04+08:00">2020-05-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-14 11:14:54" itemprop="dateModified" datetime="2020-05-14T11:14:54+08:00">2020-05-14</time>
+              </span>
 
           
 
@@ -263,12 +271,19 @@
 <p>论文还说这里同时生成了一个channel-wise sig- moid attention weights这样的权重，文中也没有讲具体实现，同时我在后文中也没有看到如何使用</p>
 </blockquote>
 <hr>
-<h2 id="Tracking-algorithm"><a href="#Tracking-algorithm" class="headerlink" title="Tracking algorithm"></a>Tracking algorithm</h2><p>这里值得说的是这个网络如何去更新的, 当在每一帧找出target之后, 会判断当前这个target的响应是否大于一个阈值 τ\tauτ , 若是大于 τ\tauτ , 便把这个patch加入到template的池中, 每次从template池中选择熵最小的,其实就是找响应比较大, 比较靠谱那 M 个template:</p>
-<p><img src="https://s1.ax1x.com/2020/05/13/YwYL79.png" alt="YwYL79.png"></p>
-<p>对于meta-learner network的δ，为了其计算，需要从T个patch里面选出M个图块来计算，那么筛选的标准通过熵最小化，如下式表示， p表示某个位置上，σ表示sigmoid函数。</p>
-<p><img src="https://s1.ax1x.com/2020/05/13/YwQMgH.png" alt="YwQMgH.png"></p>
-<p>meta-learner network的损失函数，针对meta-learner network进行最优化，matching network固定不变，如下式所示，<br><img src="https://s1.ax1x.com/2020/05/13/YwQ8bt.png" alt="YwQ8bt.png"><br><img src="https://s1.ax1x.com/2020/05/13/YwQJVP.png" alt="YwQJVP.png"></p>
-<p><img src="https://s1.ax1x.com/2020/05/13/YwQYUf.png" alt="YwQYUf.png"></p>
+<h2 id="Tracking-algorithm"><a href="#Tracking-algorithm" class="headerlink" title="Tracking algorithm"></a>Tracking algorithm</h2><p>对于跟踪过程，首先保存K个context images as zmem = {z1 , …, zK }，以及对应的响应图 yˆ = {yˆ ,…,yˆK}.保存的原则是, 当在每一帧找出target之后, 会判断当前这个target的响应是否大于一个阈值 τ , 若是大于 τ , 便把这个patch加入到template的池中：<br><img src="https://s1.ax1x.com/2020/05/13/YwQMgH.png" alt="YwQMgH.png"><br>式子中的p对应于响应图中所有可能位置P的集合中的位置，而ρ（·）是归一化函数。<br>而在接下来计算要输入meta-learner网络的δ时，从template池中选择熵最小的,其实就是找响应比较大, 比较靠谱那M个template用来更新网络。</p>
+<blockquote>
+<p>文章中提到，这里提出了一个新的响应图yˆ ⊗ h，加入了一个余弦窗函数，这个h就是余弦窗函数，用来惩罚大位移，保证目标大小平滑变化。</p>
+</blockquote>
+<p>整个跟踪流程如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwYL79.png" alt="YwYL79.png"></p>
+<h1 id="Implementation-and-Training"><a href="#Implementation-and-Training" class="headerlink" title="Implementation and Training"></a>Implementation and Training</h1><p><img src="https://s1.ax1x.com/2020/05/13/YwQYUf.png" alt="YwQYUf.png"><br>meta-learner网络使用（2）中的损失梯度δ作为输入，该信息是从matching network中获得的，它解释了其在当前特征空间中的状态。然后，meta-learner 网络中的g(·)学习从该损失梯度到自适应权重Wtarget的映射，该权重描述目标特定的特征空间，也就是所谓的目标特定权重（target-specific weights）。可以通过损失函数来训练元学习器网络，该函数可以衡量自适应权重Wtarget在正确拟合新示例{z1，…，zM’}时的准确度。</p>
+<h2 id="Matching-Network"><a href="#Matching-Network" class="headerlink" title="Matching Network"></a>Matching Network</h2><h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p>5 convolutional layers<br>2 pooling layers of kernel size 3 and stride 2 are applied after the first two convolutional layers.<br>w1 : 11×11×3×128,<br>w2 : 5×5×128×256,<br>w3 : 3×3×256×384,<br>w4 : 3×3×384×256,<br>w5 : 1×1×256×192.<br>Inputs,<br>27×127×3  for x<br>255×255×3 for z<br>response map<br>17 × 17  </p>
+<h3 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h3><p>在训练时，对(x,z)从选定的视频剪辑中的目标轨迹中随机采样。然后，生成ground-truth响应映射y∈{−1，+1}17×17，其中值在目标位置为+1，否则为- 1。对于损失函数l(fw(x, z)， y)，文章使用logistic损失函数定义为：<br><img src="https://s1.ax1x.com/2020/05/13/YwQJVP.png" alt="YwQJVP.png"><br>式中，p表示响应图中每个可能位置P的集合中的一个位置，而ζ（y [p]）是减轻标签不平衡的加权函数。<br>损失函数使用Adam优化器进行了优化，使用批处理大小为8的学习率为10−4，并运行95000次迭代。</p>
+<h2 id="Meta-learner-Network"><a href="#Meta-learner-Network" class="headerlink" title="Meta-learner Network"></a>Meta-learner Network</h2><h3 id="Network-1"><a href="#Network-1" class="headerlink" title="Network"></a>Network</h3><p>3 fully-connected layers<br>Each intermediate layer is followed by a dropout layer with the keep probability of 0.7 when training.<br>For input, gradient δ of size<br>1×1×256×192<br>output Wtarget of size<br>1×1×256×32<br>合并之后的权重 [w5,wtarget]<br>1×1×256×(192+32)</p>
+<h3 id="Train-1"><a href="#Train-1" class="headerlink" title="Train"></a>Train</h3><p>训练的时候从一个训练序列中随机抽取M′个(M′≥M)context patch，也就是Zreg ={z1,…,zM′}然后从中取M个来计算梯度δ。接着利用公式2，来计算响应二值图。注意，这里的计算二值图，是在假定目标位于中心来进行计算的(assuming the target is located at the center i<br>of zi)。这样做的目的就是在于我前面提到的，训练meta-learner network并不追求单一任务上的最优，而是去寻找可以让所有task都能下降到分别的全局最优，所以这里假设目标在context patch的中心，这样不管目标去哪里，我们的x都能很快的响应。<br>meta-learner network的损失函数，针对meta-learne network进行最优化，matching network固定不变，如下式所示，<br><img src="https://s1.ax1x.com/2020/05/13/YwQ8bt.png" alt="YwQ8bt.png"></p>
+<hr>
+<h1 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h1><p><img src="https://s1.ax1x.com/2020/05/14/Y0t0dH.png" alt="Y0t0dH.png"><br>OTB[51]和LaSOT[12]数据集的定量结果。MLT为提出的算法。该算法在OTB数据集上表现出了较好的性能，在大规模LaSOT数据集上表现优于其他算法，并利用元学习器提供的额外特征空间获得了性能提升。</p>
+<p><img src="https://s1.ax1x.com/2020/05/14/Y0tBod.png" alt="Y0tBod.png"><br>MLT-mt    只加入了meta-learner<br>MLT-mt-ft 加入了Adam优化器进行finetuning</p>
 
     </div>
 
@@ -328,7 +343,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#meta-learning"><span class="nav-number">2.1.</span> <span class="nav-text">meta-learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SiameseFc"><span class="nav-number">2.2.</span> <span class="nav-text">SiameseFc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Algorithm"><span class="nav-number">3.</span> <span class="nav-text">Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Components"><span class="nav-number">3.1.</span> <span class="nav-text">Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracking-algorithm"><span class="nav-number">3.2.</span> <span class="nav-text">Tracking algorithm</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#meta-learning"><span class="nav-number">2.1.</span> <span class="nav-text">meta-learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SiameseFc"><span class="nav-number">2.2.</span> <span class="nav-text">SiameseFc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Algorithm"><span class="nav-number">3.</span> <span class="nav-text">Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Components"><span class="nav-number">3.1.</span> <span class="nav-text">Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracking-algorithm"><span class="nav-number">3.2.</span> <span class="nav-text">Tracking algorithm</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implementation-and-Training"><span class="nav-number">4.</span> <span class="nav-text">Implementation and Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Matching-Network"><span class="nav-number">4.1.</span> <span class="nav-text">Matching Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network"><span class="nav-number">4.1.1.</span> <span class="nav-text">Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train"><span class="nav-number">4.1.2.</span> <span class="nav-text">Train</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Meta-learner-Network"><span class="nav-number">4.2.</span> <span class="nav-text">Meta-learner Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">Train</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experimental-Results"><span class="nav-number">5.</span> <span class="nav-text">Experimental Results</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
