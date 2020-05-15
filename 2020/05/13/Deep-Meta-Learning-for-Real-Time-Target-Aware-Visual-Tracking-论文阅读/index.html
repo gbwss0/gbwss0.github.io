@@ -71,7 +71,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ8bt.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0t0dH.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0tBod.png">
-<meta property="og:updated_time" content="2020-05-14T03:14:54.333Z">
+<meta property="og:updated_time" content="2020-05-14T03:16:29.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Yd75xP.png">
 
@@ -218,7 +218,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-05-14 11:14:54" itemprop="dateModified" datetime="2020-05-14T11:14:54+08:00">2020-05-14</time>
+                <time title="Modified: 2020-05-14 11:16:29" itemprop="dateModified" datetime="2020-05-14T11:16:29+08:00">2020-05-14</time>
               </span>
 
           
@@ -276,6 +276,7 @@
 <p>文章中提到，这里提出了一个新的响应图yˆ ⊗ h，加入了一个余弦窗函数，这个h就是余弦窗函数，用来惩罚大位移，保证目标大小平滑变化。</p>
 </blockquote>
 <p>整个跟踪流程如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwYL79.png" alt="YwYL79.png"></p>
+<hr>
 <h1 id="Implementation-and-Training"><a href="#Implementation-and-Training" class="headerlink" title="Implementation and Training"></a>Implementation and Training</h1><p><img src="https://s1.ax1x.com/2020/05/13/YwQYUf.png" alt="YwQYUf.png"><br>meta-learner网络使用（2）中的损失梯度δ作为输入，该信息是从matching network中获得的，它解释了其在当前特征空间中的状态。然后，meta-learner 网络中的g(·)学习从该损失梯度到自适应权重Wtarget的映射，该权重描述目标特定的特征空间，也就是所谓的目标特定权重（target-specific weights）。可以通过损失函数来训练元学习器网络，该函数可以衡量自适应权重Wtarget在正确拟合新示例{z1，…，zM’}时的准确度。</p>
 <h2 id="Matching-Network"><a href="#Matching-Network" class="headerlink" title="Matching Network"></a>Matching Network</h2><h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p>5 convolutional layers<br>2 pooling layers of kernel size 3 and stride 2 are applied after the first two convolutional layers.<br>w1 : 11×11×3×128,<br>w2 : 5×5×128×256,<br>w3 : 3×3×256×384,<br>w4 : 3×3×384×256,<br>w5 : 1×1×256×192.<br>Inputs,<br>27×127×3  for x<br>255×255×3 for z<br>response map<br>17 × 17  </p>
 <h3 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h3><p>在训练时，对(x,z)从选定的视频剪辑中的目标轨迹中随机采样。然后，生成ground-truth响应映射y∈{−1，+1}17×17，其中值在目标位置为+1，否则为- 1。对于损失函数l(fw(x, z)， y)，文章使用logistic损失函数定义为：<br><img src="https://s1.ax1x.com/2020/05/13/YwQJVP.png" alt="YwQJVP.png"><br>式中，p表示响应图中每个可能位置P的集合中的一个位置，而ζ（y [p]）是减轻标签不平衡的加权函数。<br>损失函数使用Adam优化器进行了优化，使用批处理大小为8的学习率为10−4，并运行95000次迭代。</p>
