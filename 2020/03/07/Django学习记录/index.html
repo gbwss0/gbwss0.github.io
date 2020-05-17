@@ -54,7 +54,7 @@
 <meta property="og:site_name" content="Gbwss">
 <meta property="og:description" content="学习Django的一些记录">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-04-09T02:36:08.770Z">
+<meta property="og:updated_time" content="2020-05-17T12:02:37.908Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/07/Django%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
@@ -200,7 +200,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-09 10:36:08" itemprop="dateModified" datetime="2020-04-09T10:36:08+08:00">2020-04-09</time>
+                <time title="Modified: 2020-05-17 20:02:37" itemprop="dateModified" datetime="2020-05-17T20:02:37+08:00">2020-05-17</time>
               </span>
 
           
@@ -236,9 +236,20 @@
 <li>kwargs: 视图使用的字典类型的参数。</li>
 <li>name: 用来反向获取 URL。</li>
 </ul>
-<h1 id="Django模板"><a href="#Django模板" class="headerlink" title="Django模板"></a>Django模板</h1><p>模板是一个文本，用于分离文档的表现形式和内容</p>
 <hr>
-<p>未完待续。。。</p>
+<h1 id="Django-模板"><a href="#Django-模板" class="headerlink" title="Django 模板"></a>Django 模板</h1><p>模板是一个文本，用于分离文档的表现形式和内容<br>只有两种特殊符号：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;变量&#125;&#125;</span><br><span class="line">&#123;% 逻辑 %&#125;如for循环等</span><br></pre></td></tr></table></figure>
+
+<h2 id="Django-模板标签"><a href="#Django-模板标签" class="headerlink" title="Django 模板标签"></a>Django 模板标签</h2><h4 id="if-else-标签"><a href="#if-else-标签" class="headerlink" title="if/else 标签"></a>if/else 标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if condition1 %&#125;</span><br><span class="line">   ... display 1</span><br><span class="line">&#123;% elif condition2 %&#125;</span><br><span class="line">   ... display 2</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">   ... display 3</span><br><span class="line">&#123;% endif %&#125;b</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="for-标签"><a href="#for-标签" class="headerlink" title="for 标签"></a>for 标签</h4><p>与python类似，都是 X in Y 的形式。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% for athlete in athlete_list %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; athlete.name &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>还可以嵌套使用 for 标签：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;% for athlete in athlete_list %&#125;</span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; athlete.name &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    &#123;% for sport in athlete.sports_played %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123; sport &#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+
 
     </div>
 
@@ -304,7 +315,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django项目"><span class="nav-number">1.</span> <span class="nav-text">Django项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#django-admin"><span class="nav-number">1.1.</span> <span class="nav-text">django-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-函数"><span class="nav-number">1.2.</span> <span class="nav-text">path() 函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Django模板"><span class="nav-number">2.</span> <span class="nav-text">Django模板</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django项目"><span class="nav-number">1.</span> <span class="nav-text">Django项目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#django-admin"><span class="nav-number">1.1.</span> <span class="nav-text">django-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#path-函数"><span class="nav-number">1.2.</span> <span class="nav-text">path() 函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Django-模板"><span class="nav-number">2.</span> <span class="nav-text">Django 模板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Django-模板标签"><span class="nav-number">2.1.</span> <span class="nav-text">Django 模板标签</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#if-else-标签"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">if/else 标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for-标签"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">for 标签</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
