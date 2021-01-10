@@ -192,7 +192,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-01-10 22:00:52 / Modified: 22:14:24" itemprop="dateCreated datePublished" datetime="2021-01-10T22:00:52+08:00">2021-01-10</time>
+              <time title="Created: 2021-01-10 22:00:52 / Modified: 22:17:28" itemprop="dateCreated datePublished" datetime="2021-01-10T22:00:52+08:00">2021-01-10</time>
             </span>
 
           
@@ -206,40 +206,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="安装HomeBrew"><a href="#安装HomeBrew" class="headerlink" title="安装HomeBrew"></a>安装HomeBrew</h1><p>官方推荐的是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin&#x2F;bash -c &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;Homebrew&#x2F;install&#x2F;master&#x2F;install.sh)&quot;</span><br></pre></td></tr></table></figure>
-<p>但是我在做这不操作的时候忽略了现在GitHub的raw.<code>githubusercontent.com</code>域名被污染的问题，一直报错，选择了知乎上大佬的一个脚本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;bin&#x2F;zsh -c &quot;$(curl -fsSL https:&#x2F;&#x2F;gitee.com&#x2F;cunkai&#x2F;HomebrewCN&#x2F;raw&#x2F;master&#x2F;Homebrew.sh)&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>临时解决GitHub的raw.githubusercontent.com无法连接问题:</p>
-</li>
-<li><p>Ping之后发现是0.0.0.0，根本查不到这个ip，怪不得wget报了443的错误<br>通过IPAddress.com首页,输入raw.githubusercontent.com查询到真实IP地址<br>修改hosts<br><code>sudo vim /etc/hosts</code><br>添加以下内容保存即可<br><code>199.232.28.133 raw.githubusercontent.com</code></p>
-</li>
-</ul>
-<h1 id="安装-iTerm2"><a href="#安装-iTerm2" class="headerlink" title="安装 iTerm2"></a>安装 iTerm2</h1><h2 id="命令行安装"><a href="#命令行安装" class="headerlink" title="命令行安装"></a>命令行安装</h2><p>命令行安装的话使用的是<code>brew cask</code>，直接<code>brew cask install itrem2</code> 即可，但是即使是改了国内源，还是速度比较慢，去官网下载更快一点。</p>
-<h2 id="安装包安装"><a href="#安装包安装" class="headerlink" title="安装包安装"></a>安装包安装</h2><p>官网：<a href="https://www.iterm2.com/" target="_blank" rel="noopener">https://www.iterm2.com/</a></p>
-<h1 id="安装-oh-my-zsh"><a href="#安装-oh-my-zsh" class="headerlink" title="安装 oh-my-zsh"></a>安装 oh-my-zsh</h1><p>github链接：<a href="https://github.com/robbyrussell/oh-my-zsh" target="_blank" rel="noopener">https://github.com/robbyrussell/oh-my-zsh</a></p>
-<h1 id="启用zsh"><a href="#启用zsh" class="headerlink" title="启用zsh"></a>启用zsh</h1><p>MacOS Catalina把默认shell从bash换成了zsh，所以相比于之前的macos版本，少了安装zsh这一步</p>
-<p>可以用<code>sudo chsh -s /bin/zsh</code>和<code>sudo chsh -s /bin/bash</code>相互切换，切换成功后退出，重新进入生效</p>
-<h1 id="curl-安装"><a href="#curl-安装" class="headerlink" title="curl 安装"></a>curl 安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;robbyrussell&#x2F;oh-my-zsh&#x2F;master&#x2F;tools&#x2F;install.sh)&quot;</span><br></pre></td></tr></table></figure>
-
-<h1 id="wget-安装"><a href="#wget-安装" class="headerlink" title="wget 安装"></a>wget 安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c &quot;$(wget https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;robbyrussell&#x2F;oh-my-zsh&#x2F;master&#x2F;tools&#x2F;install.sh -O -)&quot;</span><br></pre></td></tr></table></figure>
-
-<h1 id="zsh好用的插件们"><a href="#zsh好用的插件们" class="headerlink" title="zsh好用的插件们"></a>zsh好用的插件们</h1><p>z // 链接：<a href="https://github.com/rupa/z" target="_blank" rel="noopener">https://github.com/rupa/z</a></p>
-<h1 id="brew-cask-和-brew-的区别"><a href="#brew-cask-和-brew-的区别" class="headerlink" title="brew cask 和 brew 的区别"></a>brew cask 和 brew 的区别</h1><p>brew cask 是 已经编译好了的应用包 （.dmg/.pkg）<br>brew 是下载code 然后 ./configure &amp;&amp; make install ，同时会包含相关依存库</p>
-<h1 id="在安装anaconda后，远程登陆的控制台命令行之前后出现-base-字样"><a href="#在安装anaconda后，远程登陆的控制台命令行之前后出现-base-字样" class="headerlink" title="在安装anaconda后，远程登陆的控制台命令行之前后出现 (base) 字样"></a>在安装anaconda后，远程登陆的控制台命令行之前后出现 (base) 字样</h1><p>这是由于anaconda中的auto_activate_base默认设置为True，可以通过下面的命令检查：</p>
-<p>conda config –show | grep auto_activate_base<br>因此，若想隐藏 (base) ，可以将其设为False并更新.bashrc文件:<br>conda config –set auto_activate_base False<br>source ~/.bashrc<br>可通过以下命令复原：<br>conda config –set auto_activate_base True<br>source ~/.bashrc<br>Ref</p>
-<ul>
-<li><a href="https://askubuntu.com/questions/1026383/why-does-base-appear-in-front-of-my-terminal-prompt" target="_blank" rel="noopener">https://askubuntu.com/questions/1026383/why-does-base-appear-in-front-of-my-terminal-prompt</a></li>
-</ul>
-<h1 id="axel"><a href="#axel" class="headerlink" title="axel"></a>axel</h1><p>linux和mac下的下载神器，非常快！免费，简洁，多线程！！！</p>
-<h2 id="安装方式"><a href="#安装方式" class="headerlink" title="安装方式"></a>安装方式</h2><ol>
-<li>直接下载，下载地址：<a href="http://rudix.org/packages/axel.html。" target="_blank" rel="noopener">http://rudix.org/packages/axel.html。</a></li>
-<li>通过homebrew安装：先安装homebrew，然后命令行走起：brew install axel。</li>
-</ol>
-<h1 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">axel -n 30 https:&#x2F;&#x2F;download.jetbrains.8686c.com&#x2F;cpp&#x2F;CLion-2017.3.dmg</span><br></pre></td></tr></table></figure>
-<p>把后面这个下载链接换成需要的就行了，这个30代表的是线程数。如果电脑性能够强劲的话把30变大也行（别太大，否则cpu受不了，通常几十就行）</p>
-
+          <p>MacOS下终端的一些问题</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/01/10/MacOS%E9%85%8D%E7%BD%AE%E7%BB%88%E7%AB%AF/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
