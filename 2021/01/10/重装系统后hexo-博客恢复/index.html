@@ -46,19 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程">
+  <meta name="description" content="重装系统后Hexo和Github下的博客重新部署">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下mysql相关问题">
-<meta property="og:url" content="http://yoursite.com/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="重装系统后hexo 博客恢复">
+<meta property="og:url" content="http://yoursite.com/2021/01/10/%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%90%8Ehexo-%E5%8D%9A%E5%AE%A2%E6%81%A2%E5%A4%8D/index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程">
+<meta property="og:description" content="重装系统后Hexo和Github下的博客重新部署">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-04-09T02:28:43.000Z">
-<meta property="article:modified_time" content="2020-04-09T02:36:00.000Z">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/10/s1tha8.md.png">
+<meta property="article:published_time" content="2021-01-10T13:25:19.000Z">
+<meta property="article:modified_time" content="2021-01-10T13:50:11.631Z">
 <meta property="article:author" content="Wang shushu">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/10/s1tha8.md.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="http://yoursite.com/2021/01/10/%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%90%8Ehexo-%E5%8D%9A%E5%AE%A2%E6%81%A2%E5%A4%8D/">
 
 
 <script id="page-configurations">
@@ -72,7 +74,7 @@
   };
 </script>
 
-  <title>Mac下mysql相关问题 | Gbwss</title>
+  <title>重装系统后hexo 博客恢复 | Gbwss</title>
   
 
 
@@ -171,7 +173,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/10/%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F%E5%90%8Ehexo-%E5%8D%9A%E5%AE%A2%E6%81%A2%E5%A4%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,7 +186,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Mac下mysql相关问题
+          重装系统后hexo 博客恢复
         </h1>
 
         <div class="post-meta">
@@ -195,7 +197,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-04-09 10:28:43 / Modified: 10:36:00" itemprop="dateCreated datePublished" datetime="2020-04-09T10:28:43+08:00">2020-04-09</time>
+              <time title="Created: 2021-01-10 21:25:19 / Modified: 21:50:11" itemprop="dateCreated datePublished" datetime="2021-01-10T21:25:19+08:00">2021-01-10</time>
             </span>
 
           
@@ -209,15 +211,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>记录了ERROR 2002 (HY000)报错 后期补上mysql配置过程</p>
+        <p>重装系统后Hexo和Github下的博客重新部署</p>
 <a id="more"></a>
 
-<hr>
-<h2 id="ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock"><a href="#ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock" class="headerlink" title="ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock"></a>ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘/tmp/mysql.sock</h2><p><a href="https://blog.csdn.net/qinyibut/article/details/89341469" target="_blank" rel="noopener">参考链接</a></p>
-<p>出现这个问题的原因是因为没有启动mysql服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql.server start</span><br></pre></td></tr></table></figure>
-<p>即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Enter password:</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 8</span><br><span class="line">Server version: 8.0.19 Homebrew</span><br></pre></td></tr></table></figure>
+<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="NodeJS"><a href="#NodeJS" class="headerlink" title="NodeJS"></a>NodeJS</h2><p>hexo要用npm安装 所以NodeJS必不可少 官网安装即可</p>
+<h2 id="使用SSH-连接到-GitHub"><a href="#使用SSH-连接到-GitHub" class="headerlink" title="使用SSH 连接到 GitHub"></a>使用SSH 连接到 GitHub</h2><h3 id="配置个人信息-生成SSH密钥"><a href="#配置个人信息-生成SSH密钥" class="headerlink" title="配置个人信息 生成SSH密钥"></a>配置个人信息 生成SSH密钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"xxxxxx"</span></span><br><span class="line">git config --global user.email <span class="string">"xxxxxx"</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">"xxxxxxxx(邮箱)"</span></span><br></pre></td></tr></table></figure>
+<h3 id="链接GitHub"><a href="#链接GitHub" class="headerlink" title="链接GitHub"></a>链接GitHub</h3><p>去.ssh目录下的id_rsa.pub拷贝所有内容 粘贴到GitHub的Setting-&gt;SSH and GPG keys-&gt;Add SSH key中。</p>
+<h3 id="验证SSH-key"><a href="#验证SSH-key" class="headerlink" title="验证SSH key"></a>验证SSH key</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p><img src="https://s3.ax1x.com/2021/01/10/s1tha8.md.png" alt="s1tha8.md.png"></p>
+<h2 id="使用cnpm替换npm"><a href="#使用cnpm替换npm" class="headerlink" title="使用cnpm替换npm"></a>使用cnpm替换npm</h2><p>淘宝源安装比较快而且不容易失败</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cnpm -g --registry&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除博客文件夹文件-保留部分"><a href="#删除博客文件夹文件-保留部分" class="headerlink" title="删除博客文件夹文件 保留部分"></a>删除博客文件夹文件 保留部分</h2><p>打开原来的博客文件夹，只需保留这些项目，删除其他的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.gitignore </span><br><span class="line">_config.yml</span><br><span class="line">package.json</span><br><span class="line">theme&#x2F;</span><br><span class="line">source&#x2F;</span><br><span class="line">scaffolds&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h1 id="开始链接"><a href="#开始链接" class="headerlink" title="开始链接"></a>开始链接</h1><h2 id="读取依赖的信息并安装"><a href="#读取依赖的信息并安装" class="headerlink" title="读取依赖的信息并安装"></a>读取依赖的信息并安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm install</span><br></pre></td></tr></table></figure>
+<p>运行<code>cnpm install</code>根据 package.json 读取依赖的信息并安装</p>
+<h2 id="安装部署插件"><a href="#安装部署插件" class="headerlink" title="安装部署插件"></a>安装部署插件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h1 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h1><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -230,17 +242,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2020/03/07/ArcFaceSDK3-0-PythonDemo/" rel="next" title="ArcFaceSDK3.0 PythonDemo">
-                  <i class="fa fa-chevron-left"></i> ArcFaceSDK3.0 PythonDemo
+                <a href="/2020/05/19/Django-%E8%B7%AF%E7%94%B1%E7%B3%BB%E7%BB%9F%EF%BC%88url%EF%BC%89/" rel="next" title="Django 路由系统（url）">
+                  <i class="fa fa-chevron-left"></i> Django 路由系统（url）
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="prev" title="Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读">
-                  Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -279,7 +288,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ERROR-2002-HY000-Can’t-connect-to-local-MySQL-server-through-socket-‘-tmp-mysql-sock"><span class="nav-number">1.</span> <span class="nav-text">ERROR 2002 (HY000): Can’t connect to local MySQL server through socket ‘&#x2F;tmp&#x2F;mysql.sock</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeJS"><span class="nav-number">1.1.</span> <span class="nav-text">NodeJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用SSH-连接到-GitHub"><span class="nav-number">1.2.</span> <span class="nav-text">使用SSH 连接到 GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置个人信息-生成SSH密钥"><span class="nav-number">1.2.1.</span> <span class="nav-text">配置个人信息 生成SSH密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接GitHub"><span class="nav-number">1.2.2.</span> <span class="nav-text">链接GitHub</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证SSH-key"><span class="nav-number">1.2.3.</span> <span class="nav-text">验证SSH key</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用cnpm替换npm"><span class="nav-number">1.3.</span> <span class="nav-text">使用cnpm替换npm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除博客文件夹文件-保留部分"><span class="nav-number">1.4.</span> <span class="nav-text">删除博客文件夹文件 保留部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开始链接"><span class="nav-number">2.</span> <span class="nav-text">开始链接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取依赖的信息并安装"><span class="nav-number">2.1.</span> <span class="nav-text">读取依赖的信息并安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装部署插件"><span class="nav-number">2.2.</span> <span class="nav-text">安装部署插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#大功告成"><span class="nav-number">3.</span> <span class="nav-text">大功告成</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.1.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
