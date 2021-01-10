@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="Gbwss" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读">
+<meta property="og:url" content="http://yoursite.com/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Gbwss">
+<meta property="og:description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Yd75xP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxhGD.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxfPO.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Ydx6q1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Ydz9Ln.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxRIK.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwMVfg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ3DI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ1KA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQuCD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQQvd.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQMgH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwYL79.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQYUf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQJVP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ8bt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/14/Y0t0dH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/14/Y0tBod.png">
+<meta property="article:published_time" content="2020-05-13T11:07:04.000Z">
+<meta property="article:modified_time" content="2020-05-15T03:53:52.000Z">
+<meta property="article:author" content="Wang shushu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/05/13/Yd75xP.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读 | Gbwss</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gbwss</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang shushu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gbwss">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-13 19:07:04" itemprop="dateCreated datePublished" datetime="2020-05-13T19:07:04+08:00">2020-05-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-15 11:53:52" itemprop="dateModified" datetime="2020-05-15T11:53:52+08:00">2020-05-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。</p>
+<a id="more"></a>
+
+<hr>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>the number of positive samples are highly limited.</li>
+<li>overfitting</li>
+</ul>
+<p>在跟踪过程中,当目标外观发生变化时，需要对模型进行更新。而更新操作需要采用stochastic gradient descent (SGD)随机梯度下降，Lagrange multipliers , ridge regressio等方法，效率很低，通常低于20FPS，无法满足实时性需求。此外，更新通常是利用跟踪过程中等少量目标外观模型（a handful of target appearance templates obtained in the course of tracking）来进行的，由于正样本不足，所以模型很容易陷入过拟合（overfitting）而失去泛化能力。</p>
+<hr>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>本文基于以上背景和动机，提出了一种 end to end visual tracking network structure，主要包括了两个部分</p>
+<ul>
+<li>Siamese matching network for target search</li>
+<li>meta-learning network for adaptive feature space.</li>
+</ul>
+<p>在跟踪算法SiameseFc基础上，这里简称matching network，添加了meta-learner network，在运行时动态产生部分matching network的参数。利用meta-learner network，能够使matching network适应目标外形变化，而且对matching network动态新增的参数，也只需要计算forward-pass就可以，因此，实时效果好，达到了48fps，整体流程如下图如所示：<br><img src="https://s1.ax1x.com/2020/05/13/Yd75xP.png" alt="Yd75xP.png"><br>训练后的元学习网络为matching network（本文中就是SiameseFC网络）提供了额外的卷积核和channel attention information，从而让特征空间（feature space）可以根据追踪过程中获得的新的外观模版（new appearance templates obtained in the course of tracking）进行自适应修改，而不会产生过拟合情况。</p>
+<hr>
+<h2 id="Meta-learning"><a href="#Meta-learning" class="headerlink" title="Meta-learning"></a>Meta-learning</h2><p>简单来说就是像人一样在学习了很多个task之后，但面对新的task时能够借助以往的学习知识以及少量的新样本快速地适应到新的任务上，就像我们玩lol玩的很好，那么上手王者荣耀是一个道理。<br>其实meta-learning这个概念很早就提出，只是目前将其应用于深度学习和强化学习领域做出了一些效果，或提高性能，或提高训练效率。目前对meta-learning的理解，可以简单理解为learning to learn，换句话解释就是要去学习超参，那对超参的定义可以理解为设计算法时不是由data-driven的部分，可以是模型结构，可以是训练参数，也可以是根据情况动态修改模型结构等。总之，meta-learning就是要学习并替代设计算法时人的工作。<br>本文中的meta-learning其实应用主要是应用了meta-learning的思想，使用meta-learning来更新最后一层卷积层（conv5）的weight。使之产生一个可以根据现有追踪模版自适应更新的权值，然后把原始的权重和meta-learning网络生成的权值合并，生成最后的W adapt。</p>
+<blockquote>
+<p>这里分享一下我看的李宏毅老师的机器学习讲meta-learning相关的一些小知识，就是在meta-learning网络训练的时候，并不追求单一任务上的最优，而是去寻找可以让所有task都能下降到分别的全局最优。就像下面这两张图。<br><img src="https://s1.ax1x.com/2020/05/13/YdxhGD.jpg" alt="YdxhGD.jpg"><br><img src="https://s1.ax1x.com/2020/05/13/YdxfPO.jpg" alt="YdxfPO.jpg"></p>
+</blockquote>
+<hr>
+<h2 id="SiameseFc"><a href="#SiameseFc" class="headerlink" title="SiameseFc"></a>SiameseFc</h2><p>SiameseFc跟踪算法，没有采用更新model或者维护template，而是使用两个全卷积cnn组成Simaese network，提取卷积层特征做相关，产生heatmap来预测目标位置，如下图所示。两个网络中，一个输入是起始帧的目标模板，另一个输入是目标附近更大范围的区域（一般可以设为4倍，相当于搜索区域）。<br><img src="https://s1.ax1x.com/2020/05/13/Ydx6q1.png" alt="Ydx6q1.png"><br>上图中可以看出其核心计算公式：</p>
+<p><img src="https://s1.ax1x.com/2020/05/13/Ydz9Ln.png" alt="Ydz9Ln.png"><br>网络的损失函数如下式所示，y[u]表示真实标签，其定位目标框内为1，框外为-1：<br><img src="https://s1.ax1x.com/2020/05/13/YdxRIK.jpg" alt="YdxRIK.jpg"></p>
+<p>好了 让我们开始正文吧！</p>
+<h1 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h1><p>文章的网络结构如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwMVfg.png" alt="YwMVfg.png"><br>蓝色的就是SiamFC的结构, 文章是提特征, 然后用conv5的特征算一个loss, 然后把梯度给Meta-learner这个网络, 去算一个权重出来, 还算了一个attention, 再把权重concate到原始conv5的weight上面, 然后用这个新的weight来计算最终的features, 在这两个feature上做互相关.</p>
+<hr>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>首先我们来看蓝色的部分，实际上就是一个SiameseFc网络，使用具有5个卷积层的CNN，并在前两个卷积层之后应用2个内核大小为3和步幅为2的池化层。在每个卷积层之后插入批处理归一化层（Batch normalization layer）。<br>CNN的每层的内核大小和输入/输出尺寸为w1：11×11×3×128，w2：5×5×128×256，w3：3×3 ×256×384，w4：3×3×384×256，w5：1×1×256×192。对于输入，为x使用大小为127×127×3的RGB图像，为z使用大小为255×255×3的RGB图像，匹配网络生成大小为17×17的响应图。<br>实际上就是先做卷积，然后再求互相关：<br><img src="https://s1.ax1x.com/2020/05/13/YwQ3DI.png" alt="YwQ3DI.png"><br>式中 x为模版，z为搜索区域，w = {w1,w2, …,wN}表示每一层的一组权重，ϕw(⋅)表示整个网络权重为 w 时的使用Nlayer 特征提取器提取出的特征。</p>
+<p>meta-learner network根据matching network在之前追踪过程中产生的M个context patches z = {z1, …, zM}以及target x，来计算能够使追踪模版自适应更新的新增参数。</p>
+<p>首先使用matching network最后一层conv5来计算平均负梯度：<br><img src="https://s1.ax1x.com/2020/05/13/YwQ1KA.png" alt="YwQ1KA.png"><br>其中 yi表示根据ground-truth来计算出针对zi的二值标签图，也就是响应图（response map。meta-leaner设计的依据是目标发生变化，那么δ也发生变化（the characteristic of δ is empirically different according to a target）</p>
+<p>然后，以δ作为输入，meta-learner 网络 g（·）可以生成与输入对应的目标特定权重（target-specific weights），如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwQuCD.png" alt="YwQuCD.png"><br>￼然后将两个权重拼接起来就来更新matching network原始的权重</p>
+<blockquote>
+<p>这里插一嘴，上面所说的拼接是真的拼接，就是简单相加，这一点可以在后文中介绍meta-learner网络中得到印证<br>[w5,wtarget] of size 1×1×256×(192+32).</p>
+</blockquote>
+<p><img src="https://s1.ax1x.com/2020/05/13/YwQQvd.png" alt="YwQQvd.png"></p>
+<blockquote>
+<p>论文还说这里同时生成了一个channel-wise sig- moid attention weights这样的权重，文中也没有讲具体实现，同时我在后文中也没有看到如何使用</p>
+</blockquote>
+<hr>
+<h2 id="Tracking-algorithm"><a href="#Tracking-algorithm" class="headerlink" title="Tracking algorithm"></a>Tracking algorithm</h2><p>对于跟踪过程，首先保存K个context images as zmem = {z1 , …, zK }，以及对应的响应图 yˆ = {yˆ ,…,yˆK}.保存的原则是, 当在每一帧找出target之后, 会判断当前这个target的响应是否大于一个阈值 τ , 若是大于 τ , 便把这个patch加入到template的池中：<br><img src="https://s1.ax1x.com/2020/05/13/YwQMgH.png" alt="YwQMgH.png"><br>式子中的p对应于响应图中所有可能位置P的集合中的位置，而ρ（·）是归一化函数。<br>而在接下来计算要输入meta-learner网络的δ时，从template池中选择熵最小的,其实就是找响应比较大, 比较靠谱那M个template用来更新网络。</p>
+<blockquote>
+<p>文章中提到，这里提出了一个新的响应图yˆ ⊗ h，加入了一个余弦窗函数，这个h就是余弦窗函数，用来惩罚大位移，保证目标大小平滑变化。</p>
+</blockquote>
+<p>整个跟踪流程如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwYL79.png" alt="YwYL79.png"></p>
+<hr>
+<h1 id="Implementation-and-Training"><a href="#Implementation-and-Training" class="headerlink" title="Implementation and Training"></a>Implementation and Training</h1><p><img src="https://s1.ax1x.com/2020/05/13/YwQYUf.png" alt="YwQYUf.png"><br>meta-learner网络使用（2）中的损失梯度δ作为输入，该信息是从matching network中获得的，它解释了其在当前特征空间中的状态。然后，meta-learner 网络中的g(·)学习从该损失梯度到自适应权重Wtarget的映射，该权重描述目标特定的特征空间，也就是所谓的目标特定权重（target-specific weights）。可以通过损失函数来训练元学习器网络，该函数可以衡量自适应权重Wtarget在正确拟合新示例{z1，…，zM’}时的准确度。</p>
+<h2 id="Matching-Network"><a href="#Matching-Network" class="headerlink" title="Matching Network"></a>Matching Network</h2><h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p>5 convolutional layers<br>2 pooling layers of kernel size 3 and stride 2 are applied after the first two convolutional layers.<br>w1 : 11×11×3×128,<br>w2 : 5×5×128×256,<br>w3 : 3×3×256×384,<br>w4 : 3×3×384×256,<br>w5 : 1×1×256×192.<br>Inputs,<br>27×127×3  for x<br>255×255×3 for z<br>response map<br>17 × 17  </p>
+<h3 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h3><p>在训练时，对(x,z)从选定的视频序列中的目标轨迹中随机采样。然后，生成ground-truth响应映射y∈{−1，+1}17×17，其中值在目标位置为+1，否则为- 1。对于损失函数l(fw(x, z)， y)，文章使用logistic损失函数定义为：<br><img src="https://s1.ax1x.com/2020/05/13/YwQJVP.png" alt="YwQJVP.png"><br>式中，p表示响应图中每个可能位置P的集合中的一个位置，而ζ（y [p]）是减轻标签不平衡的加权函数。<br>损失函数使用Adam优化器进行了优化，使用批处理大小为8的学习率为10−4，并运行95000次迭代。</p>
+<h2 id="Meta-learner-Network"><a href="#Meta-learner-Network" class="headerlink" title="Meta-learner Network"></a>Meta-learner Network</h2><h3 id="Network-1"><a href="#Network-1" class="headerlink" title="Network"></a>Network</h3><p>3 fully-connected layers<br>Each intermediate layer is followed by a dropout layer with the keep probability of 0.7 when training.<br>For input, gradient δ of size<br>1×1×256×192<br>output Wtarget of size<br>1×1×256×32<br>合并之后的权重 [w5,wtarget]<br>1×1×256×(192+32)</p>
+<h3 id="Train-1"><a href="#Train-1" class="headerlink" title="Train"></a>Train</h3><p>训练的时候从一个训练序列中随机抽取M′个(M′≥M)context patch，也就是Zreg ={z1,…,zM′}然后从中取M个来计算梯度δ。接着利用公式2，来计算响应二值图。注意，这里的计算二值图，是在假定目标位于中心来进行计算的(assuming the target is located at the center i<br>of zi)。这样做的目的就是在于我前面提到的，训练meta-learner network并不追求单一任务上的最优，而是去寻找可以让所有task都能下降到分别的全局最优，所以这里假设目标在context patch的中心，这样不管目标去哪里，我们的x都能很快的响应。<br>meta-learner network的损失函数，针对meta-learne network进行最优化，matching network固定不变，如下式所示，<br><img src="https://s1.ax1x.com/2020/05/13/YwQ8bt.png" alt="YwQ8bt.png"></p>
+<hr>
+<h1 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h1><p><img src="https://s1.ax1x.com/2020/05/14/Y0t0dH.png" alt="Y0t0dH.png"><br>OTB[51]和LaSOT[12]数据集的定量结果。MLT为提出的算法。该算法在OTB数据集上表现出了较好的性能，在大规模LaSOT数据集上表现优于其他算法，并利用元学习器提供的额外特征空间获得了性能提升。</p>
+<p><img src="https://s1.ax1x.com/2020/05/14/Y0tBod.png" alt="Y0tBod.png"><br>MLT-mt    只加入了meta-learner<br>MLT-mt-ft 加入了Adam优化器进行finetuning</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" rel="next" title="Mac下mysql相关问题">
+                  <i class="fa fa-chevron-left"></i> Mac下mysql相关问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/05/19/Django-%E8%A7%86%E5%9B%BE%E7%B3%BB%E7%BB%9F%EF%BC%88view%EF%BC%89/" rel="prev" title="Django 视图系统（view）">
+                  Django 视图系统（view） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Meta-learning"><span class="nav-number">2.1.</span> <span class="nav-text">Meta-learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SiameseFc"><span class="nav-number">2.2.</span> <span class="nav-text">SiameseFc</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Algorithm"><span class="nav-number">3.</span> <span class="nav-text">Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Components"><span class="nav-number">3.1.</span> <span class="nav-text">Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tracking-algorithm"><span class="nav-number">3.2.</span> <span class="nav-text">Tracking algorithm</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Implementation-and-Training"><span class="nav-number">4.</span> <span class="nav-text">Implementation and Training</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Matching-Network"><span class="nav-number">4.1.</span> <span class="nav-text">Matching Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network"><span class="nav-number">4.1.1.</span> <span class="nav-text">Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train"><span class="nav-number">4.1.2.</span> <span class="nav-text">Train</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Meta-learner-Network"><span class="nav-number">4.2.</span> <span class="nav-text">Meta-learner Network</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">Train</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experimental-Results"><span class="nav-number">5.</span> <span class="nav-text">Experimental Results</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wang shushu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang shushu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.1
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
