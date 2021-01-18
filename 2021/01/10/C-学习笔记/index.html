@@ -53,10 +53,12 @@
 <meta property="og:site_name" content="Gbwss">
 <meta property="og:description" content="wss的C++学习笔记">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/18/scVfOO.md.png">
 <meta property="article:published_time" content="2021-01-10T13:55:13.000Z">
-<meta property="article:modified_time" content="2021-01-10T14:16:49.136Z">
+<meta property="article:modified_time" content="2021-01-18T11:34:30.601Z">
 <meta property="article:author" content="Wang shushu">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/18/scVfOO.md.png">
 
 <link rel="canonical" href="http://yoursite.com/2021/01/10/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
@@ -193,10 +195,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-01-10 21:55:13 / Modified: 22:16:49" itemprop="dateCreated datePublished" datetime="2021-01-10T21:55:13+08:00">2021-01-10</time>
+              <time title="Created: 2021-01-10 21:55:13" itemprop="dateCreated datePublished" datetime="2021-01-10T21:55:13+08:00">2021-01-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-18 19:34:30" itemprop="dateModified" datetime="2021-01-18T19:34:30+08:00">2021-01-18</time>
+              </span>
 
           
 
@@ -334,8 +342,82 @@
 <li>左值可以被赋值，右值不可以被赋值，可以用来给左值赋值。</li>
 <li>左值可变,右值不可变（仅对基础类型适用，用户自定义类型右值引用可以通过成员函数改变）。</li>
 </ol>
-<hr>
-<p>还未补全编译与底层 与C++11特性</p>
+<h1 id="编译和底层"><a href="#编译和底层" class="headerlink" title="编译和底层"></a>编译和底层</h1><h2 id="一个C-源文件从文本到可执行文件经历的过程？"><a href="#一个C-源文件从文本到可执行文件经历的过程？" class="headerlink" title="一个C++源文件从文本到可执行文件经历的过程？"></a>一个C++源文件从文本到可执行文件经历的过程？</h2><p>对于C++源文件，从文本到可执行文件一般需要四个过程：<br>预处理阶段：对源代码文件中文件包含关系（头文件）、预编译语句（宏定义）进行分析和替换，生成预编译文件。</p>
+<p>编译阶段：将经过预处理后的预编译文件转换成特定汇编代码，生成汇编文件</p>
+<p>汇编阶段：将编译阶段生成的汇编文件转化成机器码，生成可重定位目标文件</p>
+<p>链接阶段：将多个目标文件及所需要的库连接成最终的可执行目标文件</p>
+<h2 id="include头文件的顺序以及双引号””和尖括号-lt-gt-的区别？"><a href="#include头文件的顺序以及双引号””和尖括号-lt-gt-的区别？" class="headerlink" title="include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？"></a>include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？</h2><p>Include头文件的顺序：对于include的头文件来说，如果在文件a.h中声明一个在文件b.h中定义的变量，而不引用b.h。那么要在a.c文件中引用b.h文件，并且要先引用b.h，后引用a.h,否则汇报变量类型未声明错误。<br>双引号和尖括号的区别：编译器预处理阶段查找头文件的路径不一样。</p>
+<p>对于使用双引号包含的头文件，查找头文件路径的顺序为：</p>
+<p>当前头文件目录</p>
+<p>编译器设置的头文件路径（编译器可使用-I显式指定搜索路径）</p>
+<p>系统变量CPLUS_INCLUDE_PATH/C_INCLUDE_PATH指定的头文件路径</p>
+<p>对于使用尖括号包含的头文件，查找头文件的路径顺序为：</p>
+<p>编译器设置的头文件路径（编译器可使用-I显式指定搜索路径）</p>
+<p>系统变量CPLUS_INCLUDE_PATH/C_INCLUDE_PATH指定的头文件路径</p>
+<h2 id="malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？"><a href="#malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？" class="headerlink" title="malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？"></a>malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？</h2><p>Malloc函数用于动态分配内存。为了减少内存碎片和系统调用的开销，malloc其采用内存池的方式，先申请大块内存作为堆区，然后将堆区分为多个内存块，以块作为内存管理的基本单位。当用户申请内存时，直接从堆区分配一块合适的空闲块。Malloc采用隐式链表结构将堆区分成连续的、大小不一的块，包含已分配块和未分配块；同时malloc采用显示链表结构来管理所有的空闲块，即使用一个双向链表将空闲块连接起来，每一个空闲块记录了一个连续的、未分配的地址。<br>当进行内存分配时，Malloc会通过隐式链表遍历所有的空闲块，选择满足要求的块进行分配；当进行内存合并时，malloc采用边界标记法，根据每个块的前后块是否已经分配来决定是否进行块合并。</p>
+<p>Malloc在申请内存时，一般会通过brk或者mmap系统调用进行申请。其中当申请内存小于128K时，会使用系统函数brk在堆区中分配；而当申请内存大于128K时，会使用系统函数mmap在映射区分配。</p>
+<h2 id="C-的内存管理是怎样的？"><a href="#C-的内存管理是怎样的？" class="headerlink" title="C++的内存管理是怎样的？"></a>C++的内存管理是怎样的？</h2><p>在C++中，虚拟内存分为代码段、数据段、BSS段、堆区、文件映射区以及栈区六部分。<br>代码段:包括只读存储区和文本区，其中只读存储区存储字符串常量，文本区存储程序的机器代码。</p>
+<p>数据段：存储程序中已初始化的全局变量和静态变量</p>
+<p>bss 段：存储未初始化的全局变量和静态变量（局部+全局），以及所有被初始化为0的全局变量和静态变量。</p>
+<p>堆区：调用new/malloc函数时在堆区动态分配内存，同时需要调用delete/free来手动释放申请的内存。</p>
+<p>映射区:存储动态链接库以及调用mmap函数进行的文件映射</p>
+<p>栈：使用栈空间存储函数的返回地址、参数、局部变量、返回值</p>
+<h2 id="什么时候会发生段错误？"><a href="#什么时候会发生段错误？" class="headerlink" title="什么时候会发生段错误？"></a>什么时候会发生段错误？</h2><p>段错误通常发生在访问非法内存地址的时候，具体来说分为以下几种情况：</p>
+<ul>
+<li>使用野指针</li>
+<li>试图修改字符串常量的内容</li>
+</ul>
+<h2 id="什么是memory-leak，也就是内存泄漏"><a href="#什么是memory-leak，也就是内存泄漏" class="headerlink" title="什么是memory leak，也就是内存泄漏"></a>什么是memory leak，也就是内存泄漏</h2><p>内存泄漏(memory leak)是指由于疏忽或错误造成了程序未能释放掉不再使用的内存的情况。内存泄漏并非指内存在物理上的消失，而是应用程序分配某段内存后，由于设计错误，失去了对该段内存的控制，因而造成了内存的浪费。<br>内存泄漏的分类：</p>
+<ol>
+<li><p>堆内存泄漏 （Heap leak）。对内存指的是程序运行中根据需要分配通过malloc,realloc new等从堆中分配的一块内存，再是完成后必须通过调用对应的 free或者delete 删掉。如果程序的设计的错误导致这部分内存没有被释放，那么此后这块内存将不会被使用，就会产生Heap Leak.</p>
+</li>
+<li><p>系统资源泄露（Resource Leak）。主要指程序使用系统分配的资源比如 Bitmap,handle ,SOCKET等没有使用相应的函数释放掉，导致系统资源的浪费，严重可导致系统效能降低，系统运行不稳定。</p>
+</li>
+<li><p>没有将基类的析构函数定义为虚函数。当基类指针指向子类对象时，如果基类的析构函数不是virtual，那么子类的析构函数将不会被调用，子类的资源没有正确是释放，因此造成内存泄露。</p>
+</li>
+</ol>
+<h2 id="如何判断内存泄漏？"><a href="#如何判断内存泄漏？" class="headerlink" title="如何判断内存泄漏？"></a>如何判断内存泄漏？</h2><p>内存泄漏通常是由于调用了malloc/new等内存申请的操作，但是缺少了对应的free/delete。为了判断内存是否泄露，我们一方面可以使用linux环境下的内存泄漏检查工具Valgrind,另一方面我们在写代码时可以添加内存申请和释放的统计功能，统计当前申请和释放的内存是否一致，以此来判断内存是否泄露。</p>
+<h2 id="new和malloc的区别"><a href="#new和malloc的区别" class="headerlink" title="new和malloc的区别"></a>new和malloc的区别</h2><ol>
+<li>new分配内存按照数据类型进行分配，malloc分配内存按照指定的大小分配；</li>
+<li>new返回的是指定对象的指针，而malloc返回的是void*，因此malloc的返回值一般都需要进行类型转化。</li>
+<li>new不仅分配一段内存，而且会调用构造函数，malloc不会。</li>
+<li>new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</li>
+<li>new是一个操作符可以重载，malloc是一个库函数。</li>
+<li>malloc分配的内存不够的时候，可以用realloc扩容。扩容的原理？new没用这样操作。</li>
+<li>new如果分配失败了会抛出bad_malloc的异常，而malloc失败了会返回NULL。</li>
+<li>申请数组时： new[]一次分配所有内存，多次调用构造函数，搭配使用delete[]，delete[]多次调用析构函数，销毁数组中的每个对象。而malloc则只能sizeof(int) * n。</li>
+</ol>
+<h2 id="共享内存相关api"><a href="#共享内存相关api" class="headerlink" title="共享内存相关api"></a>共享内存相关api</h2><p>Linux允许不同进程访问同一个逻辑内存，提供了一组API，头文件在sys/shm.h中。<br>1）新建共享内存shmget</p>
+<p>int shmget(key_t key,size_t size,int shmflg);</p>
+<p>key：共享内存键值，可以理解为共享内存的唯一性标记。</p>
+<p>size：共享内存大小</p>
+<p>shmflag：创建进程和其他进程的读写权限标识。</p>
+<p>返回值：相应的共享内存标识符，失败返回-1</p>
+<p>2）连接共享内存到当前进程的地址空间shmat</p>
+<p>void *shmat(int shm_id,const void *shm_addr,int shmflg);</p>
+<p>shm_id：共享内存标识符</p>
+<p>shm_addr：指定共享内存连接到当前进程的地址，通常为0，表示由系统来选择。</p>
+<p>shmflg：标志位</p>
+<p>返回值：指向共享内存第一个字节的指针，失败返回-1</p>
+<p>3）当前进程分离共享内存shmdt</p>
+<p>int shmdt(const void *shmaddr);</p>
+<p>4）控制共享内存shmctl</p>
+<p>和信号量的semctl函数类似，控制共享内存</p>
+<p>int shmctl(int shm_id,int command,struct shmid_ds *buf);</p>
+<p>shm_id：共享内存标识符</p>
+<p>command: 有三个值</p>
+<p>IPC_STAT:获取共享内存的状态，把共享内存的shmid_ds结构复制到buf中。</p>
+<p>IPC_SET:设置共享内存的状态，把buf复制到共享内存的shmid_ds结构。</p>
+<p>IPC_RMID:删除共享内存</p>
+<p>buf：共享内存管理结构体。</p>
+<h2 id="自己设计一下如何采用单线程的方式处理高并发"><a href="#自己设计一下如何采用单线程的方式处理高并发" class="headerlink" title="自己设计一下如何采用单线程的方式处理高并发"></a>自己设计一下如何采用单线程的方式处理高并发</h2><p>在单线程模型中，可以采用I/O复用来提高单线程处理多个请求的能力，然后再采用事件驱动模型，基于异步回调来处理事件来</p>
+<h2 id="C-STL-的内存优化"><a href="#C-STL-的内存优化" class="headerlink" title="C++ STL 的内存优化"></a>C++ STL 的内存优化</h2><p>1）二级配置器结构<br>STL内存管理使用二级内存配置器。<br>1、第一级配置器<br>第一级配置器以malloc()，free()，realloc()等C函数执行实际的内存配置、释放、重新配置等操作，并且能在内存需求不被满足的时候，调用一个指定的函数。<br>一级空间配置器分配的是大于128字节的空间<br>如果分配不成功，调用句柄释放一部分内存<br>如果还不能分配成功，抛出异常<br>2、第二级配置器<br>在STL的第二级配置器中多了一些机制，避免太多小区块造成的内存碎片，小额区块带来的不仅是内存碎片，配置时还有额外的负担。区块越小，额外负担所占比例就越大。<br>3、分配原则<br>如果要分配的区块大于128bytes，则移交给第一级配置器处理。<br>如果要分配的区块小于128bytes，则以内存池管理（memory pool），又称之次层配置（sub-allocation）：每次配置一大块内存，并维护对应的16个空闲链表（free-list）。下次若有相同大小的内存需求，则直接从free-list中取。如果有小额区块被释放，则由配置器回收到free-list中。<br>当用户申请的空间小于128字节时，将字节数扩展到8的倍数，然后在自由链表中查找对应大小的子链表<br>如果在自由链表查找不到或者块数不够，则向内存池进行申请，一般一次申请20块<br>如果内存池空间足够，则取出内存<br>如果不够分配20块，则分配最多的块数给自由链表，并且更新每次申请的块数<br>如果一块都无法提供，则把剩余的内存挂到自由链表，然后向系统heap申请空间，如果申请失败，则看看自由链表还有没有可用的块，如果也没有，则最后调用一级空间配置器<br>2）二级内存池<br>二级内存池采用了16个空闲链表，这里的16个空闲链表分别管理大小为8、16、24……120、128的数据块。这里空闲链表节点的设计十分巧妙，这里用了一个联合体既可以表示下一个空闲数据块（存在于空闲链表中）的地址，也可以表示已经被用户使用的数据块（不存在空闲链表中）的地址。<br><img src="https://s3.ax1x.com/2021/01/18/scVfOO.md.png" alt=""><br>1、空间配置函数allocate<br>首先先要检查申请空间的大小，如果大于128字节就调用第一级配置器，小于128字节就检查对应的空闲链表，如果该空闲链表中有可用数据块，则直接拿来用（拿取空闲链表中的第一个可用数据块，然后把该空闲链表的地址设置为该数据块指向的下一个地址），如果没有可用数据块，则调用refill重新填充空间。<br>2、空间释放函数deallocate<br>首先先要检查释放数据块的大小，如果大于128字节就调用第一级配置器，小于128字节则根据数据块的大小来判断回收后的空间会被插入到哪个空闲链表。<br>3、重新填充空闲链表refill<br>在用allocate配置空间时，如果空闲链表中没有可用数据块，就会调用refill来重新填充空间，新的空间取自内存池。缺省取20个数据块，如果内存池空间不足，那么能取多少个节点就取多少个。<br>从内存池取空间给空闲链表用是chunk_alloc的工作，首先根据end_free-start_free来判断内存池中的剩余空间是否足以调出nobjs个大小为size的数据块出去，如果内存连一个数据块的空间都无法供应，需要用malloc取堆中申请内存。<br>假如山穷水尽，整个系统的堆空间都不够用了，malloc失败，那么chunk_alloc会从空闲链表中找是否有大的数据块，然后将该数据块的空间分给内存池（这个数据块会从链表中去除）。<br>3、总结：</p>
+<ol>
+<li>使用allocate向内存池请求size大小的内存空间，如果需要请求的内存大小大于128bytes，直接使用malloc。</li>
+<li>如果需要的内存大小小于128bytes，allocate根据size找到最适合的自由链表。<br>a. 如果链表不为空，返回第一个node，链表头改为第二个node。<br>b. 如果链表为空，使用blockAlloc请求分配node。<br>x. 如果内存池中有大于一个node的空间，分配竟可能多的node(但是最多20个)，将一个node返回，其他的node添加到链表中。<br>y. 如果内存池只有一个node的空间，直接返回给用户。<br>z. 若果如果连一个node都没有，再次向操作系统请求分配内存。<br>①分配成功，再次进行b过程。<br>②分配失败，循环各个自由链表，寻找空间。<br>I. 找到空间，再次进行过程b。<br>II. 找不到空间，抛出异常。</li>
+<li>用户调用deallocate释放内存空间，如果要求释放的内存空间大于128bytes，直接调用free。</li>
+<li>否则按照其大小找到合适的自由链表，并将其插入。</li>
+</ol>
 
     </div>
 
@@ -398,7 +480,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本语言"><span class="nav-number">1.</span> <span class="nav-text">基本语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指针和引用的区别"><span class="nav-number">1.1.</span> <span class="nav-text">指针和引用的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组和指针的区别"><span class="nav-number">1.2.</span> <span class="nav-text">数组和指针的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#野指针"><span class="nav-number">1.3.</span> <span class="nav-text">野指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么析构函数必须是虚函数？为什么C-默认的析构函数不是虚函数"><span class="nav-number">1.4.</span> <span class="nav-text">为什么析构函数必须是虚函数？为什么C++默认的析构函数不是虚函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数指针"><span class="nav-number">1.5.</span> <span class="nav-text">函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork函数"><span class="nav-number">1.6.</span> <span class="nav-text">fork函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中析构函数的作用"><span class="nav-number">1.7.</span> <span class="nav-text">C++中析构函数的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态函数和虚函数的区别"><span class="nav-number">1.8.</span> <span class="nav-text">静态函数和虚函数的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重载和覆盖"><span class="nav-number">1.9.</span> <span class="nav-text">重载和覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数和多态"><span class="nav-number">1.10.</span> <span class="nav-text">虚函数和多态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-里是怎么定义常量的？常量存放在内存的哪个位置？"><span class="nav-number">1.11.</span> <span class="nav-text">C++里是怎么定义常量的？常量存放在内存的哪个位置？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const修饰成员函数的目的是什么？"><span class="nav-number">1.12.</span> <span class="nav-text">const修饰成员函数的目的是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式类型转换"><span class="nav-number">1.13.</span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-delete与malloc-free的区别是什么"><span class="nav-number">1.14.</span> <span class="nav-text">new&#x2F;delete与malloc&#x2F;free的区别是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.15.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器和算法"><span class="nav-number">2.</span> <span class="nav-text">容器和算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map和set有什么区别，分别又是怎么实现的？"><span class="nav-number">2.1.</span> <span class="nav-text">map和set有什么区别，分别又是怎么实现的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL里resize和reserve的区别"><span class="nav-number">2.2.</span> <span class="nav-text">STL里resize和reserve的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL中迭代器的作用，有指针为何还要迭代器"><span class="nav-number">2.3.</span> <span class="nav-text">STL中迭代器的作用，有指针为何还要迭代器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类和数据抽象"><span class="nav-number">3.</span> <span class="nav-text">类和数据抽象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中类成员的访问权限"><span class="nav-number">3.1.</span> <span class="nav-text">C++中类成员的访问权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中struct和class的区别"><span class="nav-number">3.2.</span> <span class="nav-text">C++中struct和class的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类内可以定义引用数据成员吗"><span class="nav-number">3.3.</span> <span class="nav-text">C++类内可以定义引用数据成员吗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是右值引用，跟左值又有什么区别"><span class="nav-number">3.4.</span> <span class="nav-text">什么是右值引用，跟左值又有什么区别</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本语言"><span class="nav-number">1.</span> <span class="nav-text">基本语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指针和引用的区别"><span class="nav-number">1.1.</span> <span class="nav-text">指针和引用的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组和指针的区别"><span class="nav-number">1.2.</span> <span class="nav-text">数组和指针的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#野指针"><span class="nav-number">1.3.</span> <span class="nav-text">野指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么析构函数必须是虚函数？为什么C-默认的析构函数不是虚函数"><span class="nav-number">1.4.</span> <span class="nav-text">为什么析构函数必须是虚函数？为什么C++默认的析构函数不是虚函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数指针"><span class="nav-number">1.5.</span> <span class="nav-text">函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork函数"><span class="nav-number">1.6.</span> <span class="nav-text">fork函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中析构函数的作用"><span class="nav-number">1.7.</span> <span class="nav-text">C++中析构函数的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态函数和虚函数的区别"><span class="nav-number">1.8.</span> <span class="nav-text">静态函数和虚函数的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重载和覆盖"><span class="nav-number">1.9.</span> <span class="nav-text">重载和覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚函数和多态"><span class="nav-number">1.10.</span> <span class="nav-text">虚函数和多态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-里是怎么定义常量的？常量存放在内存的哪个位置？"><span class="nav-number">1.11.</span> <span class="nav-text">C++里是怎么定义常量的？常量存放在内存的哪个位置？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const修饰成员函数的目的是什么？"><span class="nav-number">1.12.</span> <span class="nav-text">const修饰成员函数的目的是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式类型转换"><span class="nav-number">1.13.</span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-delete与malloc-free的区别是什么"><span class="nav-number">1.14.</span> <span class="nav-text">new&#x2F;delete与malloc&#x2F;free的区别是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.15.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器和算法"><span class="nav-number">2.</span> <span class="nav-text">容器和算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map和set有什么区别，分别又是怎么实现的？"><span class="nav-number">2.1.</span> <span class="nav-text">map和set有什么区别，分别又是怎么实现的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL里resize和reserve的区别"><span class="nav-number">2.2.</span> <span class="nav-text">STL里resize和reserve的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL中迭代器的作用，有指针为何还要迭代器"><span class="nav-number">2.3.</span> <span class="nav-text">STL中迭代器的作用，有指针为何还要迭代器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类和数据抽象"><span class="nav-number">3.</span> <span class="nav-text">类和数据抽象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中类成员的访问权限"><span class="nav-number">3.1.</span> <span class="nav-text">C++中类成员的访问权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中struct和class的区别"><span class="nav-number">3.2.</span> <span class="nav-text">C++中struct和class的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类内可以定义引用数据成员吗"><span class="nav-number">3.3.</span> <span class="nav-text">C++类内可以定义引用数据成员吗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是右值引用，跟左值又有什么区别"><span class="nav-number">3.4.</span> <span class="nav-text">什么是右值引用，跟左值又有什么区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译和底层"><span class="nav-number">4.</span> <span class="nav-text">编译和底层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个C-源文件从文本到可执行文件经历的过程？"><span class="nav-number">4.1.</span> <span class="nav-text">一个C++源文件从文本到可执行文件经历的过程？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include头文件的顺序以及双引号””和尖括号-lt-gt-的区别？"><span class="nav-number">4.2.</span> <span class="nav-text">include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？"><span class="nav-number">4.3.</span> <span class="nav-text">malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-的内存管理是怎样的？"><span class="nav-number">4.4.</span> <span class="nav-text">C++的内存管理是怎样的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么时候会发生段错误？"><span class="nav-number">4.5.</span> <span class="nav-text">什么时候会发生段错误？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是memory-leak，也就是内存泄漏"><span class="nav-number">4.6.</span> <span class="nav-text">什么是memory leak，也就是内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何判断内存泄漏？"><span class="nav-number">4.7.</span> <span class="nav-text">如何判断内存泄漏？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new和malloc的区别"><span class="nav-number">4.8.</span> <span class="nav-text">new和malloc的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享内存相关api"><span class="nav-number">4.9.</span> <span class="nav-text">共享内存相关api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自己设计一下如何采用单线程的方式处理高并发"><span class="nav-number">4.10.</span> <span class="nav-text">自己设计一下如何采用单线程的方式处理高并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-STL-的内存优化"><span class="nav-number">4.11.</span> <span class="nav-text">C++ STL 的内存优化</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
