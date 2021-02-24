@@ -53,13 +53,14 @@
 <meta property="og:site_name" content="Gbwss">
 <meta property="og:description" content="wss的网络学习笔记">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s3.ax1x.com/2021/02/24/yXTUS0.png">
 <meta property="og:image" content="https://s3.ax1x.com/2021/02/24/yXofaj.png">
 <meta property="og:image" content="https://s3.ax1x.com/2021/02/24/yXTPsO.png">
 <meta property="article:published_time" content="2021-02-24T12:03:25.000Z">
-<meta property="article:modified_time" content="2021-02-24T14:47:55.635Z">
+<meta property="article:modified_time" content="2021-02-24T15:59:56.916Z">
 <meta property="article:author" content="Wang shushu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s3.ax1x.com/2021/02/24/yXofaj.png">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/02/24/yXTUS0.png">
 
 <link rel="canonical" href="http://yoursite.com/2021/02/24/%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
@@ -198,7 +199,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-02-24 20:03:25 / Modified: 22:47:55" itemprop="dateCreated datePublished" datetime="2021-02-24T20:03:25+08:00">2021-02-24</time>
+              <time title="Created: 2021-02-24 20:03:25 / Modified: 23:59:56" itemprop="dateCreated datePublished" datetime="2021-02-24T20:03:25+08:00">2021-02-24</time>
             </span>
 
           
@@ -218,7 +219,8 @@
 <blockquote>
 <p>物联网淑惠试用</p>
 </blockquote>
-<h1 id="TCP-IP模型"><a href="#TCP-IP模型" class="headerlink" title="TCP/IP模型"></a>TCP/IP模型</h1><h2 id="四层TCP-IP模型"><a href="#四层TCP-IP模型" class="headerlink" title="四层TCP/IP模型"></a>四层TCP/IP模型</h2><h1 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h1><p>传输单位：比特流<br>物理设备：中继器（信号再生），集线器（HDB）</p>
+<h1 id="TCP-IP模型"><a href="#TCP-IP模型" class="headerlink" title="TCP/IP模型"></a>TCP/IP模型</h1><h2 id="四层TCP-IP模型"><a href="#四层TCP-IP模型" class="headerlink" title="四层TCP/IP模型"></a>四层TCP/IP模型</h2><p><img src="https://s3.ax1x.com/2021/02/24/yXTUS0.png" alt="yXTUS0.png"></p>
+<h1 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h1><p>传输单位：比特流<br>物理设备：中继器（信号再生），集线器（HDB）</p>
 <h1 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h1><p>传输单位：帧<br>典型协议：SDLC，HDLC，PPP，STP<br>功能：链路管理，！差错控制，！流量控制，传输管理，介质访问控制（MAC）<br>物理设备：网桥，交换机  //工作在MAC子层，隔离碰撞域</p>
 <h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><p>传输单位：数据报<br>典型协议：IP，ICMP（网际控制报文协议），IGMP（因特网组管理协议，用于组播）ARP，RARP，OSPF，CIDR </p>
 <blockquote>
@@ -253,6 +255,10 @@
 <li><p>Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</p>
 </li>
 </ol>
+<h3 id="三次握手的原因"><a href="#三次握手的原因" class="headerlink" title="三次握手的原因"></a>三次握手的原因</h3><p>三次握手可以防止已经失效的连接请求报文突然又传输到服务器端导致的服务器资源浪费。</p>
+<blockquote>
+<p>例如，客户端先发送了一个SYN，但是由于网络阻塞，该SYN数据包在某个节点长期滞留。然后客户端又重传SYN数据包并正确建立TCP连接，然后传输完数据后关闭该连接。该连接释放后失效的SYN数据包才到达服务器端。在二次握手的前提下，服务器端会认为这是客户端发起的又一次请求，然后发送SYN ，并且在服务器端创建socket套接字，一直等待客户端发送数据。但是由于客户端并没有发起新的请求，所以会丢弃服务端的SYN 。此时服务器会一直等待客户端发送数据从而造成资源浪费。</p>
+</blockquote>
 <h3 id="四次挥手："><a href="#四次挥手：" class="headerlink" title="四次挥手："></a>四次挥手：</h3><p>由于TCP连接时全双工的，因此，每个方向都必须要单独进行关闭，这一原则是当一方完成数据发送任务后，发送一个FIN来终止这一方向的连接，收到一个FIN只是意味着这一方向上没有数据流动了，即不会再收到数据了，但是在这个TCP连接上仍然能够发送数据，直到这一方向也发送了FIN。首先进行关闭的一方将执行主动关闭，而另一方则执行被动关闭。</p>
 <ol>
 <li><p>数据传输结束后，客户端的应用进程发出连接释放报文段，并停止发送数据，客户端进入<code>FIN_WAIT_1</code>状态，此时客户端依然可以接收服务器发送来的数据。</p>
@@ -264,7 +270,134 @@
 <li><p>客户端收到服务器的FIN报文后，给服务器发送一个ACK报文，确认序列号为收到的序号+1。此时客户端进入<code>TIME_WAIT</code>状态，等待2MSL（MSL：报文段最大生存时间），然后关闭连接。</p>
 </li>
 </ol>
+<h3 id="四次挥手的原因"><a href="#四次挥手的原因" class="headerlink" title="四次挥手的原因"></a>四次挥手的原因</h3><p>由于连接的关闭控制权在应用层，所以被动关闭的一方在接收到FIN包时，TCP协议栈会直接发送一个ACK确认包，优先关闭一端的通信。然后通知应用层，由应用层决定什么时候发送FIN包。应用层可以使用系统调用函数read==0来判断对端是否关闭连接。</p>
+<blockquote>
+<p>MSL（Maximum Segment Lifetime）最大报文生存时间: 每个TCP实现必须选择一个MSL。它是任何报文段被丢弃前在网络内的最长时间。这个时间是有限的，因为TCP报文段以IP数据报在网络内传输，而IP数据报则有限制其生存时间的TTL时间。RFC 793指出MSL为2分钟，现实中常用30秒或1分钟。</p>
+</blockquote>
+<blockquote>
+<p>TTL（time-to-live）生存时间字段: 在IP首部中的8位字段。该字段不是存的具体时间，而是设置了数据报可以经过的最多路由器数。它制定了数据报的生存时间。TTL的初始值由源主机设置（通常为32或64），一旦经过一个处理它的路由器，它的值就减去1.当该字段值为0时，数据报就被丢弃，并发送ICMP报文通知源主机。</p>
+</blockquote>
+<blockquote>
+<p>RTT（round-trip-time）往返时间: TCP超时与重传中最重要的部分就是对一个给定连接的往返时间RTT的测量。由于路由器和网络流量均会变化，因此这个时间可能经常会变化，TCP应该跟踪这些变化并相应地改变其超时时间。</p>
+</blockquote>
 <h1 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h1><h1 id="表示层"><a href="#表示层" class="headerlink" title="表示层"></a>表示层</h1><h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><p>典型协议：DNS（UDP，53），SMTP（TCP，25）：IMAP（TCP，143，有状态）/POP3（TCP，110，无状态），FTP（TCP，21(控制)，20(传输)）</p>
+<h2 id="HTTP和HTTPS的区别"><a href="#HTTP和HTTPS的区别" class="headerlink" title="HTTP和HTTPS的区别"></a>HTTP和HTTPS的区别</h2><ol>
+<li><p>HTTP协议是以明文的方式在网络中传输数据，而HTTPS协议传输的数据则是经过TLS加密后的，HTTPS具有更高的安全性</p>
+</li>
+<li><p>HTTPS在TCP三次握手阶段之后，还需要进行SSL的handshake，协商加密使用的对称加密密钥</p>
+</li>
+<li><p>HTTPS协议需要服务端申请证书，浏览器端安装对应的根证书</p>
+</li>
+<li><p>HTTP协议端口是80，HTTPS协议端口是443</p>
+</li>
+</ol>
+<h2 id="HTTPS的优缺点"><a href="#HTTPS的优缺点" class="headerlink" title="HTTPS的优缺点"></a>HTTPS的优缺点</h2><h3 id="HTTPS优点："><a href="#HTTPS优点：" class="headerlink" title="HTTPS优点："></a>HTTPS优点：</h3><p>HTTPS传输数据过程中使用密钥进行加密，所以安全性更高</p>
+<p>HTTPS协议可以认证用户和服务器，确保数据发送到正确的用户和服务器</p>
+<h3 id="HTTPS缺点："><a href="#HTTPS缺点：" class="headerlink" title="HTTPS缺点："></a>HTTPS缺点：</h3><p>HTTPS握手阶段延时较高：由于在进行HTTP会话之前还需要进行SSL握手，因此HTTPS协议握手阶段延时增加</p>
+<p>HTTPS部署成本高：一方面HTTPS协议需要使用证书来验证自身的安全性，所以需要购买CA证书；另一方面由于采用HTTPS协议需要进行加解密的计算，占用CPU资源较多，需要的服务器配置或数目高</p>
+<h2 id="HTTP返回码"><a href="#HTTP返回码" class="headerlink" title="HTTP返回码"></a>HTTP返回码</h2><p>HTTP协议的响应报文由状态行、响应头部和响应包体组成，其响应状态码总体描述如下：<br>1xx：指示信息–表示请求已接收，继续处理。</p>
+<p>2xx：成功–表示请求已被成功接收、理解、接受。</p>
+<p>3xx：重定向–要完成请求必须进行更进一步的操作。</p>
+<p>4xx：客户端错误–请求有语法错误或请求无法实现。</p>
+<p>5xx：服务器端错误–服务器未能实现合法的请求。</p>
+<p>常见状态代码、状态描述的详细说明如下。</p>
+<p>200 OK：客户端请求成功。</p>
+<p>206 partial content服务器已经正确处理部分GET请求，实现断点续传或同时分片下载，该请求必须包含Range请求头来指示客户端期望得到的范围</p>
+<p>300 multiple choices（可选重定向）:被请求的资源有一系列可供选择的反馈信息，由浏览器/用户自行选择其中一个。</p>
+<p>301  moved permanently（永久重定向）：该资源已被永久移动到新位置，将来任何对该资源的访问都要使用本响应返回的若干个URI之一。</p>
+<p>302 move temporarily(临时重定向)：请求的资源现在临时从不同的URI中获得，</p>
+<p>304：not modified :如果客户端发送一个待条件的GET请求并且该请求以经被允许，而文档内容未被改变，则返回304,该响应不包含包体（即可直接使用缓存）。</p>
+<p>403 Forbidden：服务器收到请求，但是拒绝提供服务。</p>
+<p>404 Not Found：请求资源不存在，举个例子：输入了错误的URL。</p>
+<h1 id="总体问题"><a href="#总体问题" class="headerlink" title="总体问题"></a>总体问题</h1><h2 id="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><a href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的" class="headerlink" title="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"></a>搜索baidu，会用到计算机网络中的什么层？每层是干什么的</h2><p>浏览器中输入URL<br>浏览器要将URL解析为IP地址，解析域名就要用到DNS协议，首先主机会查询DNS的缓存，如果没有就给本地DNS发送查询请求。DNS查询分为两种方式，一种是递归查询，一种是迭代查询。如果是迭代查询，本地的DNS服务器，向根域名服务器发送查询请求，根域名服务器告知该域名的一级域名服务器，然后本地服务器给该一级域名服务器发送查询请求，然后依次类推直到查询到该域名的IP地址。DNS服务器是基于UDP的，因此会用到UDP协议。</p>
+<p>得到IP地址后，浏览器就要与服务器建立一个http连接。因此要用到http协议，http协议报文格式上面已经提到。http生成一个get请求报文，将该报文传给TCP层处理，所以还会用到TCP协议。如果采用https还会使用https协议先对http数据进行加密。TCP层如果有需要先将HTTP数据包分片，分片依据路径MTU和MSS。TCP的数据包然后会发送给IP层，用到IP协议。IP层通过路由选路，一跳一跳发送到目的地址。当然在一个网段内的寻址是通过以太网协议实现(也可以是其他物理层协议，比如PPP，SLIP)，以太网协议需要直到目的IP地址的物理地址，有需要ARP协议。</p>
+<p>其中：</p>
+<ol>
+<li>DNS协议，http协议，https协议属于应用层</li>
+</ol>
+<p>应用层是体系结构中的最高层。应用层确定进程之间通信的性质以满足用户的需要。这里的进程就是指正在运行的程序。应用层不仅要提供应用进程所需要的信息交换和远地操作，而且还要作为互相作用的应用进程的用户代理，来完成一些为进行语义上有意义的信息交换所必须的功能。应用层直接为用户的应用进程提供服务。</p>
+<ol start="2">
+<li>TCP/UDP属于传输层</li>
+</ol>
+<p>传输层的任务就是负责主机中两个进程之间的通信。因特网的传输层可使用两种不同协议：即面向连接的传输控制协议TCP，和无连接的用户数据报协议UDP。面向连接的服务能够提供可靠的交付，但无连接服务则不保证提供可靠的交付，它只是“尽最大努力交付”。这两种服务方式都很有用，备有其优缺点。在分组交换网内的各个交换结点机都没有传输层。</p>
+<ol start="3">
+<li>IP协议，ARP协议属于网络层</li>
+</ol>
+<p>网络层负责为分组交换网上的不同主机提供通信。在发送数据时，网络层将运输层产生的报文段或用户数据报封装成分组或包进行传送。在TCP/IP体系中，分组也叫作IP数据报，或简称为数据报。网络层的另一个任务就是要选择合适的路由，使源主机运输层所传下来的分组能够交付到目的主机。</p>
+<ol start="4">
+<li>数据链路层</li>
+</ol>
+<p>当发送数据时，数据链路层的任务是将在网络层交下来的IP数据报组装成帧，在两个相邻结点间的链路上传送以帧为单位的数据。每一帧包括数据和必要的控制信息（如同步信息、地址信息、差错控制、以及流量控制信息等）。控制信息使接收端能够知道—个帧从哪个比特开始和到哪个比特结束。控制信息还使接收端能够检测到所收到的帧中有无差错。</p>
+<ol start="5">
+<li>物理层</li>
+</ol>
+<p>物理层的任务就是透明地传送比特流。在物理层上所传数据的单位是比特。传递信息所利用的一些物理媒体，如双绞线、同轴电缆、光缆等，并不在物理层之内而是在物理层的下面。因此也有人把物理媒体当做第0层。</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><ol>
+<li>HTTP协议：<br>HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，是用于从万维网（WWW:World Wide Web）服务器传输超文本到本地浏览器的传送协议。</li>
+</ol>
+<p>HTTP是一个基于TCP/IP通信协议来传递数据（HTML 文件，图片文件，查询结果等）。</p>
+<p>HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。它于1990年提出，经过几年的使用与发展，得到不断地完善和扩展。目前在WWW中使用的是HTTP/1.0的第六版，HTTP/1.1的规范化工作正在进行之中，而且HTTP-NG（Next Generation of HTTP）的建议已经提出。</p>
+<p>HTTP协议工作于客户端-服务端架构为上。浏览器作为HTTP客户端通过URL向HTTP服务端即WEB服务器发送所有请求。Web服务器根据接收到的请求后，向客户端发送响应信息。</p>
+<ol start="2">
+<li>HTTP协议特点</li>
+</ol>
+<p>1、简单快速：</p>
+<p>客户向服务器请求服务时，只需传送请求方法和路径。请求方法常用的有GET、HEAD、POST。每种方法规定了客户与服务器联系的类型不同。由于HTTP协议简单，使得HTTP服务器的程序规模小，因而通信速度很快。</p>
+<p>2、灵活：</p>
+<p>HTTP允许传输任意类型的数据对象。正在传输的类型由Content-Type加以标记。</p>
+<p>3、无连接：</p>
+<p>无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</p>
+<p>4、无状态：</p>
+<p>HTTP协议是无状态协议。无状态是指协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。</p>
+<p>5、支持B/S及C/S模式。</p>
+<p>6、默认端口80</p>
+<p>7、基于TCP协议</p>
+<ol start="3">
+<li>HTTP过程概述：</li>
+</ol>
+<p>HTTP协议定义Web客户端如何从Web服务器请求Web页面，以及服务器如何把Web页面传送给客户端。HTTP协议采用了请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求的方法、URL、协议版本、请求头部和请求数据。服务器以一个状态行作为响应，响应的内容包括协议的版本、成功或者错误代码、服务器信息、响应头部和响应数据。</p>
+<p>HTTP 请求/响应的步骤如下：</p>
+<p>1、客户端连接到Web服务器</p>
+<p>一个HTTP客户端，通常是浏览器，与Web服务器的HTTP端口（默认为80）建立一个TCP套接字连接。例如，<a href="http://www.baidu.com。" target="_blank" rel="noopener">http://www.baidu.com。</a></p>
+<p>2、发送HTTP请求</p>
+<p>通过TCP套接字，客户端向Web服务器发送一个文本的请求报文，一个请求报文由请求行、请求头部、空行和请求数据4部分组成。</p>
+<p>3、服务器接受请求并返回HTTP响应</p>
+<p>Web服务器解析请求，定位请求资源。服务器将资源复本写到TCP套接字，由客户端读取。一个响应由状态行、响应头部、空行和响应数据4部分组成。</p>
+<p>4、释放连接TCP连接</p>
+<p>若connection 模式为close，则服务器主动关闭TCP连接，客户端被动关闭连接，释放TCP连接;若connection 模式为keepalive，则该连接会保持一段时间，在该时间内可以继续接收请求;</p>
+<p>5、客户端浏览器解析HTML内容</p>
+<p>客户端浏览器首先解析状态行，查看表明请求是否成功的状态代码。然后解析每一个响应头，响应头告知以下为若干字节的HTML文档和文档的字符集。客户端浏览器读取响应数据HTML，根据HTML的语法对其进行格式化，并在浏览器窗口中显示。</p>
+<ol start="4">
+<li>举例：</li>
+</ol>
+<p>在浏览器地址栏键入URL，按下回车之后会经历以下流程：</p>
+<p>1、浏览器向 DNS 服务器请求解析该 URL 中的域名所对应的 IP 地址；</p>
+<p>2、解析出 IP 地址后，根据该 IP 地址和默认端口80，和服务器建立TCP连接；</p>
+<p>3、浏览器发出读取文件（URL中域名后面部分对应的文件）的HTTP 请求，该请求报文作为 TCP 三次握手的第三个报文的数据发送给服务器；</p>
+<p>4、服务器对浏览器请求作出响应，并把对应的 html 文本发送给浏览器；</p>
+<p>5、释放 TCP连接；</p>
+<p>6、浏览器将该 html 文本并显示内容；</p>
+<h2 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h2><p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
+<p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）</p>
+<p>区别：</p>
+<ol>
+<li><p>get参数通过url传递，post放在request body中。</p>
+</li>
+<li><p>get请求在url中传递的参数是有长度限制的，而post没有。</p>
+</li>
+<li><p>get比post更不安全，因为参数直接暴露在url中，所以不能用来传递敏感信息。</p>
+</li>
+<li><p>get请求只能进行url编码，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求会浏览器主动cache，而post支持多种编码方式。</p>
+</li>
+<li><p>get请求参数会被完整保留在浏览历史记录里，而post中的参数不会被保留。</p>
+</li>
+<li><p>GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
+</li>
+<li><p>GET产生一个TCP数据包；POST产生两个TCP数据包。</p>
+</li>
+</ol>
 
     </div>
 
@@ -324,7 +457,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP模型"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四层TCP-IP模型"><span class="nav-number">1.1.</span> <span class="nav-text">四层TCP&#x2F;IP模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#物理层"><span class="nav-number">2.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链路层"><span class="nav-number">3.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络层"><span class="nav-number">4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#传输层"><span class="nav-number">5.</span> <span class="nav-text">传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP如何保证可靠性"><span class="nav-number">5.1.</span> <span class="nav-text">TCP如何保证可靠性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP的三次握手四次挥手"><span class="nav-number">5.2.</span> <span class="nav-text">TCP的三次握手四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手："><span class="nav-number">5.2.1.</span> <span class="nav-text">三次握手：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手："><span class="nav-number">5.2.2.</span> <span class="nav-text">四次挥手：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#会话层"><span class="nav-number">6.</span> <span class="nav-text">会话层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表示层"><span class="nav-number">7.</span> <span class="nav-text">表示层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用层"><span class="nav-number">8.</span> <span class="nav-text">应用层</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP模型"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四层TCP-IP模型"><span class="nav-number">1.1.</span> <span class="nav-text">四层TCP&#x2F;IP模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#物理层"><span class="nav-number">2.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#链路层"><span class="nav-number">3.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络层"><span class="nav-number">4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#传输层"><span class="nav-number">5.</span> <span class="nav-text">传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP如何保证可靠性"><span class="nav-number">5.1.</span> <span class="nav-text">TCP如何保证可靠性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP的三次握手四次挥手"><span class="nav-number">5.2.</span> <span class="nav-text">TCP的三次握手四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手："><span class="nav-number">5.2.1.</span> <span class="nav-text">三次握手：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手的原因"><span class="nav-number">5.2.2.</span> <span class="nav-text">三次握手的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手："><span class="nav-number">5.2.3.</span> <span class="nav-text">四次挥手：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手的原因"><span class="nav-number">5.2.4.</span> <span class="nav-text">四次挥手的原因</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#会话层"><span class="nav-number">6.</span> <span class="nav-text">会话层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表示层"><span class="nav-number">7.</span> <span class="nav-text">表示层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用层"><span class="nav-number">8.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP和HTTPS的区别"><span class="nav-number">8.1.</span> <span class="nav-text">HTTP和HTTPS的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS的优缺点"><span class="nav-number">8.2.</span> <span class="nav-text">HTTPS的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS优点："><span class="nav-number">8.2.1.</span> <span class="nav-text">HTTPS优点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS缺点："><span class="nav-number">8.2.2.</span> <span class="nav-text">HTTPS缺点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP返回码"><span class="nav-number">8.3.</span> <span class="nav-text">HTTP返回码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总体问题"><span class="nav-number">9.</span> <span class="nav-text">总体问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><span class="nav-number">9.1.</span> <span class="nav-text">搜索baidu，会用到计算机网络中的什么层？每层是干什么的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">9.2.</span> <span class="nav-text">HTTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GET和POST的区别"><span class="nav-number">9.3.</span> <span class="nav-text">GET和POST的区别</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
