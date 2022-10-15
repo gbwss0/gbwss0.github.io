@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在代码中发现设置navigationBar的背景颜色都是将一个颜色绘制为 UIImage 然后 通过 setBackgroundImage()进行赋值，而没有使用常见的 backgroundColor。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS-NavigationBar的backgroundColor">
+<meta property="og:url" content="http://yoursite.com/2022/07/iOS-NavigationBar%E7%9A%84backgroundColor/index.html">
+<meta property="og:site_name" content="ShuaiShuai">
+<meta property="og:description" content="在代码中发现设置navigationBar的背景颜色都是将一个颜色绘制为 UIImage 然后 通过 setBackgroundImage()进行赋值，而没有使用常见的 backgroundColor。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_C56A633B2AED-1.jpeg">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_0123.jpg">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_532CFEA85A81-1.jpeg">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_0125.jpg">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_0126.jpg">
+<meta property="og:image" content="https://docs-assets.developer.apple.com/published/dde7452123/e8608c12-1a29-47c9-95c5-984a0ca17bce.png">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_0127.jpg">
+<meta property="og:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_0CA250DF94E3-1.jpeg">
+<meta property="og:image" content="https://docs-assets.developer.apple.com/published/dde7452123/e8608c12-1a29-47c9-95c5-984a0ca17bce.png">
+<meta property="og:image" content="https://docs-assets.developer.apple.com/published/dde7452123/01969d1a-db6b-4ef5-b86b-45ffa1730b85.png">
+<meta property="article:published_time" content="2022-07-11T01:41:00.000Z">
+<meta property="article:modified_time" content="2022-07-11T01:41:00.000Z">
+<meta property="article:author" content="Wang Shuaishuai">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/Users/yuhan.wang/Downloads/IMG_C56A633B2AED-1.jpeg">
+
+<link rel="canonical" href="http://yoursite.com/2022/07/iOS-NavigationBar%E7%9A%84backgroundColor/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS-NavigationBar的backgroundColor | ShuaiShuai</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ShuaiShuai</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/07/iOS-NavigationBar%E7%9A%84backgroundColor/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang Shuaishuai">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ShuaiShuai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS-NavigationBar的backgroundColor
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-07-11 09:41:00" itemprop="dateCreated datePublished" datetime="2022-07-11T09:41:00+08:00">2022-07-11</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在代码中发现设置navigationBar的背景颜色都是将一个颜色绘制为 UIImage 然后 通过 <code>setBackgroundImage()</code>进行赋值，而没有使用常见的 backgroundColor。<br><escape><span id="more"></span></escape></p>
+<p>尝试直接给 navigationBar 直接设置 backgroundColor 发现并没有正常工作，只有在 UINavigationBarAppearance().backgroundColor 上赋值才会有用，所以查找资料了解了一下navigationBar的背景颜色</p>
+<h2 id="backgroundColor"><a href="#backgroundColor" class="headerlink" title="backgroundColor"></a>backgroundColor</h2><p>直接添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">backgroundColor = .green</span><br></pre></td></tr></table></figure>
+
+<p>会被 navigationBar 的  <code>isTranslucent</code>  属性所影响： </p>
+<p> isTranslucent &#x3D; false</p>
+<img src="/Users/yuhan.wang/Downloads/IMG_C56A633B2AED-1.jpeg" alt="IMG_C56A633B2AED-1" style="zoom:67%;" />
+
+<p>isTranslucent &#x3D; true</p>
+<img src="/Users/yuhan.wang/Downloads/IMG_0123.jpg" alt="IMG_0123" style="zoom:67%;" />
+
+<p>也就是说 他是真正的背景颜色 navigationBar的颜色设置不来源于继承自UIView的 backgroundColor </p>
+<p>附：在iOS15中 navigationBar 默认为全透明 所以此时的表现是这样：</p>
+<img src="/Users/yuhan.wang/Downloads/IMG_532CFEA85A81-1.jpeg" alt="IMG_532CFEA85A81-1" style="zoom: 33%;" />
+
+<h2 id="barTintColor"><a href="#barTintColor" class="headerlink" title="barTintColor"></a>barTintColor</h2><p> barTintColor 才是真正设置 navigationBar 的 backgroundColor 的方法但是直接使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">barTintColor = .orange</span><br></pre></td></tr></table></figure>
+
+<p>的颜色并不是真正的  .orange 上面蒙了一层白色</p>
+<p><img src="/Users/yuhan.wang/Downloads/IMG_0125.jpg" alt="IMG_0125"></p>
+<p>查找官方文档后发现 <code>isTranslucent</code>属性默认为true 那如果将 isTranslucent 设为 false呢</p>
+<p><img src="/Users/yuhan.wang/Downloads/IMG_0126.jpg" alt="IMG_0126"></p>
+<p>附：tintColor是应用于导航项和按钮项的色调颜色</p>
+<img src="https://docs-assets.developer.apple.com/published/dde7452123/e8608c12-1a29-47c9-95c5-984a0ca17bce.png" alt="A navigation bar diagram that depicts the fonts, color, and layout of a navigation bar, including the tint color, title text atributes, bar tint color, and the title vertical position." style="zoom:67%;" />
+
+
+
+<p>那我们如果既想使用半透明 又想要纯正的颜色呢 那就需要设置backgroundImage了：</p>
+<h2 id="backgroundImage"><a href="#backgroundImage" class="headerlink" title="backgroundImage"></a>backgroundImage</h2><p>直接设置 backgroundImage 即可得到我们想要的效果（imge()为给UIColor添加的extension)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setBackgroundImage(UIColor.yellow.image(), for: .default)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Users/yuhan.wang/Downloads/IMG_0127.jpg" alt="IMG_0127"></p>
+<p>但是如果我们设置一个半透明图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setBackgroundImage(UIColor.yellow.withAlphaComponent(0.5).image(), for: .default)</span><br></pre></td></tr></table></figure>
+
+<p>则出现了和之前一样的问题 translucent 为 true 时 影响到了原来的布局。</p>
+<p><img src="/Users/yuhan.wang/Downloads/IMG_0CA250DF94E3-1.jpeg" alt="IMG_0CA250DF94E3-1"></p>
+<h4 id="translucent-和-setBackgroundImage"><a href="#translucent-和-setBackgroundImage" class="headerlink" title="translucent 和 setBackgroundImage"></a>translucent 和 setBackgroundImage</h4><p>前面提到我们可以通过修改背景图片来修改导航栏的背景色，设置了背景图片后在有些页面我们会遇到一些奇怪的问题，发现原来布局正常的页面显示不对了，会多出一部分空白或者被导航栏遮挡住了。</p>
+<p>通过打印出 translucent 的值我们发现设置了纯色的背景图后原来半透明的导航栏变成了不透明的，结合前面提到的 translucent 对布局起点的影响，如果页面是按照半透明情况，即 rootView 从（0，0）开始布局来设置子视图的 frame，那么设置了纯色背景图后 translucent 变成了 false，此时 rootview 从 navigationBar 下面开始布局 。为什么设置背景图片会影响 translucent 呢，通过查看文档发现了如下说明：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> New behavior on iOS 7.</span></span><br><span class="line"><span class="comment"> Default is YES.</span></span><br><span class="line"><span class="comment"> You may force an opaque background by setting the property to NO.</span></span><br><span class="line"><span class="comment"> If the navigation bar has a custom background image, the default is inferred </span></span><br><span class="line"><span class="comment"> from the alpha values of the image—YES if it has any pixel with alpha &lt; 1.0</span></span><br><span class="line"><span class="comment"> If you send setTranslucent:YES to a bar with an opaque custom background image</span></span><br><span class="line"><span class="comment"> it will apply a system opacity less than 1.0 to the image.</span></span><br><span class="line"><span class="comment"> If you send setTranslucent:NO to a bar with a translucent custom background image</span></span><br><span class="line"><span class="comment"> it will provide an opaque background for the image using the bar&#x27;s barTintColor if defined, or black</span></span><br><span class="line"><span class="comment"> for UIBarStyleBlack or white for UIBarStyleDefault if barTintColor is nil.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>,<span class="keyword">getter</span>=isTranslucent) <span class="type">BOOL</span> translucent <span class="built_in">NS_AVAILABLE_IOS</span>(<span class="number">3</span>_0) <span class="built_in">UI_APPEARANCE_SELECTOR</span>; <span class="comment">// Default is NO on iOS 6 and earlier. Always YES if barStyle is set to UIBarStyleBlackTranslucent</span></span><br></pre></td></tr></table></figure>
+
+<p>也就是说背景图片如果包含 alpha 的色值，系统会默认将 translucent 设置为 true，没有包含 alpha 色值会将 translucent 设置为 false。这下真相大白了，原来我们前面设置了纯绿色的背景图片，是不包含 alpha 色值的，即系统默认将 translucent 设置成了 false。但这是针对没有手动设置 translucent 值的情况，<strong>如果我们手动设置了 translucent，那么系统就不会根据背景图片的 alpha 来修改 translucent</strong>。</p>
+<p>至此，我们了解了苹果是如何使用这几个属性的：</p>
+<ol>
+<li>translucent 默认为 true，rootView 从（0，0）开始布局</li>
+<li>translucent 设置为 false，rootView 从导航栏底部开始布局</li>
+<li>automaticallyAdjustsScrollViewInsets 默认值是 true，用来纠正scrollview在全屏模式下的显示；</li>
+<li>设置 <code>UINavigationBar</code> 的背景图片可以改变导航栏背景色，如果背景图片包含 alpha 的色值，系统会默认将 translucent 设置为 true，没有包含 alpha 色值会将 translucent 设置为 false。但这是针对没有手动设置 translucent 值的情况，<strong>如果我们手动设置了 translucent，那么系统就不会根据背景图片的 alpha 来修改 translucent</strong>。</li>
+</ol>
+<hr>
+<p>上面是在iOS13以前的 Legacy Customizations 在 iOS13 苹果提出了新的 <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbarappearance"><code>UINavigationBarAppearance</code></a>来配置navigationBar的 <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/3198028-standardappearance"><code>standardAppearance</code></a>, <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/3198026-compactappearance"><code>compactAppearance</code></a>, <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/3198027-scrolledgeappearance"><code>scrollEdgeAppearance</code></a> 三种状态。</p>
+<p>UINavigationBarAppearance 继承自 UIBarAppearance ，在这里我们可以自由的定义backgroundColor 等等各种属性。</p>
+<p>苹果官网的介绍：<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar">https://developer.apple.com/documentation/uikit/uinavigationbar</a></p>
+<blockquote>
+<h3 id="Customize-the-Appearance-of-a-Navigation-Bar"><a href="#Customize-the-Appearance-of-a-Navigation-Bar" class="headerlink" title="Customize the Appearance of a Navigation Bar"></a>Customize the Appearance of a Navigation Bar</h3><p>Navigation bars have two standard appearance styles: white with dark text or black with light text. Use the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624955-barstyle"><code>barStyle</code></a> property to select the style. Any changes you make to other navigation bar appearance properties override those inferred from the bar style.</p>
+<p>Navigation bars are translucent by default; that is, their background color is semitransparent. You can make the navigation bar opaque by setting the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent"><code>isTranslucent</code></a> property to <code>false</code>.</p>
+<p>You can specify a custom tint color for a navigation bar background using the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624931-bartintcolor"><code>barTintColor</code></a> property. Setting this property overrides the default color inferred from the bar style. As with all <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uiview"><code>UIView</code></a> subclasses, you can control the color of the interactive elements within navigation bars, including button images and titles, using the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uiview/1622467-tintcolor"><code>tintColor</code></a> property.</p>
+<p>The <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624953-titletextattributes"><code>titleTextAttributes</code></a> property specifies the attributes for displaying the bar’s title text. You can specify the font, text color, text shadow color, and text shadow offset for the title in the text attributes dictionary using the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nsattributedstring/key/1528839-font"><code>font</code></a>, <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nsattributedstring/key/1533563-foregroundcolor"><code>foregroundColor</code></a>, and <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/foundation/nsattributedstring/key/1524321-shadow"><code>shadow</code></a> keys, respectively. For more information about string-formatting attributes, see <code>Character Attributes</code>.</p>
+<p>Use the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624959-settitleverticalpositionadjustme"><code>setTitleVerticalPositionAdjustment(_:for:)</code></a> method to adjust the vertical position of the title. This method allows you to specify the adjustment dependent on the bar height, which is represented by the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uibarmetrics"><code>UIBarMetrics</code></a> enum. The following figure shows a navigation bar with custom tint color, title text attributes, and bar tint color.</p>
+<img src="https://docs-assets.developer.apple.com/published/dde7452123/e8608c12-1a29-47c9-95c5-984a0ca17bce.png" alt="A navigation bar diagram that depicts the fonts, color, and layout of a navigation bar, including the tint color, title text atributes, bar tint color, and the title vertical position." style="zoom:67%;" />
+
+<p>To allow complete customization over the appearance of navigation bars, you can additionally provide custom background and shadow images. To provide a custom background image, use the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage"><code>setBackgroundImage(_:for:barMetrics:)</code></a> method, providing a <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uiimage"><code>UIImage</code></a> object for the appropriate bar position and metrics values. Use a <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uibarposition"><code>UIBarPosition</code></a> value for the bar position argument to specify whether to use the supplied image at the bottom or the top of the window, and if it appears at the top, whether to extend it upward under the status bar. Similarly, you can specify that the image should be used for either compact or default bar metrics, with or without a prompt, by providing a <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uibarmetrics"><code>UIBarMetrics</code></a> value to the bar metrics argument.</p>
+<p>To add a shadow, provide a resizable <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uiimage"><code>UIImage</code></a> to the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage"><code>shadowImage</code></a> property. To use the custom shadow image, you need to have specified a custom background image. The following figure shows a navigation bar with a custom background image, supplied using <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage"><code>setBackgroundImage(_:for:barMetrics:)</code></a> with a bar position value of <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uibarposition/topattached"><code>UIBarPosition.topAttached</code></a> and a bar metrics value of <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uibarmetrics/default"><code>UIBarMetrics.default</code></a>. A custom image has also been provided to the <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage"><code>shadowImage</code></a> property.</p>
+<img src="https://docs-assets.developer.apple.com/published/dde7452123/01969d1a-db6b-4ef5-b86b-45ffa1730b85.png" alt="A screenshot of a navigation bar with the location of a background image and a shadow image labeled." style="zoom:67%;" />
+
+<p>To see examples of customizing a navigation bar, see <a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/uikit/uinavigationcontroller/customizing_your_app_s_navigation_bar">Customizing Your App’s Navigation Bar</a>.</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/Git%20%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2/" rel="prev" title="Git原理初探">
+      <i class="fa fa-chevron-left"></i> Git原理初探
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/08/Rust-%E6%89%80%E6%9C%89%E6%9D%83/" rel="next" title="Rust-所有权">
+      Rust-所有权 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#backgroundColor"><span class="nav-number">1.</span> <span class="nav-text">backgroundColor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#barTintColor"><span class="nav-number">2.</span> <span class="nav-text">barTintColor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#backgroundImage"><span class="nav-number">3.</span> <span class="nav-text">backgroundImage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#translucent-%E5%92%8C-setBackgroundImage"><span class="nav-number">3.0.1.</span> <span class="nav-text">translucent 和 setBackgroundImage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Customize-the-Appearance-of-a-Navigation-Bar"><span class="nav-number">3.1.</span> <span class="nav-text">Customize the Appearance of a Navigation Bar</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wang Shuaishuai</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Shuaishuai</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

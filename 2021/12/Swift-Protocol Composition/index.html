@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Any 这个类型的定义十分奇怪，它是一个 protocol&lt;&gt; 的同名类型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift-Protocol Composition">
+<meta property="og:url" content="http://yoursite.com/2021/12/Swift-Protocol%20Composition/index.html">
+<meta property="og:site_name" content="ShuaiShuai">
+<meta property="og:description" content="Any 这个类型的定义十分奇怪，它是一个 protocol&lt;&gt; 的同名类型">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-12-14T01:33:47.000Z">
+<meta property="article:modified_time" content="2021-12-14T01:33:47.000Z">
+<meta property="article:author" content="Wang Shuaishuai">
+<meta property="article:tag" content="Swift">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2021/12/Swift-Protocol%20Composition/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Swift-Protocol Composition | ShuaiShuai</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">ShuaiShuai</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/12/Swift-Protocol%20Composition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang Shuaishuai">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ShuaiShuai">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Swift-Protocol Composition
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-12-14 09:33:47" itemprop="dateCreated datePublished" datetime="2021-12-14T09:33:47+08:00">2021-12-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><code>Any</code> 这个类型的定义十分奇怪，它是一个 <code>protocol&lt;&gt;</code> 的同名类型</p>
+<p><escape><span id="more"></span></escape></p>
+<p>转载来自：<a target="_blank" rel="noopener" href="https://swifter.tips/protocol-composition/">https://swifter.tips/protocol-composition/</a></p>
+<p>在 Swift 中我们可以使用 <code>Any</code> 来表示任意类型 (如果你对此感到模糊或者陌生的话，可以先看看 Apple 的 Swift 官方教程或者本书的<a target="_blank" rel="noopener" href="https://swifter.tips/any-anyobject/">这篇 tip</a>)，充满好奇心的同学可能已经发现，<code>Any</code> 这个类型的定义十分奇怪，它是一个 <code>protocol&lt;&gt;</code> 的同名类型。</p>
+<p><code>protocol&lt;&gt;</code> 这样形式的写法在日常 Swift 使用中其实并不多见，这其实是 Swift 的接口组合的用法。标准的语法形式是下面这样的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span>&lt;<span class="title class_">ProtocolA</span>, <span class="title class_">ProtocolB</span>, <span class="title class_">ProtocolC</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>尖括号内是具体接口的名称，这里表示将名称为 <code>ProtocolA</code>，<code>ProtocolB</code> 以及 <code>ProtocolC</code> 的接口组合在一起的一个新的匿名接口。实现这个匿名接口就意味着要同时实现这三个接口所定义的内容。所以说，这里的 protocol 组合的写法和下面的新声明的 <code>ProtocolD</code> 是相同的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">ProtocolD</span>: <span class="title class_">ProtocolA</span>, <span class="title class_">ProtocolB</span>, <span class="title class_">ProtocolC</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么，在 <code>Any</code> 定义的时候的里面什么都不写的 <code>protocol&lt;&gt;</code> 是什么意思呢？从语意上来说，这代表一个 “需要实现空接口的接口”，其实就是任意类型的意思了。</p>
+<p>除了可以方便地表达空接口这一概念以外，protocol 的组合相比于新创建一个接口的最大区别就在于其匿名性。有时候我们可以借助这个特性写出更清晰的代码。因为 Swift 的类型组织是比较松散的，你的类型可以由不同的 <code>extension</code> 来定义实现不同的接口，Swift 也并没有要求它们在同一个文件中。这样，当一个类型实现了很多接口时，在使用这个类型的时候我们很可能在不查询相关代码的情况下很难知道这个类型所实现的接口。</p>
+<p>举个理想化的例子，比如我们有下面的三个接口，分别代表了三种动物的叫的方式，而有一种谜之动物，同时实现了这三个接口：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">KittenLike</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">meow</span>() -&gt; <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">DogLike</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bark</span>() -&gt; <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">TigerLike</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">aou</span>() -&gt; <span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MysteryAnimal</span>: <span class="title class_">KittenLike</span>, <span class="title class_">DogLike</span>, <span class="title class_">TigerLike</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">meow</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;meow&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bark</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;bark&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">aou</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;aou&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们想要检查某种动物作为宠物的时候的叫声的话，我们可能要重新定义一个叫做 <code>PetLike</code> 的接口，表明其实现 <code>KittenLike</code> 和 <code>DogLike</code>；如果稍后我们又想检查某种动物作为猫科动物的叫声的话，我们也许又要去定义一个叫做 <code>CatLike</code> 这样的实现 <code>KittenLike</code> 和 <code>TigerLike</code> 的接口。最后我们大概会写出这样的东西：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">PetLike</span>: <span class="title class_">KittenLike</span>, <span class="title class_">DogLike</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">CatLike</span>: <span class="title class_">KittenLike</span>, <span class="title class_">TigerLike</span> &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">SoundChecker</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">checkPetTalking</span>(<span class="params">pet</span>: <span class="type">PetLike</span>) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">checkCatTalking</span>(<span class="params">cat</span>: <span class="type">CatLike</span>) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然没有引入定义任何新的内容，但是为了实现这个需求，我们还是添加了两个空 protocol，这可能会让人困惑，代码的使用者 (也包括一段时间后的你自己) 可能会去猜测 <code>PetLike</code> 和 <code>CatLike</code> 的作用 – 其实它们除了标注以外并没有其他作用。借助 protocol 组合的特性，我们可以很好的解决这个问题。protocol 组合是可以使用 <a target="_blank" rel="noopener" href="https://swifter.tips/typealias/">typealias</a> 来命名的，于是可以将上面的新定义 protocol 的部分换为：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typealias</span> <span class="type">PetLike</span> <span class="operator">=</span> <span class="keyword">protocol</span>&lt;<span class="title class_">KittenLike</span>, <span class="title class_">DogLike</span>&gt;</span><br><span class="line"><span class="title class_">typealias</span> <span class="title class_">CatLike</span> = <span class="title class_">protocol</span>&lt;<span class="title class_">KittenLike</span>, <span class="title class_">TigerLike</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这样既保持了可读性，也没有多定义不必要的新类型。</p>
+<p>另外，其实如果这两个临时接口我们就只用一次的话，如果上下文里理解起来不会有困难，我们完全可以直接将它们匿名化，变成下面这样：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">SoundChecker</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">checkPetTalking</span>(<span class="params">pet</span>: <span class="keyword">protocol</span><span class="operator">&lt;</span><span class="type">KittenLike</span>, <span class="type">DogLike</span><span class="operator">&gt;</span>) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">func</span> <span class="title function_">checkCatTalking</span>(<span class="params">cat</span>: <span class="keyword">protocol</span><span class="operator">&lt;</span><span class="type">KittenLike</span>, <span class="type">TigerLike</span><span class="operator">&gt;</span>) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的好处是定义和使用的地方更加接近，这在代码复杂的时候读代码时可以少一些跳转，多一些专注。但是因为使用了匿名的接口组合，所以能表达的信息毕竟少了一些。如果要实际使用这种方法的话，还是需要多多斟酌。</p>
+<p>虽然这一节已经够长了，不过我还是想多提一句关于实现多个接口时接口内方法冲突的解决方法。因为在 Swift 的世界中没有人限制或者保证过不同接口的方法不能重名，所以这是有可能出现的情况。比如有 <code>A</code> 和 <code>B</code> 两个接口，定义如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protocol</span> <span class="title class_">A</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bar</span>() -&gt; <span class="type">Int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protocol</span> <span class="title class_">B</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bar</span>() -&gt; <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两个接口中 <code>bar()</code> 只有返回值的类型不同。我们如果有一个类型 <code>Class</code> 同时实现了 A 和 B，我们要怎么才能避免和解决调用冲突呢？</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Class</span>: <span class="title class_">A</span>, <span class="title class_">B</span> &#123;</span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bar</span>() -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">func</span> <span class="title function_">bar</span>() -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hi&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样一来，对于 <code>bar()</code>，只要在调用前进行类型转换就可以了：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> instance <span class="operator">=</span> <span class="type">Class</span>()</span><br><span class="line"><span class="keyword">let</span> num <span class="operator">=</span> (instance <span class="keyword">as</span> <span class="type">A</span>).bar()  <span class="comment">// 1</span></span><br><span class="line"><span class="keyword">let</span> str <span class="operator">=</span> (instance <span class="keyword">as</span> <span class="type">B</span>).bar()  <span class="comment">// &quot;Hi&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们这里不进行类型转换的话就会报错<code>Ambiguous use of &#39;bar()&#39;</code></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Swift/" rel="tag"># Swift</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/iOS-URLSession/" rel="prev" title="iOS-URLSession">
+      <i class="fa fa-chevron-left"></i> iOS-URLSession
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/Swift-Any&AnyObject%20/" rel="next" title="Swift-ANY&ANYOBJECT">
+      Swift-ANY&ANYOBJECT <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wang Shuaishuai</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang Shuaishuai</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
