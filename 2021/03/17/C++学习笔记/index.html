@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="Gbwss" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="整理了一些C++的相关问题，包含了C++的语言特性，以及部分底层原理，还有STL标准库的部分内容，内容不断整理更新中       C++三大特征：继承、多态、封装  封装：把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。类将成员变量和成员函数封装在类的内部，根据需要设置访问权限，通过成员函数管理内部状态 继承：继承所表达的是类之间相关的关系，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++学习笔记">
+<meta property="og:url" content="http://yoursite.com/2021/03/17/C++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Gbwss">
+<meta property="og:description" content="整理了一些C++的相关问题，包含了C++的语言特性，以及部分底层原理，还有STL标准库的部分内容，内容不断整理更新中       C++三大特征：继承、多态、封装  封装：把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。类将成员变量和成员函数封装在类的内部，根据需要设置访问权限，通过成员函数管理内部状态 继承：继承所表达的是类之间相关的关系，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s3.ax1x.com/2021/01/18/scVfOO.md.png">
+<meta property="article:published_time" content="2021-03-17T01:41:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T02:06:22.247Z">
+<meta property="article:author" content="Wang shushu">
+<meta property="article:tag" content="C++, 面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/01/18/scVfOO.md.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/03/17/C++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++学习笔记 | Gbwss</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gbwss</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/17/C++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang shushu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gbwss">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-17 09:41:00" itemprop="dateCreated datePublished" datetime="2021-03-17T09:41:00+08:00">2021-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-15 10:06:22" itemprop="dateModified" datetime="2022-10-15T10:06:22+08:00">2022-10-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>整理了一些C++的相关问题，包含了C++的语言特性，以及部分底层原理，还有STL标准库的部分内容，内容不断整理更新中</p>
+<!---more--->
+
+
+
+<blockquote>
+<p> C++三大特征：继承、多态、封装</p>
+</blockquote>
+<h3 id="封装："><a href="#封装：" class="headerlink" title="封装："></a>封装：</h3><p>把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。<br>类将成员变量和成员函数封装在类的内部，根据需要设置访问权限，通过成员函数管理内部状态</p>
+<h3 id="继承："><a href="#继承：" class="headerlink" title="继承："></a>继承：</h3><p>继承所表达的是类之间相关的关系，这种关系使得对象可以继承另外一类对象的特征和能力。<br>继承的作用：避免公用代码的重复开发，减少代码和数据冗余。</p>
+<h3 id="多态："><a href="#多态：" class="headerlink" title="多态："></a>多态：</h3><p>多态性可以简单地概括为“一个接口，多种方法”，字面意思为多种形态。程序在运行时才决定调用的函数，它是面向对象编程领域的核心概念。<br>比如函数重载、运算符重载、虚函数等</p>
+<p>C++有两种多态形式：</p>
+<ul>
+<li>静态多态</li>
+<li>动态多态</li>
+</ul>
+<h4 id="静态多态"><a href="#静态多态" class="headerlink" title="静态多态"></a>静态多态</h4><p><strong>静态多态</strong>：也称为编译期间的多态，编译器在编译期间完成的，编译器根据函数实参的类型(可能会进行隐式类型转换)，可推断出要调用那个函数，如果有对应的函数就调用该函数，否则出现编译错误。<br>静态多态有两种实现方式：</p>
+<p><strong>函数重载</strong>：包括普通函数的重载和成员函数的重载<br><strong>函数模板的使用</strong></p>
+<h5 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h5><p>函数重载就像是有多种含义的动词。例如：你可以在棒球场为球队助威（root），也可以在地里种植（root）菌类植物。<br>根据上下文可以知道每种情况下，root的含义是什么，同样，C++中也通过上下文来确定同名函数的重载版本。<br>重载函数的关键是函数参数列表——也称函数特征标。包括：函数的参数数目和类型，以及参数的排列顺序。所以，重载函数与返回值，参数名无关。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// print()函数</span><br><span class="line">void print(const char* str,int width);</span><br><span class="line">void print(double i ,int width);</span><br><span class="line">void print(const char* str);</span><br><span class="line">// 使用print()函数时，编译器将根据所采取的用法使用有相应特征标的原型</span><br><span class="line">print(&quot;abc&quot;,12);</span><br><span class="line">print(2.2,55);</span><br><span class="line">print(&quot;def&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>以下这种方式的重载是错误的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void print(const char* str,int width);</span><br><span class="line">int print(const char* str,int width);</span><br></pre></td></tr></table></figure>
+
+<p>重载时返回值可以不同，但特征标也必须不同。</p>
+<h5 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h5><p>函数模板是通用的函数描述，也就是说，使用泛型来定义函数，其中泛型可用具体的类型（int 、double等）替换。通过将类型作为参数，传递给模板，可使编译器生成该类型的函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 交换两个值，但是不清楚是int 还是 double，如果不使用模板，则要写两份代码</span><br><span class="line">// 使用函数模板，将类型作为参数传递</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void Swa(T a,T b)</span><br><span class="line">&#123;</span><br><span class="line">    T temp;</span><br><span class="line">    temp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = temp;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="动态多态"><a href="#动态多态" class="headerlink" title="动态多态"></a>动态多态</h4><p>**动态多态（动态绑定)**：即运行时的多态，在程序执行期间(非编译期)判断所引用对象的实际类型，根据其实际类型调用相应的方法。</p>
+<h5 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a>动态绑定</h5><p>1.通过基类类型的引用或者指针调用虚函数<br>首先搞清楚这个对象的类型：</p>
+<p>静态类型：对象声明时的类型，编译时确定<br>动态类型：目前所指对象的类型，运行时确定</p>
+<p>2.必须是虚函数（派生类一定要重写基类中的虚函数）</p>
+<h5 id="纯虚函数"><a href="#纯虚函数" class="headerlink" title="纯虚函数"></a>纯虚函数</h5><p>纯虚函数是在基类中声明的虚函数，它在基类中没有定义，但要求任何派生类都要定义自己的实现方法。在基类中实现纯虚函数的方法是在函数原型后加“&#x3D;0” 。<br>包含纯虚函数的类叫做抽象类（也叫接口类），抽象类不能实例化出对象。纯虚函数在派生类中重新定义以后，派生类才能实例化出对象。</p>
+<ul>
+<li>先拷贝基类的虚函数表</li>
+<li>如果派生类重写了基类的某个虚函数，就用派生类的虚函数替换虚表同位置的基类虚函数</li>
+<li>跟上派生类自己的虚函数</li>
+</ul>
+<p><strong>通过基类的引用或指针调用，调用基类还是派生类的虚函数，要根据运行时根据指针或引用实际指向或引用的类型确定，调用非虚函数时，则无论基类指向的是何种类型，都调用基类的函数</strong></p>
+<h2 id="程序的内存分配"><a href="#程序的内存分配" class="headerlink" title="程序的内存分配"></a>程序的内存分配</h2><p>一个由C&#x2F;C++编译的程序占用的内存分为以下几个部分</p>
+<table>
+<thead>
+<tr>
+<th align="left">内存高位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">栈区</td>
+</tr>
+<tr>
+<td align="left">堆区</td>
+</tr>
+<tr>
+<td align="left">全局区</td>
+</tr>
+<tr>
+<td align="left">文字常量区</td>
+</tr>
+<tr>
+<td align="left">程序代码区</td>
+</tr>
+</tbody></table>
+<ul>
+<li>栈区（stack）— 由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。 &#x2F;&#x2F;栈从内存高位向内存低位拓展，由OS控制 堆从内存低位向内存高位拓展，是C&#x2F;C++的一个函数库。</li>
+<li>堆区（heap） — 一般由程序员分配释放，若程序员不释放，程序结束时可能由OS回收 。注意它与数据结构中的堆是两回事，分配方式倒是类似于链表。</li>
+<li>全局区（静态区）（static）全局变量和静态变量的存储是放在一块的，初始化的全局变量和静态变量在一块区域，未初始化的全局变量、未初始化的静态变量在相邻的另一块区域。程序结束后由系统释放。</li>
+<li>文字常量区 常量字符串就是放在这里的。程序结束后由系统释放</li>
+<li>程序代码区 存放函数体的二进制代码。</li>
+</ul>
+<p>一个正常的程序在内存中通常分为程序段、数据端、堆栈三部分。程序段里放着程序的机器码、只读数据，这个段通常是只读，对它的写操作是非法的。数据段放的是程序中的静态数据。动态数据则通过堆栈来存放。</p>
+<p>在函数体中定义的变量通常是在栈上，用malloc, calloc, realloc等分配内存的函数分配得到的就是在堆上。在所有函数体外定义的是全局量，加了static修饰符后不管在哪里都存放在全局区（静态区），在所有函数体外定义的static变量表示在该文件中有效，不能extern到别的文件用；在函数体内定义的static表示只在该函数体内有效。另外，函数中的”adgfdf”这样的字符串存放在常量区。</p>
+<h2 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h2><h3 id="栈溢出概念："><a href="#栈溢出概念：" class="headerlink" title="栈溢出概念："></a>栈溢出概念：</h3><p>栈溢出指的是程序向栈中某个变量中写入的字节数超过了这个变量本身所申请的字节数，因而导致栈中与其相邻的变量的值被改变。</p>
+<h3 id="栈溢出的原因："><a href="#栈溢出的原因：" class="headerlink" title="栈溢出的原因："></a>栈溢出的原因：</h3><ol>
+<li>局部数组过大。当函数内部的数组过大时，有可能导致堆栈溢出。局部变量是存储在栈中的，因此这个很好理解。解决这类问题的办法有两个，一是增大栈空间,二是改用动态分配，使用堆（heap）而不是栈（stack）。</li>
+<li>递归调用层次太多。递归函数在运行时会执行压栈操作，当压栈次数太多时，也会导致堆栈溢出。</li>
+<li>指针或数组越界。这种情况最常见，例如进行字符串拷贝，或处理用户输入等等。</li>
+</ol>
+<h2 id="指针和引用的区别"><a href="#指针和引用的区别" class="headerlink" title="指针和引用的区别"></a>指针和引用的区别</h2><ol>
+<li>指针有自己的一块空间，而引用只是一个别名；</li>
+<li>使用sizeof看一个指针的大小是4，而引用则是被引用对象的大小；</li>
+<li>作为参数传递时，指针需要被解引用才可以对对象进行操作，而直接对引用的修改都会改变引用所指向的对象；</li>
+<li>可以有const指针，空指针，但是没有const引用，空引用，引用必须被初始化且必须是一个已有对象的引用；</li>
+<li>指针在使用中可以指向其它对象，但是引用只能是一个对象的引用，不能被改变；</li>
+<li>指针可以有多级指针（**p），而引用至于一级；</li>
+<li>如果返回动态内存分配的对象或者内存，必须使用指针，引用可能引起内存泄露。</li>
+</ol>
+<h2 id="数组和指针的区别"><a href="#数组和指针的区别" class="headerlink" title="数组和指针的区别"></a>数组和指针的区别</h2><table>
+<thead>
+<tr>
+<th align="left">指针</th>
+<th align="left">数组</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">保存数据的地址</td>
+<td align="left">保存数据</td>
+</tr>
+<tr>
+<td align="left">间接访问数据，首先获得指针的内容，然后将其作为地址，从该地址中提取数据</td>
+<td align="left">直接访问数据</td>
+</tr>
+<tr>
+<td align="left">通常用于动态的数据结构</td>
+<td align="left">通常用于固定数目且数据类型相同的元素</td>
+</tr>
+<tr>
+<td align="left">通过Malloc分配内存，free释放内存</td>
+<td align="left">隐式的分配和删除</td>
+</tr>
+<tr>
+<td align="left">通常指向匿名数据，操作匿名函数</td>
+<td align="left">自身即为数据名</td>
+</tr>
+</tbody></table>
+<h2 id="野指针"><a href="#野指针" class="headerlink" title="野指针"></a>野指针</h2><p>野指针就是指向一个已删除的对象或者未申请访问受限内存区域的指针</p>
+<h2 id="为什么析构函数必须是虚函数？为什么C-默认的析构函数不是虚函数"><a href="#为什么析构函数必须是虚函数？为什么C-默认的析构函数不是虚函数" class="headerlink" title="为什么析构函数必须是虚函数？为什么C++默认的析构函数不是虚函数"></a>为什么析构函数必须是虚函数？为什么C++默认的析构函数不是虚函数</h2><p>将可能会被继承的父类的析构函数设置为虚函数，可以保证当我们new一个子类，然后使用基类指针指向该子类对象，释放基类指针时可以释放掉子类的空间，防止内存泄漏。</p>
+<p>C++默认的析构函数不是虚函数是因为虚函数需要额外的虚函数表和虚表指针，占用额外的内存。而对于不会被继承的类来说，其析构函数如果是虚函数，就会浪费内存。因此C++默认的析构函数不是虚函数，而是只有当需要当作父类时，设置为虚函数。</p>
+<h2 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h2><p>函数指针是指向函数的指针变量。</p>
+<p>C在编译时，每一个函数都有一个入口地址，该入口地址就是函数指针所指向的地址。有了指向函数的指针变量后，可用该指针变量调用函数，就如同用指针变量可引用其他类型变量一样，在这些概念上是大体一致的。</p>
+<h2 id="fork函数"><a href="#fork函数" class="headerlink" title="fork函数"></a>fork函数</h2><p>创建一个和当前进程映像一样的进程可以通过fork( )系统调用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">pid_t fork(void);</span><br></pre></td></tr></table></figure>
+
+<p>成功调用fork( )会创建一个新的进程，它几乎与调用fork( )的进程一模一样，这两个进程都会继续运行。在子进程中，成功的fork( )调用会返回0。在父进程中fork( )返回子进程的pid。如果出现错误，fork( )返回一个负值。</p>
+<p>最常见的fork( )用法是创建一个新的进程，然后使用exec( )载入二进制映像，替换当前进程的映像。这种情况下，派生（fork）了新的进程，而这个子进程会执行一个新的二进制可执行文件的映像。这种“派生加执行”的方式是很常见的。</p>
+<p>在早期的Unix系统中，创建进程比较原始。当调用fork时，内核会把所有的内部数据结构复制一份，复制进程的页表项，然后把父进程的地址空间中的内容逐页的复制到子进程的地址空间中。但从内核角度来说，逐页的复制方式是十分耗时的。现代的Unix系统采取了更多的优化，例如Linux，采用了写时复制的方法，而不是对父进程空间进程整体复制。</p>
+<h2 id="C-中析构函数的作用"><a href="#C-中析构函数的作用" class="headerlink" title="C++中析构函数的作用"></a>C++中析构函数的作用</h2><p>析构函数与构造函数对应，当对象结束其生命周期，如对象所在的函数已调用完毕时，系统会自动执行析构函数。</p>
+<p>析构函数名也应与类名相同，只是在函数名前面加一个位取反符<del>，例如</del>stud( )，以区别于构造函数。它不能带任何参数，也没有返回值（包括void类型）。只能有一个析构函数，不能重载。</p>
+<p>如果用户没有编写析构函数，编译系统会自动生成一个缺省的析构函数（即使自定义了析构函数，编译器也总是会为我们合成一个析构函数，并且如果自定义了析构函数，编译器在执行时会先调用自定义的析构函数再调用合成的析构函数），它也不进行任何操作。所以许多简单的类中没有用显式的析构函数。</p>
+<p>如果一个类中有指针，且在使用的过程中动态的申请了内存，那么最好显示构造析构函数在销毁类之前，释放掉申请的内存空间，避免内存泄漏。</p>
+<p>类析构顺序：1）派生类本身的析构函数；2）对象成员析构函数；3）基类析构函数。</p>
+<h2 id="静态函数和虚函数的区别"><a href="#静态函数和虚函数的区别" class="headerlink" title="静态函数和虚函数的区别"></a>静态函数和虚函数的区别</h2><p>静态函数在编译的时候就已经确定运行时机，虚函数在运行的时候动态绑定。虚函数因为用了虚函数表机制，调用的时候会增加一次内存开销</p>
+<h2 id="重载和覆盖"><a href="#重载和覆盖" class="headerlink" title="重载和覆盖"></a>重载和覆盖</h2><p>重载：两个函数名相同，但是参数列表不同（个数，类型），返回值类型没有要求，在同一作用域中<br>重写：子类继承了父类，父类中的函数是虚函数，在子类中重新定义了这个虚函数，这种情况是重写</p>
+<h2 id="虚函数和多态"><a href="#虚函数和多态" class="headerlink" title="虚函数和多态"></a>虚函数和多态</h2><p>多态的实现主要分为静态多态和动态多态，静态多态主要是重载，在编译的时候就已经确定；动态多态是用虚函数机制实现的，在运行期间动态绑定。</p>
+<p>举个例子：一个父类类型的指针指向一个子类对象时候，使用父类的指针去调用子类中重写了的父类中的虚函数的时候，会调用子类重写过后的函数，在父类中声明为加了virtual关键字的函数，在子类中重写时候不需要加virtual也是虚函数。</p>
+<p>虚函数的实现：在有虚函数的类中，类的最开始部分是一个虚函数表的指针，这个指针指向一个虚函数表，表中放了虚函数的地址，实际的虚函数在代码段(.text)中。当子类继承了父类的时候也会继承其虚函数表，当子类重写父类中虚函数时候，会将其继承到的虚函数表中的地址替换为重新写的函数地址。使用了虚函数，会增加访问内存开销，降低效率。</p>
+<h2 id="C-里是怎么定义常量的？常量存放在内存的哪个位置？"><a href="#C-里是怎么定义常量的？常量存放在内存的哪个位置？" class="headerlink" title="C++里是怎么定义常量的？常量存放在内存的哪个位置？"></a>C++里是怎么定义常量的？常量存放在内存的哪个位置？</h2><p>常量在C++里的定义就是一个top-level const加上对象类型，常量定义必须初始化。对于局部对象，常量存放在栈区，对于全局对象，常量存放在全局&#x2F;静态存储区。对于字面值常量，常量存放在常量存储区。</p>
+<h2 id="const修饰成员函数的目的是什么？"><a href="#const修饰成员函数的目的是什么？" class="headerlink" title="const修饰成员函数的目的是什么？"></a>const修饰成员函数的目的是什么？</h2><p>const修饰的成员函数表明函数调用不会对对象做出任何更改，事实上，如果确认不会对对象做更改，就应该为函数加上const限定，这样无论const对象还是普通对象都可以调用该函数。</p>
+<h2 id="隐式类型转换"><a href="#隐式类型转换" class="headerlink" title="隐式类型转换"></a>隐式类型转换</h2><p>首先，对于内置类型，低精度的变量给高精度变量赋值会发生隐式类型转换，其次，对于只存在单个参数的构造函数的对象构造来说，函数调用可以直接使用该参数传入，编译器会自动调用其构造函数生成临时对象。</p>
+<h2 id="new-x2F-delete与malloc-x2F-free的区别是什么"><a href="#new-x2F-delete与malloc-x2F-free的区别是什么" class="headerlink" title="new&#x2F;delete与malloc&#x2F;free的区别是什么"></a>new&#x2F;delete与malloc&#x2F;free的区别是什么</h2><p>首先，new&#x2F;delete是C++的关键字，而malloc&#x2F;free是C语言的库函数，后者使用必须指明申请内存空间的大小</p>
+<p>对于类类型的对象，后者不会调用构造函数和析构函数</p>
+<p>malloc需要给定申请内存的大小，返回的指针需要强转。<br>new会调用构造函数，不用指定内存大小，返回的指针不用强转。</p>
+<h1 id="容器和算法"><a href="#容器和算法" class="headerlink" title="容器和算法"></a>容器和算法</h1><h2 id="map和set有什么区别，分别又是怎么实现的？"><a href="#map和set有什么区别，分别又是怎么实现的？" class="headerlink" title="map和set有什么区别，分别又是怎么实现的？"></a>map和set有什么区别，分别又是怎么实现的？</h2><p>map和set都是C++的关联容器，其底层实现都是红黑树（RB-Tree）。由于 map 和set所开放的各种操作接口，RB-tree 也都提供了，所以几乎所有的 map 和set的操作行为，都只是转调 RB-tree 的操作行为。</p>
+<p>unordered map底层结构是哈希表</p>
+<p>map和set区别在于：</p>
+<ol>
+<li>map中的元素是key-value（关键字—值）对：关键字起到索引的作用，值则表示与索引相关联的数据；Set与之相对就是关键字的简单集合，set中每个元素只包含一个关键字。</li>
+<li>set的迭代器是const的，不允许修改元素的值；map允许修改value，但不允许修改key。其原因是因为map和set是根据关键字排序来保证其有序性的，如果允许修改key的话，那么首先需要删除该键，然后调节平衡，再插入修改后的键值，调节平衡，如此一来，严重破坏了map和set的结构，导致iterator失效，不知道应该指向改变前的位置，还是指向改变后的位置。所以STL中将set的迭代器设置成const，不允许修改迭代器的值；而map的迭代器则不允许修改key值，允许修改value值。</li>
+<li>map支持下标操作，set不支持下标操作。map可以用key做下标，map的下标运算符[ ]将关键码作为下标去执行查找，如果关键码不存在，则插入一个具有该关键码和mapped_type类型默认值的元素至map中，因此下标运算符[ ]在map应用中需要慎用，const_map不能用，只希望确定某一个关键值是否存在而不希望插入元素时也不应该使用，mapped_type类型没有默认值也不应该使用。如果find能解决需要，尽可能用find。</li>
+<li>set</li>
+</ol>
+<p>所有元素都会根据元素的值自动被排序，且不允许重复。</p>
+<p>底层实现：红黑树</p>
+<p>set 底层是通过红黑树（RB-tree）来实现的，由于红黑树是一种平衡二叉搜索树，自动排序的效果很不错，所以标准的 STL 的 set 即以 RB-Tree 为底层机制。又由于 set 所开放的各种操作接口，RB-tree 也都提供了，所以几乎所有的 set 操作行为，都只有转调用 RB-tree 的操作行为而已。</p>
+<p>适用场景：有序不重复集合</p>
+<ol>
+<li>map</li>
+</ol>
+<p>映射。map 的所有元素都是 pair，同时拥有实值（value）和键值（key）。pair 的第一元素被视为键值，第二元素被视为实值。所有元素都会根据元素的键值自动被排序。不允许键值重复。</p>
+<p>底层：红黑树</p>
+<p>适用场景：有序键值对不重复映射</p>
+<h2 id="STL里resize和reserve的区别"><a href="#STL里resize和reserve的区别" class="headerlink" title="STL里resize和reserve的区别"></a>STL里resize和reserve的区别</h2><p>resize()：改变当前容器内含有元素的数量(size())，eg: vectorv; v.resize(len);v的size变为len,如果原来v的size小于len，那么容器新增（len-size）个元素，元素的值为默认为0.当v.push_back(3);之后，则是3是放在了v的末尾，即下标为len，此时容器是size为len+1；<br>reserve()：改变当前容器的最大容量（capacity）,它不会生成元素，只是确定这个容器允许放入多少对象，如果reserve(len)的值大于当前的capacity()，那么会重新分配一块能存len个对象的空间，然后把之前v.size()个对象通过copy construtor复制过来，销毁之前的内存；</p>
+<h2 id="STL中迭代器的作用，有指针为何还要迭代器"><a href="#STL中迭代器的作用，有指针为何还要迭代器" class="headerlink" title="STL中迭代器的作用，有指针为何还要迭代器"></a>STL中迭代器的作用，有指针为何还要迭代器</h2><ol>
+<li>迭代器</li>
+</ol>
+<p>Iterator（迭代器）模式又称Cursor（游标）模式，用于提供一种方法顺序访问一个聚合对象中各个元素, 而又不需暴露该对象的内部表示。或者这样说可能更容易理解：Iterator模式是运用于聚合对象的一种模式，通过运用该模式，使得我们可以在不知道对象内部表示的情况下，按照一定顺序（由iterator提供的方法）访问聚合对象中的各个元素。</p>
+<p>由于Iterator模式的以上特性：与聚合对象耦合，在一定程度上限制了它的广泛运用，一般仅用于底层聚合支持类，如STL的list、vector、stack等容器类及ostream_iterator等扩展iterator。</p>
+<ol>
+<li>迭代器和指针的区别</li>
+</ol>
+<p>迭代器不是指针，是类模板，表现的像指针。他只是模拟了指针的一些功能，通过重载了指针的一些操作符，-&gt;、*、++、–等。迭代器封装了指针，是一个“可遍历STL（ Standard Template Library）容器内全部或部分元素”的对象， 本质是封装了原生指针，是指针概念的一种提升（lift），提供了比指针更高级的行为，相当于一种智能指针，他可以根据不同类型的数据结构来实现不同的++，–等操作。</p>
+<p>迭代器返回的是对象引用而不是对象的值，所以cout只能输出迭代器使用*取值后的值而不能直接输出其自身。</p>
+<ol>
+<li>迭代器产生原因</li>
+</ol>
+<p>Iterator类的访问方式就是把不同集合类的访问逻辑抽象出来，使得不用暴露集合内部的结构而达到循环遍历集合的效果。</p>
+<h1 id="类和数据抽象"><a href="#类和数据抽象" class="headerlink" title="类和数据抽象"></a>类和数据抽象</h1><h2 id="C-中类成员的访问权限"><a href="#C-中类成员的访问权限" class="headerlink" title="C++中类成员的访问权限"></a>C++中类成员的访问权限</h2><p>C++通过 public、protected、private 三个关键字来控制成员变量和成员函数的访问权限，它们分别表示公有的、受保护的、私有的，被称为成员访问限定符。在类的内部（定义类的代码内部），无论成员被声明为 public、protected 还是 private，都是可以互相访问的，没有访问权限的限制。在类的外部（定义类的代码之外），只能通过对象访问成员，并且通过对象只能访问 public 属性的成员，不能访问 private、protected 属性的成员</p>
+<h2 id="C-中struct和class的区别"><a href="#C-中struct和class的区别" class="headerlink" title="C++中struct和class的区别"></a>C++中struct和class的区别</h2><p>在C++中，可以用struct和class定义类，都可以继承。区别在于：structural的默认继承权限和默认访问权限是public，而class的默认继承权限和默认访问权限是private。</p>
+<p>另外，class还可以定义模板类形参，比如template &lt;class T, int i&gt;。</p>
+<h2 id="C-类内可以定义引用数据成员吗"><a href="#C-类内可以定义引用数据成员吗" class="headerlink" title="C++类内可以定义引用数据成员吗"></a>C++类内可以定义引用数据成员吗</h2><p>可以，必须通过成员函数初始化列表初始化。</p>
+<h2 id="什么是右值引用，跟左值又有什么区别"><a href="#什么是右值引用，跟左值又有什么区别" class="headerlink" title="什么是右值引用，跟左值又有什么区别"></a>什么是右值引用，跟左值又有什么区别</h2><p>右值引用是C++11中引入的新特性 , 它实现了转移语义和精确传递。它的主要目的有两个方面：</p>
+<ol>
+<li>消除两个对象交互时不必要的对象拷贝，节省运算存储资源，提高效率。</li>
+<li>能够更简洁明确地定义泛型函数。</li>
+</ol>
+<p>左值和右值的概念：</p>
+<p>左值：能对表达式取地址、或具名对象&#x2F;变量。一般指表达式结束后依然存在的持久对象。</p>
+<p>右值：不能对表达式取地址，或匿名对象。一般指表达式结束就不再存在的临时对象。</p>
+<p>右值引用和左值引用的区别：</p>
+<ol>
+<li>左值可以寻址，而右值不可以。</li>
+<li>左值可以被赋值，右值不可以被赋值，可以用来给左值赋值。</li>
+<li>左值可变,右值不可变（仅对基础类型适用，用户自定义类型右值引用可以通过成员函数改变）。</li>
+</ol>
+<h1 id="编译和底层"><a href="#编译和底层" class="headerlink" title="编译和底层"></a>编译和底层</h1><h2 id="一个C-源文件从文本到可执行文件经历的过程？"><a href="#一个C-源文件从文本到可执行文件经历的过程？" class="headerlink" title="一个C++源文件从文本到可执行文件经历的过程？"></a>一个C++源文件从文本到可执行文件经历的过程？</h2><p>对于C++源文件，从文本到可执行文件一般需要四个过程：<br>预处理阶段：对源代码文件中文件包含关系（头文件）、预编译语句（宏定义）进行分析和替换，生成预编译文件。</p>
+<p>编译阶段：将经过预处理后的预编译文件转换成特定汇编代码，生成汇编文件</p>
+<p>汇编阶段：将编译阶段生成的汇编文件转化成机器码，生成可重定位目标文件</p>
+<p>链接阶段：将多个目标文件及所需要的库连接成最终的可执行目标文件</p>
+<h2 id="include头文件的顺序以及双引号””和尖括号-lt-gt-的区别？"><a href="#include头文件的顺序以及双引号””和尖括号-lt-gt-的区别？" class="headerlink" title="include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？"></a>include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？</h2><p>Include头文件的顺序：对于include的头文件来说，如果在文件a.h中声明一个在文件b.h中定义的变量，而不引用b.h。那么要在a.c文件中引用b.h文件，并且要先引用b.h，后引用a.h,否则汇报变量类型未声明错误。<br>双引号和尖括号的区别：编译器预处理阶段查找头文件的路径不一样。</p>
+<p>对于使用双引号包含的头文件，查找头文件路径的顺序为：</p>
+<p>当前头文件目录</p>
+<p>编译器设置的头文件路径（编译器可使用-I显式指定搜索路径）</p>
+<p>系统变量CPLUS_INCLUDE_PATH&#x2F;C_INCLUDE_PATH指定的头文件路径</p>
+<p>对于使用尖括号包含的头文件，查找头文件的路径顺序为：</p>
+<p>编译器设置的头文件路径（编译器可使用-I显式指定搜索路径）</p>
+<p>系统变量CPLUS_INCLUDE_PATH&#x2F;C_INCLUDE_PATH指定的头文件路径</p>
+<h2 id="malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？"><a href="#malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？" class="headerlink" title="malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？"></a>malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？</h2><p>Malloc函数用于动态分配内存。为了减少内存碎片和系统调用的开销，malloc其采用内存池的方式，先申请大块内存作为堆区，然后将堆区分为多个内存块，以块作为内存管理的基本单位。当用户申请内存时，直接从堆区分配一块合适的空闲块。Malloc采用隐式链表结构将堆区分成连续的、大小不一的块，包含已分配块和未分配块；同时malloc采用显示链表结构来管理所有的空闲块，即使用一个双向链表将空闲块连接起来，每一个空闲块记录了一个连续的、未分配的地址。<br>当进行内存分配时，Malloc会通过隐式链表遍历所有的空闲块，选择满足要求的块进行分配；当进行内存合并时，malloc采用边界标记法，根据每个块的前后块是否已经分配来决定是否进行块合并。</p>
+<p>Malloc在申请内存时，一般会通过brk或者mmap系统调用进行申请。其中当申请内存小于128K时，会使用系统函数brk在堆区中分配；而当申请内存大于128K时，会使用系统函数mmap在映射区分配。</p>
+<h2 id="C-的内存管理是怎样的？"><a href="#C-的内存管理是怎样的？" class="headerlink" title="C++的内存管理是怎样的？"></a>C++的内存管理是怎样的？</h2><p>在C++中，虚拟内存分为代码段、数据段、BSS段、堆区、文件映射区以及栈区六部分。<br>代码段:包括只读存储区和文本区，其中只读存储区存储字符串常量，文本区存储程序的机器代码。</p>
+<p>数据段：存储程序中已初始化的全局变量和静态变量</p>
+<p>bss 段：存储未初始化的全局变量和静态变量（局部+全局），以及所有被初始化为0的全局变量和静态变量。</p>
+<p>堆区：调用new&#x2F;malloc函数时在堆区动态分配内存，同时需要调用delete&#x2F;free来手动释放申请的内存。</p>
+<p>映射区:存储动态链接库以及调用mmap函数进行的文件映射</p>
+<p>栈：使用栈空间存储函数的返回地址、参数、局部变量、返回值</p>
+<h2 id="什么时候会发生段错误？"><a href="#什么时候会发生段错误？" class="headerlink" title="什么时候会发生段错误？"></a>什么时候会发生段错误？</h2><p>段错误通常发生在访问非法内存地址的时候，具体来说分为以下几种情况：</p>
+<ul>
+<li>使用野指针</li>
+<li>试图修改字符串常量的内容</li>
+</ul>
+<h2 id="什么是memory-leak，也就是内存泄漏"><a href="#什么是memory-leak，也就是内存泄漏" class="headerlink" title="什么是memory leak，也就是内存泄漏"></a>什么是memory leak，也就是内存泄漏</h2><p>内存泄漏(memory leak)是指由于疏忽或错误造成了程序未能释放掉不再使用的内存的情况。内存泄漏并非指内存在物理上的消失，而是应用程序分配某段内存后，由于设计错误，失去了对该段内存的控制，因而造成了内存的浪费。<br>内存泄漏的分类：</p>
+<ol>
+<li>堆内存泄漏 （Heap leak）。对内存指的是程序运行中根据需要分配通过malloc,realloc new等从堆中分配的一块内存，再是完成后必须通过调用对应的 free或者delete 删掉。如果程序的设计的错误导致这部分内存没有被释放，那么此后这块内存将不会被使用，就会产生Heap Leak.</li>
+<li>系统资源泄露（Resource Leak）。主要指程序使用系统分配的资源比如 Bitmap,handle ,SOCKET等没有使用相应的函数释放掉，导致系统资源的浪费，严重可导致系统效能降低，系统运行不稳定。</li>
+<li>没有将基类的析构函数定义为虚函数。当基类指针指向子类对象时，如果基类的析构函数不是virtual，那么子类的析构函数将不会被调用，子类的资源没有正确是释放，因此造成内存泄露。</li>
+</ol>
+<h2 id="如何判断内存泄漏？"><a href="#如何判断内存泄漏？" class="headerlink" title="如何判断内存泄漏？"></a>如何判断内存泄漏？</h2><p>内存泄漏通常是由于调用了malloc&#x2F;new等内存申请的操作，但是缺少了对应的free&#x2F;delete。为了判断内存是否泄露，我们一方面可以使用linux环境下的内存泄漏检查工具Valgrind,另一方面我们在写代码时可以添加内存申请和释放的统计功能，统计当前申请和释放的内存是否一致，以此来判断内存是否泄露。</p>
+<h2 id="new和malloc的区别"><a href="#new和malloc的区别" class="headerlink" title="new和malloc的区别"></a>new和malloc的区别</h2><ol>
+<li>new分配内存按照数据类型进行分配，malloc分配内存按照指定的大小分配；</li>
+<li>new返回的是指定对象的指针，而malloc返回的是void*，因此malloc的返回值一般都需要进行类型转化。</li>
+<li>new不仅分配一段内存，而且会调用构造函数，malloc不会。</li>
+<li>new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会。</li>
+<li>new是一个操作符可以重载，malloc是一个库函数。</li>
+<li>malloc分配的内存不够的时候，可以用realloc扩容。扩容的原理？new没用这样操作。</li>
+<li>new如果分配失败了会抛出bad_malloc的异常，而malloc失败了会返回NULL。</li>
+<li>申请数组时： new[]一次分配所有内存，多次调用构造函数，搭配使用delete[]，delete[]多次调用析构函数，销毁数组中的每个对象。而malloc则只能sizeof(int) * n。</li>
+</ol>
+<h2 id="共享内存相关api"><a href="#共享内存相关api" class="headerlink" title="共享内存相关api"></a>共享内存相关api</h2><p>Linux允许不同进程访问同一个逻辑内存，提供了一组API，头文件在sys&#x2F;shm.h中。<br>1）新建共享内存shmget</p>
+<p>int shmget(key_t key,size_t size,int shmflg);</p>
+<p>key：共享内存键值，可以理解为共享内存的唯一性标记。</p>
+<p>size：共享内存大小</p>
+<p>shmflag：创建进程和其他进程的读写权限标识。</p>
+<p>返回值：相应的共享内存标识符，失败返回-1</p>
+<p>2）连接共享内存到当前进程的地址空间shmat</p>
+<p>void *shmat(int shm_id,const void *shm_addr,int shmflg);</p>
+<p>shm_id：共享内存标识符</p>
+<p>shm_addr：指定共享内存连接到当前进程的地址，通常为0，表示由系统来选择。</p>
+<p>shmflg：标志位</p>
+<p>返回值：指向共享内存第一个字节的指针，失败返回-1</p>
+<p>3）当前进程分离共享内存shmdt</p>
+<p>int shmdt(const void *shmaddr);</p>
+<p>4）控制共享内存shmctl</p>
+<p>和信号量的semctl函数类似，控制共享内存</p>
+<p>int shmctl(int shm_id,int command,struct shmid_ds *buf);</p>
+<p>shm_id：共享内存标识符</p>
+<p>command: 有三个值</p>
+<p>IPC_STAT:获取共享内存的状态，把共享内存的shmid_ds结构复制到buf中。</p>
+<p>IPC_SET:设置共享内存的状态，把buf复制到共享内存的shmid_ds结构。</p>
+<p>IPC_RMID:删除共享内存</p>
+<p>buf：共享内存管理结构体。</p>
+<h2 id="自己设计一下如何采用单线程的方式处理高并发"><a href="#自己设计一下如何采用单线程的方式处理高并发" class="headerlink" title="自己设计一下如何采用单线程的方式处理高并发"></a>自己设计一下如何采用单线程的方式处理高并发</h2><p>在单线程模型中，可以采用I&#x2F;O复用来提高单线程处理多个请求的能力，然后再采用事件驱动模型，基于异步回调来处理事件来</p>
+<h2 id="C-STL-的内存优化"><a href="#C-STL-的内存优化" class="headerlink" title="C++ STL 的内存优化"></a>C++ STL 的内存优化</h2><p>1）二级配置器结构<br>STL内存管理使用二级内存配置器。<br>1、第一级配置器<br>第一级配置器以malloc()，free()，realloc()等C函数执行实际的内存配置、释放、重新配置等操作，并且能在内存需求不被满足的时候，调用一个指定的函数。<br>一级空间配置器分配的是大于128字节的空间<br>如果分配不成功，调用句柄释放一部分内存<br>如果还不能分配成功，抛出异常<br>2、第二级配置器<br>在STL的第二级配置器中多了一些机制，避免太多小区块造成的内存碎片，小额区块带来的不仅是内存碎片，配置时还有额外的负担。区块越小，额外负担所占比例就越大。<br>3、分配原则<br>如果要分配的区块大于128bytes，则移交给第一级配置器处理。<br>如果要分配的区块小于128bytes，则以内存池管理（memory pool），又称之次层配置（sub-allocation）：每次配置一大块内存，并维护对应的16个空闲链表（free-list）。下次若有相同大小的内存需求，则直接从free-list中取。如果有小额区块被释放，则由配置器回收到free-list中。<br>当用户申请的空间小于128字节时，将字节数扩展到8的倍数，然后在自由链表中查找对应大小的子链表<br>如果在自由链表查找不到或者块数不够，则向内存池进行申请，一般一次申请20块<br>如果内存池空间足够，则取出内存<br>如果不够分配20块，则分配最多的块数给自由链表，并且更新每次申请的块数<br>如果一块都无法提供，则把剩余的内存挂到自由链表，然后向系统heap申请空间，如果申请失败，则看看自由链表还有没有可用的块，如果也没有，则最后调用一级空间配置器<br>2）二级内存池<br>二级内存池采用了16个空闲链表，这里的16个空闲链表分别管理大小为8、16、24……120、128的数据块。这里空闲链表节点的设计十分巧妙，这里用了一个联合体既可以表示下一个空闲数据块（存在于空闲链表中）的地址，也可以表示已经被用户使用的数据块（不存在空闲链表中）的地址。<br><img src="https://s3.ax1x.com/2021/01/18/scVfOO.md.png" alt="img"><br>1、空间配置函数allocate<br>首先先要检查申请空间的大小，如果大于128字节就调用第一级配置器，小于128字节就检查对应的空闲链表，如果该空闲链表中有可用数据块，则直接拿来用（拿取空闲链表中的第一个可用数据块，然后把该空闲链表的地址设置为该数据块指向的下一个地址），如果没有可用数据块，则调用refill重新填充空间。<br>2、空间释放函数deallocate<br>首先先要检查释放数据块的大小，如果大于128字节就调用第一级配置器，小于128字节则根据数据块的大小来判断回收后的空间会被插入到哪个空闲链表。<br>3、重新填充空闲链表refill<br>在用allocate配置空间时，如果空闲链表中没有可用数据块，就会调用refill来重新填充空间，新的空间取自内存池。缺省取20个数据块，如果内存池空间不足，那么能取多少个节点就取多少个。<br>从内存池取空间给空闲链表用是chunk_alloc的工作，首先根据end_free-start_free来判断内存池中的剩余空间是否足以调出nobjs个大小为size的数据块出去，如果内存连一个数据块的空间都无法供应，需要用malloc取堆中申请内存。<br>假如山穷水尽，整个系统的堆空间都不够用了，malloc失败，那么chunk_alloc会从空闲链表中找是否有大的数据块，然后将该数据块的空间分给内存池（这个数据块会从链表中去除）。<br>3、总结：</p>
+<ol>
+<li>使用allocate向内存池请求size大小的内存空间，如果需要请求的内存大小大于128bytes，直接使用malloc。</li>
+<li>如果需要的内存大小小于128bytes，allocate根据size找到最适合的自由链表。<br>a. 如果链表不为空，返回第一个node，链表头改为第二个node。<br>b. 如果链表为空，使用blockAlloc请求分配node。<br>x. 如果内存池中有大于一个node的空间，分配竟可能多的node(但是最多20个)，将一个node返回，其他的node添加到链表中。<br>y. 如果内存池只有一个node的空间，直接返回给用户。<br>z. 若果如果连一个node都没有，再次向操作系统请求分配内存。<br>①分配成功，再次进行b过程。<br>②分配失败，循环各个自由链表，寻找空间。<br>I. 找到空间，再次进行过程b。<br>II. 找不到空间，抛出异常。</li>
+<li>用户调用deallocate释放内存空间，如果要求释放的内存空间大于128bytes，直接调用free。</li>
+<li>否则按照其大小找到合适的自由链表，并将其插入。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-%E9%9D%A2%E8%AF%95/" rel="tag"># C++, 面试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="next" title="Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读">
+                  <i class="fa fa-chevron-left"></i> Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2021/03/17/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="操作系统学习笔记">
+                  操作系统学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">封装：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">继承：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%80%81%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">多态：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%A4%9A%E6%80%81"><span class="nav-number">3.1.</span> <span class="nav-text">静态多态</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD"><span class="nav-number">3.1.1.</span> <span class="nav-text">函数重载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF"><span class="nav-number">3.1.2.</span> <span class="nav-text">函数模板</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E5%A4%9A%E6%80%81"><span class="nav-number">3.2.</span> <span class="nav-text">动态多态</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">动态绑定</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.2.</span> <span class="nav-text">纯虚函数</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number"></span> <span class="nav-text">程序的内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA"><span class="nav-number"></span> <span class="nav-text">栈溢出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">栈溢出概念：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA%E7%9A%84%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">栈溢出的原因：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E9%92%88%E5%92%8C%E5%BC%95%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">指针和引用的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">数组和指针的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8E%E6%8C%87%E9%92%88"><span class="nav-number"></span> <span class="nav-text">野指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E5%BF%85%E9%A1%BB%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88C-%E9%BB%98%E8%AE%A4%E7%9A%84%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E4%B8%8D%E6%98%AF%E8%99%9A%E5%87%BD%E6%95%B0"><span class="nav-number"></span> <span class="nav-text">为什么析构函数必须是虚函数？为什么C++默认的析构函数不是虚函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88"><span class="nav-number"></span> <span class="nav-text">函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork%E5%87%BD%E6%95%B0"><span class="nav-number"></span> <span class="nav-text">fork函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E4%B8%AD%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">C++中析构函数的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%87%BD%E6%95%B0%E5%92%8C%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">静态函数和虚函数的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%BD%BD%E5%92%8C%E8%A6%86%E7%9B%96"><span class="nav-number"></span> <span class="nav-text">重载和覆盖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E5%92%8C%E5%A4%9A%E6%80%81"><span class="nav-number"></span> <span class="nav-text">虚函数和多态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E9%87%8C%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F%E7%9A%84%EF%BC%9F%E5%B8%B8%E9%87%8F%E5%AD%98%E6%94%BE%E5%9C%A8%E5%86%85%E5%AD%98%E7%9A%84%E5%93%AA%E4%B8%AA%E4%BD%8D%E7%BD%AE%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">C++里是怎么定义常量的？常量存放在内存的哪个位置？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const%E4%BF%AE%E9%A5%B0%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E7%9A%84%E7%9B%AE%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">const修饰成员函数的目的是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number"></span> <span class="nav-text">隐式类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-x2F-delete%E4%B8%8Emalloc-x2F-free%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number"></span> <span class="nav-text">new&#x2F;delete与malloc&#x2F;free的区别是什么</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%92%8C%E7%AE%97%E6%B3%95"><span class="nav-number"></span> <span class="nav-text">容器和算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#map%E5%92%8Cset%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%8C%E5%88%86%E5%88%AB%E5%8F%88%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">map和set有什么区别，分别又是怎么实现的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL%E9%87%8Cresize%E5%92%8Creserve%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">STL里resize和reserve的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL%E4%B8%AD%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%9A%84%E4%BD%9C%E7%94%A8%EF%BC%8C%E6%9C%89%E6%8C%87%E9%92%88%E4%B8%BA%E4%BD%95%E8%BF%98%E8%A6%81%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-number"></span> <span class="nav-text">STL中迭代器的作用，有指针为何还要迭代器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1"><span class="nav-number"></span> <span class="nav-text">类和数据抽象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E4%B8%AD%E7%B1%BB%E6%88%90%E5%91%98%E7%9A%84%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90"><span class="nav-number"></span> <span class="nav-text">C++中类成员的访问权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E4%B8%ADstruct%E5%92%8Cclass%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">C++中struct和class的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E7%B1%BB%E5%86%85%E5%8F%AF%E4%BB%A5%E5%AE%9A%E4%B9%89%E5%BC%95%E7%94%A8%E6%95%B0%E6%8D%AE%E6%88%90%E5%91%98%E5%90%97"><span class="nav-number"></span> <span class="nav-text">C++类内可以定义引用数据成员吗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%EF%BC%8C%E8%B7%9F%E5%B7%A6%E5%80%BC%E5%8F%88%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">什么是右值引用，跟左值又有什么区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%92%8C%E5%BA%95%E5%B1%82"><span class="nav-number"></span> <span class="nav-text">编译和底层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AAC-%E6%BA%90%E6%96%87%E4%BB%B6%E4%BB%8E%E6%96%87%E6%9C%AC%E5%88%B0%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E7%BB%8F%E5%8E%86%E7%9A%84%E8%BF%87%E7%A8%8B%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">一个C++源文件从文本到可执行文件经历的过程？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include%E5%A4%B4%E6%96%87%E4%BB%B6%E7%9A%84%E9%A1%BA%E5%BA%8F%E4%BB%A5%E5%8F%8A%E5%8F%8C%E5%BC%95%E5%8F%B7%E2%80%9D%E2%80%9D%E5%92%8C%E5%B0%96%E6%8B%AC%E5%8F%B7-lt-gt-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">include头文件的顺序以及双引号””和尖括号&lt;&gt;的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#malloc%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%8C%E5%8F%A6%E5%A4%96brk%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8Cmmap%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E4%BD%9C%E7%94%A8%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">malloc的原理，另外brk系统调用和mmap系统调用的作用分别是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-%E7%9A%84%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">C++的内存管理是怎样的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%8F%91%E7%94%9F%E6%AE%B5%E9%94%99%E8%AF%AF%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">什么时候会发生段错误？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFmemory-leak%EF%BC%8C%E4%B9%9F%E5%B0%B1%E6%98%AF%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-number"></span> <span class="nav-text">什么是memory leak，也就是内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%EF%BC%9F"><span class="nav-number"></span> <span class="nav-text">如何判断内存泄漏？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new%E5%92%8Cmalloc%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number"></span> <span class="nav-text">new和malloc的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9B%B8%E5%85%B3api"><span class="nav-number"></span> <span class="nav-text">共享内存相关api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%8B%E5%A6%82%E4%BD%95%E9%87%87%E7%94%A8%E5%8D%95%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F%E5%A4%84%E7%90%86%E9%AB%98%E5%B9%B6%E5%8F%91"><span class="nav-number"></span> <span class="nav-text">自己设计一下如何采用单线程的方式处理高并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-STL-%E7%9A%84%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96"><span class="nav-number"></span> <span class="nav-text">C++ STL 的内存优化</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wang shushu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang shushu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

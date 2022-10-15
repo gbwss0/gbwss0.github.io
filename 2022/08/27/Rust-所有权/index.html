@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="Gbwss" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="所有权是Rust特有的核心概念，该特性让Rust即使没有垃圾回收或引用计数等机制也能够编写出内存安全的程序。    野指针：是指向“垃圾”内存（不可用内存）的指针,指针创建时未初始化。指针变量刚被创建时不会自动成为NULL指针，它会随机指向一个内存地址。  悬垂指针(Dangling pointers): 指向无效数据的指针（当我们了解数据在内存中如何存储之后，这个就很有意义）。你可以在这里了解更">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust-所有权">
+<meta property="og:url" content="http://yoursite.com/2022/08/27/Rust-%E6%89%80%E6%9C%89%E6%9D%83/index.html">
+<meta property="og:site_name" content="Gbwss">
+<meta property="og:description" content="所有权是Rust特有的核心概念，该特性让Rust即使没有垃圾回收或引用计数等机制也能够编写出内存安全的程序。    野指针：是指向“垃圾”内存（不可用内存）的指针,指针创建时未初始化。指针变量刚被创建时不会自动成为NULL指针，它会随机指向一个内存地址。  悬垂指针(Dangling pointers): 指向无效数据的指针（当我们了解数据在内存中如何存储之后，这个就很有意义）。你可以在这里了解更">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/a7/4c/a7e7f2334460f15f9afd04ebd710b54c.jpg?wh=2312x2043">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/f0/2f/f0989fa8611db83b79500060e8cd682f.jpg?wh=2312x2043">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/fe/64/fe810cf1616bce15f53bcf6d28d7f864.jpg?wh=2312x2043">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/44/39/441678ea9318e9f159cac6b274aef239.jpg?wh=2312x2043">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBDfeZI6bqVOOZNnJ9potyDmw5HiaU5iauGOMmbJ2OicgsOiaHEMDU6AemDQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBNdGEh0EQVeCUgN44WC8RbtBVw5YCFZnWw9pDKajZ2ZevdllicADympw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBkNFntq3ItpUQzLk3Gjh0gWB137t6GzpyDH44x19cv8CGRlU1NOkqNA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBq5EvEMX6Al3RsViamh9icOBD42bAB8B5209RibZCb5Wzibj1UgacwJb2eg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBSjpQrFJibXXMzCbIiaUVwJZ4jNbTajfiaxicx0ykR3aA7UVQG3dr8a1xyQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="article:published_time" content="2022-08-27T01:41:00.000Z">
+<meta property="article:modified_time" content="2022-10-15T02:10:24.741Z">
+<meta property="article:author" content="Wang shushu">
+<meta property="article:tag" content="Rust">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/a7/4c/a7e7f2334460f15f9afd04ebd710b54c.jpg?wh=2312x2043">
+
+<link rel="canonical" href="http://yoursite.com/2022/08/27/Rust-%E6%89%80%E6%9C%89%E6%9D%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Rust-所有权 | Gbwss</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Gbwss</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/08/27/Rust-%E6%89%80%E6%9C%89%E6%9D%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Wang shushu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Gbwss">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rust-所有权
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-08-27 09:41:00" itemprop="dateCreated datePublished" datetime="2022-08-27T09:41:00+08:00">2022-08-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-15 10:10:24" itemprop="dateModified" datetime="2022-10-15T10:10:24+08:00">2022-10-15</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>所有权是Rust特有的核心概念，该特性让Rust即使没有垃圾回收或引用计数等机制也能够编写出内存安全的程序。</p>
+<!---more--->
+
+<ul>
+<li><p><strong>野指针</strong>：是指向“垃圾”内存（不可用内存）的指针,指针创建时未初始化。指针变量刚被创建时不会自动成为NULL指针，它会随机指向一个内存地址。</p>
+</li>
+<li><p><strong>悬垂指针(Dangling pointers)</strong>: 指向无效数据的指针（当我们了解数据在内存中如何存储之后，这个就很有意义）。你可以在这里了解更多悬垂指针</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/57754901/what-is-a-fat-pointer"><strong>胖指针(fat pointer)</strong></a>：术语“胖指针”用于指代*动态大小类型*（DST）的引用和原始指针——切片或特征对象(<strong>The term “fat pointer” is used to refer to references and raw pointers to *dynamically sized types* (DSTs) – slices or trait objects.</strong>)</p>
+</li>
+</ul>
+<h2 id="内存的堆和栈"><a href="#内存的堆和栈" class="headerlink" title="内存的堆和栈"></a>内存的堆和栈</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">str</span> = <span class="string">&quot;hello world&quot;</span>.<span class="title function_ invoke__">to_string</span>();</span><br></pre></td></tr></table></figure>
+
+<p>“hello world” 作为一个字符串常量（string literal），在编译时被存入可执行文件的 .RODATA 段（GCC）或者 .RDATA 段（VC++），然后在程序加载时，获得一个固定的内存地址。</p>
+<p>这个时候如果没有后面的<code>to_string()</code>方法，那么 str 便是一个存在栈区的指针指向作为可执行文件的一部分存储在<strong>只读内存中的预分配文本(preallocated text)</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">            s: &amp;str</span><br><span class="line">            [–––––––––––]</span><br><span class="line">            +–––+–––+</span><br><span class="line">stack frame │ • │ 6 │ </span><br><span class="line">            +–│–+–––+</span><br><span class="line">              │                 </span><br><span class="line">              +––+                </span><br><span class="line">                 │</span><br><span class="line"> preallocated  +–V–+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+</span><br><span class="line"> read-only     │ H │ e │ l │ l │ o │   │ w | o | r | l | d |</span><br><span class="line"> memory        +–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+</span><br></pre></td></tr></table></figure>
+
+<p>当执行 “hello world”.to_string() 时，在堆上，一块新的内存被分配出来，并把 “hello world” 逐个字节拷贝过去。</p>
+<p><img src="https://static001.geekbang.org/resource/image/a7/4c/a7e7f2334460f15f9afd04ebd710b54c.jpg?wh=2312x2043" alt="img"></p>
+<p>对于存入栈上的值，它的大小在编译期就需要确定。栈上存储的变量生命周期在当前调用栈的作用域内，无法跨调用栈引用。</p>
+<p>堆可以存入大小未知或者动态伸缩的数据类型。堆上存储的变量，其生命周期从分配后开始，一直到释放时才结束，因此堆上的变量允许在多个调用栈之间引用。</p>
+<p>但也导致堆变量的管理非常复杂，手工管理会引发很多内存安全性问题，而自动管理，无论是 GC 还是 ARC，都有性能损耗和其它问题。</p>
+<p>一句话对比总结就是：栈上存放的数据是静态的，固定大小，固定生命周期；堆上存放的数据是动态的，不固定大小，不固定生命周期。</p>
+<h2 id="变量在被函数调用时发生了什么"><a href="#变量在被函数调用时发生了什么" class="headerlink" title="变量在被函数调用时发生了什么"></a>变量在被函数调用时发生了什么</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = <span class="built_in">vec!</span>[<span class="number">10</span>, <span class="number">42</span>, <span class="number">9</span>, <span class="number">8</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">v</span> = <span class="number">42</span>;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">Some</span>(pos) = <span class="title function_ invoke__">find_pos</span>(data, v) &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;Found &#123;&#125; at &#123;&#125;&quot;</span>, v, pos);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">find_pos</span>(data: <span class="type">Vec</span>&lt;<span class="type">u32</span>&gt;, v: <span class="type">u32</span>) <span class="punctuation">-&gt;</span> <span class="type">Option</span>&lt;<span class="type">usize</span>&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">for</span> (pos, item) <span class="keyword">in</span> data.<span class="title function_ invoke__">iter</span>().<span class="title function_ invoke__">enumerate</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> *item == v &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="title function_ invoke__">Some</span>(pos);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="literal">None</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>动态数组因为大小在编译期无法确定，所以放在堆上，并且在栈上有一个包含了长度和容量的胖指针指向堆上的内存。</p>
+<p><img src="https://static001.geekbang.org/resource/image/f0/2f/f0989fa8611db83b79500060e8cd682f.jpg?wh=2312x2043" alt="img"></p>
+<p>对于堆内存多次引用的问题，我们先来看大多数语言的方案：</p>
+<ul>
+<li>C&#x2F;C++ 要求开发者手工处理，非常不便。这需要我们在写代码时高度自律，按照前人总结的最佳实践来操作。但人必然会犯错，一个不慎就会导致内存安全问题，要么内存泄露，要么使用已释放内存，导致程序崩溃。</li>
+<li>Java 等语言使用追踪式 GC，通过定期扫描堆上数据还有没有人引用，来替开发者管理堆内存，不失为一种解决之道，但 GC 带来的 STW 问题让语言的使用场景受限，性能损耗也不小。</li>
+<li>ObjC&#x2F;Swift 使用自动引用计数（ARC），在编译时自动添加维护引用计数的代码，减轻开发者维护堆内存的负担。但同样地，它也会有不小的运行时性能损耗。</li>
+</ul>
+<h3 id="Rust-的解决思路"><a href="#Rust-的解决思路" class="headerlink" title="Rust 的解决思路"></a>Rust 的解决思路</h3><p>Rust 决定限制开发者随意引用的行为, 通过规则保证单一所有权：</p>
+<ul>
+<li>一个值只能被一个变量所拥有，这个变量被称为所有者（Each value in Rust has a variable that’s called its owner）</li>
+<li>一个值同一时刻只能有一个所有者（There can only be one owner at a time）</li>
+<li>当所有者离开作用域，其拥有的值被丢弃（When the owner goes out of scope, the value will be dropped）</li>
+</ul>
+<p>所以上面的问题变成了这样：</p>
+<p><img src="https://static001.geekbang.org/resource/image/fe/64/fe810cf1616bce15f53bcf6d28d7f864.jpg?wh=2312x2043" alt="img"></p>
+<h2 id="Move-语义"><a href="#Move-语义" class="headerlink" title="Move 语义"></a>Move 语义</h2><p>上面的例子说明 赋值或者传参会导致值 Move，所有权被转移，一旦所有权转移，之前的变量就不能访问。</p>
+<p>所以如果此时想在 main() 使用 data 则会报错，Rust 考虑到了这一点，提供了两种方案：</p>
+<ol>
+<li>如果你不希望值的所有权被转移，在 Move 语义外，Rust 提供了 Copy 语义。如果一个数据结构实现了 Copy trait，那么它就会使用 Copy 语义。这样，在你赋值或者传参时，值会自动按位拷贝（浅拷贝）。</li>
+<li>如果你不希望值的所有权被转移，又无法使用 Copy 语义，那你可以“借用”数据，也就是 borrow</li>
+</ol>
+<h2 id="Copy-语义"><a href="#Copy-语义" class="headerlink" title="Copy 语义"></a>Copy 语义</h2><p>符合 Copy 语义的类型，在赋值或者传参时，值会自动按位拷贝(浅拷贝)。</p>
+<p>也就是说，当需要移动一个值，如果值的类型实现了 Copy trait，就会自动使用 Copy 语义进行拷贝，否则使用 Move 语义进行移动。</p>
+<h3 id="Copy-trait"><a href="#Copy-trait" class="headerlink" title="Copy trait"></a>Copy trait</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">fn is_copy&lt;T: Copy&gt;() &#123;&#125;</span><br><span class="line"></span><br><span class="line">fn types_impl_copy_trait() &#123;</span><br><span class="line">    is_copy::&lt;bool&gt;();</span><br><span class="line">    is_copy::&lt;char&gt;();</span><br><span class="line"></span><br><span class="line">    // all iXX and uXX, usize/isize, fXX implement Copy trait</span><br><span class="line">    is_copy::&lt;i8&gt;();</span><br><span class="line">    is_copy::&lt;u64&gt;();</span><br><span class="line">    is_copy::&lt;i64&gt;();</span><br><span class="line">    is_copy::&lt;usize&gt;();</span><br><span class="line"></span><br><span class="line">    // function (actually a pointer) is Copy</span><br><span class="line">    is_copy::&lt;fn()&gt;();</span><br><span class="line"></span><br><span class="line">    // raw pointer is Copy</span><br><span class="line">    is_copy::&lt;*const String&gt;();</span><br><span class="line">    is_copy::&lt;*mut String&gt;();</span><br><span class="line"></span><br><span class="line">    // immutable reference is Copy</span><br><span class="line">    is_copy::&lt;&amp;[Vec&lt;u8&gt;]&gt;();</span><br><span class="line">    is_copy::&lt;&amp;String&gt;();</span><br><span class="line"></span><br><span class="line">    // array/tuple with values which is Copy is Copy</span><br><span class="line">    is_copy::&lt;[u8; 4]&gt;();</span><br><span class="line">    is_copy::&lt;(&amp;str, &amp;str)&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn types_not_impl_copy_trait() &#123;</span><br><span class="line">    // unsized or dynamic sized type is not Copy</span><br><span class="line">    is_copy::&lt;str&gt;();</span><br><span class="line">    is_copy::&lt;[u8]&gt;();</span><br><span class="line">    is_copy::&lt;Vec&lt;u8&gt;&gt;();</span><br><span class="line">    is_copy::&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">    // mutable reference is not Copy</span><br><span class="line">    is_copy::&lt;&amp;mut String&gt;();</span><br><span class="line"></span><br><span class="line">    // array / tuple with values that not Copy is not Copy</span><br><span class="line">    is_copy::&lt;[Vec&lt;u8&gt;; 4]&gt;();</span><br><span class="line">    is_copy::&lt;(String, u32)&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn main() &#123;</span><br><span class="line">    types_impl_copy_trait();</span><br><span class="line">    types_not_impl_copy_trait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>总结一下：</p>
+<ul>
+<li>原生类型，包括函数、不可变引用和裸指针实现了 Copy；</li>
+<li>数组和元组，如果其内部的数据结构实现了 Copy，那么它们也实现了 Copy；</li>
+<li>可变引用没有实现 Copy；</li>
+<li>非固定大小的数据结构，没有实现 Copy。</li>
+</ul>
+<h2 id="Borrow-语义"><a href="#Borrow-语义" class="headerlink" title="Borrow 语义"></a>Borrow 语义</h2><p>Borrow 语义允许一个值的所有权，在不发生转移的情况下，被其它上下文使用。就好像住酒店或者租房那样，旅客 &#x2F; 租客只有房间的临时使用权，但没有它的所有权(<strong>默认情况下，Rust 的借用都是只读的</strong>)。另外，Borrow 语义通过引用语法（&amp; 或者 &amp;mut）来实现。</p>
+<h3 id="只读借用"><a href="#只读借用" class="headerlink" title="只读借用"></a>只读借用</h3><p>在其他语言中，函数传参有两种方式：值传递（pass-by-value）和引用传递（pass-by-reference）（提问）</p>
+<p>但 Rust 没有传引用的概念，Rust 所有的参数传递都是传值，不管是 Copy 还是 Move。所以在 Rust 中，你必须<strong>显式</strong>地把某个数据的引用，传给另一个函数。（就是copy栈上的值，不论栈上存的是“指针&#x2F;地址”还是“值”。）</p>
+<p>同时，<strong>Rust 的只读借用实现了 Copy trait，也就意味着引用的赋值、传参都会产生新的浅拷贝。</strong></p>
+<p>（这里可以分析一下这段代码）</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data1</span> = &amp;data;</span><br><span class="line">    <span class="comment">// 值的地址是什么？引用的地址又是什么？</span></span><br><span class="line">    <span class="built_in">println!</span>(</span><br><span class="line">        <span class="string">&quot;addr of value: &#123;:p&#125;(&#123;:p&#125;), addr of data &#123;:p&#125;, data1: &#123;:p&#125;&quot;</span>,</span><br><span class="line">        &amp;data, data1, &amp;&amp;data, &amp;data1</span><br><span class="line">    );</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;sum of data1: &#123;&#125;&quot;</span>, <span class="title function_ invoke__">sum</span>(data1));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">sum</span>(data: &amp;<span class="type">Vec</span>&lt;<span class="type">u32</span>&gt;) <span class="punctuation">-&gt;</span> <span class="type">u32</span> &#123;</span><br><span class="line">    <span class="comment">// 值的地址会改变么？引用的地址会改变么？</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;addr of value: &#123;:p&#125;, addr of ref: &#123;:p&#125;&quot;</span>, data, &amp;data);</span><br><span class="line">    data.<span class="title function_ invoke__">iter</span>().<span class="title function_ invoke__">fold</span>(<span class="number">0</span>, |acc, x| acc + x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="https://static001.geekbang.org/resource/image/44/39/441678ea9318e9f159cac6b274aef239.jpg?wh=2312x2043" alt="img"></p>
+<p>虽然 data 有很多只读引用指向它，但堆上的数据依旧只有 data 一个所有者，<strong>所以值的任意多个引用并不会影响所有权的唯一性</strong>。但是这样不就又回到我们之前在想极力避免的使用已释放内存（use after free）这样的内存安全问题吗？所以，我们对借用也要有约束。</p>
+<h3 id="借用的生命周期及其约束"><a href="#借用的生命周期及其约束" class="headerlink" title="借用的生命周期及其约束"></a>借用的生命周期及其约束</h3><p><strong>借用不能超过（outlive）值的生存期</strong></p>
+<p>在上面的代码中，sum() 函数处在 main() 函数下一层调用栈中，它结束之后 main() 函数还会继续执行，所以在 main() 函数中定义的 data 生命周期要比 sum() 中对 data 的引用要长，这样不会有任何问题。</p>
+<p>但如果是这样的代码呢？</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r</span> = <span class="title function_ invoke__">local_ref</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;r: &#123;:p&#125;&quot;</span>, r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">local_ref</span>&lt;<span class="symbol">&#x27;a</span>&gt;() <span class="punctuation">-&gt;</span> &amp;<span class="symbol">&#x27;a</span> <span class="type">i32</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">a</span> = <span class="number">42</span>;</span><br><span class="line">    &amp;a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然，生命周期更长的 main() 函数变量 r ，引用了生命周期更短的 local_ref() 函数里的局部变量，这违背了有关引用的约束，所以 Rust 不允许这样的代码编译通过。</p>
+<p>那么，如果我们在堆内存中，使用栈内存的引用，可以么？根据过去的开发经验，你也许会脱口而出：不行！因为堆内存的生命周期显然比栈内存要更长更灵活，这样做内存不安全。</p>
+<p>我们写段代码试试看，把一个本地变量的引用存入一个可变数组中。从基础知识的学习中我们知道，可变数组存放在堆上，栈上只有一个胖指针指向它，所以这是一个典型的把栈上变量的引用存在堆上的例子（情况 2）：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">data</span>: <span class="type">Vec</span>&lt;&amp;<span class="type">u32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    <span class="title function_ invoke__">push_local_ref</span>(&amp;<span class="keyword">mut</span> data);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;data: &#123;:?&#125;&quot;</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">push_local_ref</span>(data: &amp;<span class="keyword">mut</span> <span class="type">Vec</span>&lt;&amp;<span class="type">u32</span>&gt;) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">v</span> = <span class="number">42</span>;</span><br><span class="line">    data.<span class="title function_ invoke__">push</span>(&amp;v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>到这里，你是不是有点迷糊了，这三种情况，为什么同样是对栈内存的引用，怎么编译结果都不一样？</p>
+<p>这三段代码看似错综复杂，但如果抓住了一个核心要素“<strong>在一个作用域下，同一时刻，一个值只能有一个所有者</strong>”，你会发现，其实很简单。</p>
+<p>堆变量的生命周期不具备任意长短的灵活性，因为堆上内存的生死存亡，跟栈上的所有者牢牢绑定。而栈上内存的生命周期，又跟栈的生命周期相关，所以我们<strong>核心只需要关心调用栈的生命周期。</strong></p>
+<h2 id="拓展–-String-vs-amp-str-in-Rust"><a href="#拓展–-String-vs-amp-str-in-Rust" class="headerlink" title="拓展– String vs &amp;str in Rust"></a>拓展– String vs &amp;str in Rust</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="variable">my_name</span> = <span class="string">&quot;Pascal&quot;</span>;</span><br><span class="line">  <span class="title function_ invoke__">greet</span>(my_name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">greet</span>(name: <span class="type">String</span>) &#123;</span><br><span class="line">  <span class="built_in">println!</span>(<span class="string">&quot;Hello, &#123;&#125;!&quot;</span>, name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">my_name</span> = <span class="string">&quot;Pascal&quot;</span>.<span class="title function_ invoke__">to_string</span>();</span><br><span class="line">my_name.<span class="title function_ invoke__">push_str</span>( <span class="string">&quot; Precht&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let mut my_name = &quot;Pascal&quot;.to_string();</span><br><span class="line">my_name.push_str( &quot; Precht&quot;);</span><br><span class="line"></span><br><span class="line">let last_name = &amp;my_name[7..];</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">            my_name: String   last_name: &amp;str</span><br><span class="line">            [––––––––––––]    [–––––––]</span><br><span class="line">            +–––+––––+––––+–––+–––+–––+</span><br><span class="line">stack frame │ • │ 16 │ 13 │   │ • │ 6 │ </span><br><span class="line">            +–│–+––––+––––+–––+–│–+–––+</span><br><span class="line">              │                 │</span><br><span class="line">              │                 +–––––––––+</span><br><span class="line">              │                           │</span><br><span class="line">              │                           │</span><br><span class="line">              │                         [–│––––––– str –––––––––]</span><br><span class="line">            +–V–+–––+–––+–––+–––+–––+–––+–V–+–––+–––+–––+–––+–––+–––+–––+–––+</span><br><span class="line">       heap │ P │ a │ s │ c │ a │ l │   │ P │ r │ e │ c │ h │ t │   │   │   │</span><br><span class="line">            +–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+–––+</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>String</code> is the dynamic heap string type, like <code>Vec</code>: use it when you need to own or modify your string data.</p>
+<p><code>str</code> is an immutable1 sequence of UTF-8 bytes of dynamic length somewhere in memory. Since the size is unknown, one can only handle it behind a pointer. This means that <code>str</code> most commonly2 appears as <code>&amp;str</code>: a reference to some UTF-8 data, normally called a “string slice” or just a “slice”. <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/book/ch04-03-slices.html">A slice</a> is just a view onto some data, and that data can be anywhere, e.g.</p>
+<ul>
+<li><p><strong>In static storage</strong>: a string literal <code>&quot;foo&quot;</code> is a <code>&amp;&#39;static str</code>. The data is hardcoded into the executable and loaded into memory when the program runs.</p>
+</li>
+<li><p><strong>Inside a heap allocated <code>String</code></strong>: <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/string/struct.String.html#deref"><code>String</code> dereferences to a <code>&amp;str</code> view</a> of the <code>String</code>‘s data.</p>
+</li>
+<li><p><strong>On the stack</strong>: e.g. the following creates a stack-allocated byte array, and then gets a <a target="_blank" rel="noopener" href="https://doc.rust-lang.org/std/str/fn.from_utf8.html">view of that data as a <code>&amp;str</code></a>:</p>
+  <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::<span class="type">str</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">x</span>: &amp;[<span class="type">u8</span>] = &amp;[<span class="string">b&#x27;a&#x27;</span>, <span class="string">b&#x27;b&#x27;</span>, <span class="string">b&#x27;c&#x27;</span>];</span><br><span class="line"><span class="keyword">let</span> <span class="variable">stack_str</span>: &amp;<span class="type">str</span> = <span class="type">str</span>::<span class="title function_ invoke__">from_utf8</span>(x).<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Move"><a href="#Move" class="headerlink" title="Move"></a>Move</h2><p>正如在<strong>Memory safety in Rust - part 2</strong>[1]所展示的，把一个变量赋值给另一个变量会把所有权(ownership)转移给受让者：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">let v:Vec&lt;i32&gt; = Vec::new();</span><br><span class="line">let v1 = v;//v1 is the new owner</span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中，<code>v</code>被move到<code>v1</code>。但是move <code>v</code>意味着什么？要想理解这个问题，我们需要先来看一下一个<code>Vec</code>在内存中是如何布局的：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBDfeZI6bqVOOZNnJ9potyDmw5HiaU5iauGOMmbJ2OicgsOiaHEMDU6AemDQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p><code>Vec</code>不得不维护一个动态增长或收缩(shrinking)的缓冲区(buffer)。这个缓冲区被分配在堆上，包含<code>Vec</code>里真正的元素。此外，<code>Vec</code>还在栈上有一个小的对象。这个对象包含某些内务信息：一个指向堆上缓冲区的<em>指针(pointer)</em> ，缓存区的<em>容量(capacity)</em> 和<em>长度(length)</em> (比如，当前被填满的容量是多少)。</p>
+<p>当变量<code>v</code>被move到<code>v1</code>时，栈上的对象被逐位拷贝(bitwise copy)：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBNdGEh0EQVeCUgN44WC8RbtBVw5YCFZnWw9pDKajZ2ZevdllicADympw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<blockquote>
+<p>“</p>
+<p>在前面的例子中，本质上发生的是一个浅拷贝(shallow copy)。这与C++形成了鲜明的对比，当一个向量被赋值给另一个变量时，C++会进行深拷贝(deep copy)。</p>
+</blockquote>
+<p>堆上的缓冲区保持不变。这确实是一个move：现在<code>v1</code>负责释放缓冲区，<code>v</code>不能接触这个缓冲区。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let v: Vec&lt;i32&gt; = Vec::new();</span><br><span class="line">let v1 = v;</span><br><span class="line">println!(&quot;v&#x27;s length is &#123;&#125;&quot;, v.len());//error: borrow of moved value: `v`</span><br></pre></td></tr></table></figure>
+
+<p>这个所有权的改变很好，因为如果<code>v</code>和<code>v1</code>都被允许访问，那么就有两个栈上的对象指向相同的堆缓冲区。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBkNFntq3ItpUQzLk3Gjh0gWB137t6GzpyDH44x19cv8CGRlU1NOkqNA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片">这种情况，应该由哪个对象释放缓冲区呢？因为这是不清晰的，所以Rust从根本上避免了这种情况的出现。</p>
+<p>赋值不是唯一涉及到move的操作。当传递参数或者从函数返回的时候，值也会被move：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line"><span class="comment">//v is first moved into print_len&#x27;s v1</span></span><br><span class="line"><span class="comment">//and then moved into v2 when print_len returns it</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">v2</span> = <span class="title function_ invoke__">print_len</span>(v);</span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">print_len</span>(v1: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt;) <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; &#123;</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;v1&#x27;s length is &#123;&#125;&quot;</span>, v1.<span class="title function_ invoke__">len</span>());</span><br><span class="line">    v1<span class="comment">//v1 is moved out of the function</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者被赋值给结构体或枚举的成员:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Numbers</span> &#123;</span><br><span class="line">    nums: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line"><span class="comment">//v moved into nums field of the Numbers struct</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">n</span> = Numbers &#123; nums: v &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">NothingOrString</span> &#123;</span><br><span class="line">    Nothing,</span><br><span class="line">    <span class="title function_ invoke__">Str</span>(<span class="type">String</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">s</span>: <span class="type">String</span> = <span class="string">&quot;I am moving soon&quot;</span>.<span class="title function_ invoke__">to_string</span>();</span><br><span class="line"><span class="comment">//s moved into the enum</span></span><br><span class="line"><span class="keyword">let</span> <span class="variable">nos</span> = NothingOrString::<span class="title function_ invoke__">Str</span>(s);</span><br></pre></td></tr></table></figure>
+
+<p>以上就是关于move的全部内容。下面让我们来看一下copy。</p>
+<h2 id="Copy"><a href="#Copy" class="headerlink" title="Copy"></a>Copy</h2><p>还记得上面的这个例子么？</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">v1</span> = v;</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;v&#x27;s length is &#123;&#125;&quot;</span>, v.<span class="title function_ invoke__">len</span>());<span class="comment">//error: borrow of moved value: `v`</span></span><br></pre></td></tr></table></figure>
+
+<p>如果我们把变量<code>v</code>和<code>v1</code>的类型从<code>Vec</code>改为<code>i32</code>会发生什么？</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">i32</span> = <span class="number">42</span>;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">v1</span> = v;</span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;v is &#123;&#125;&quot;</span>, v);<span class="comment">//compiles fine, no error!</span></span><br></pre></td></tr></table></figure>
+
+<p>这几乎是相同的代码。为什么这次赋值没有把<code>v</code> move到<code>v1</code>呢？要想理解这个，我们需要再来看一下内存布局:</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBq5EvEMX6Al3RsViamh9icOBD42bAB8B5209RibZCb5Wzibj1UgacwJb2eg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>在这个例子中，值完全被包含在栈上。在堆上什么都没有拥有。这就是为什么<code>v</code>和<code>v1</code>都被允许访问是没有问题的——它们是完全独立的拷贝(copy)。</p>
+<p>像这样没有拥有其他资源的类型且可以被逐位拷贝(bitwise copy)的类型被称为<code>Copy</code>类型。它们实现了<strong>Copy marker trait</strong>[2]。所有的基本类型，像整数，浮点数和字符都是<code>Copy</code>类型。结构体或枚举默认不是<code>Copy</code>但是你可以派生(derive)自一个<code>Copy</code> trait：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[derive(Copy, Clone)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">i32</span>,</span><br><span class="line">    y: <span class="type">i32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[derive(Copy, Clone)]</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">SignedOrUnsignedInt</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">Signed</span>(<span class="type">i32</span>),</span><br><span class="line">    <span class="title function_ invoke__">Unsigned</span>(<span class="type">u32</span>),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>“</p>
+<p>在派生语句中的<code>Clone</code>是需要的，因为<code>Copy</code>的定义类似这样:<code>pub trait Copy:Clone &#123;&#125;</code></p>
+</blockquote>
+<p>为了能让<code>#[derive(Copy, Clone)]</code>正常工作，结构体或枚举的所有成员自身必须是<code>Copy</code>类型。例如，下面这样就无法正常工作:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//error:the trait `Copy` may not be implemented for this type</span></span><br><span class="line"><span class="comment">//because its nums field does not implement `Copy`</span></span><br><span class="line"><span class="meta">#[derive(Copy, Clone)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Numbers</span> &#123;</span><br><span class="line">    nums: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，你也可以手动实现<code>Copy</code>和<code>Clone</code>：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">i32</span>,</span><br><span class="line">    y: <span class="type">i32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//no method in Copy because it is a marker trait</span></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Copy</span> <span class="keyword">for</span> <span class="title class_">Point</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Clone</span> <span class="keyword">for</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">clone</span>(&amp;<span class="keyword">self</span>) <span class="punctuation">-&gt;</span> Point &#123;</span><br><span class="line">        *<span class="keyword">self</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常来讲，任何实现了<code>Drop</code>的类型都不能被<code>Copy</code>，因为<code>Drop</code>是被拥有其他资源的类型来实现的，且因此不能被简单地逐位拷贝。但是<code>Copy</code>类型应该是可以被拷贝的。因此，<code>Drop</code>和<code>Copy</code>不能很好地混合在一起使用。</p>
+<p>以上就是关于copy的内容，下面是clone。</p>
+<h2 id="Clone"><a href="#Clone" class="headerlink" title="Clone"></a>Clone</h2><p>当一个值被move的时候，Rust做一个浅拷贝；但是如果你想像在C++里那样创建一个深拷贝该怎么办呢？要实现这个，这个类型必须首先实现<strong>Clone trait</strong>[3]。接着做一个深拷贝，客户端代码应该调用<code>clone</code>方法:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="type">Vec</span>::<span class="title function_ invoke__">new</span>();</span><br><span class="line"><span class="keyword">let</span> <span class="variable">v1</span> = v.<span class="title function_ invoke__">clone</span>();<span class="comment">//ok since Vec implements Clone</span></span><br><span class="line"><span class="built_in">println!</span>(<span class="string">&quot;v&#x27;s length is &#123;&#125;&quot;</span>, v.<span class="title function_ invoke__">len</span>());<span class="comment">//ok</span></span><br></pre></td></tr></table></figure>
+
+<p>在<code>clone</code>调用后，就产生了下面的内存布局:</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gRo2fL9GmTDZEUo7w3kRSW5KicTkpV2MBSjpQrFJibXXMzCbIiaUVwJZ4jNbTajfiaxicx0ykR3aA7UVQG3dr8a1xyQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片">由于是深拷贝，<code>v</code>和<code>v1</code>可以自由独立地释放它们的堆缓冲区。</p>
+<p>Clone方法不总是会创建一个深拷贝。类型可以以任意想要的方式自由实现<code>clone</code>，但是语义上，它应该足够接近复制一个对象的含义。例如，<code>Rc</code>和<code>Arc</code>取而代之的是增加了一个引用计数。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Rust/" rel="tag"># Rust</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2022/07/11/iOS-NavigationBar%E7%9A%84backgroundColor/" rel="next" title="iOS-NavigationBar的backgroundColor">
+                  <i class="fa fa-chevron-left"></i> iOS-NavigationBar的backgroundColor
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%9A%84%E5%A0%86%E5%92%8C%E6%A0%88"><span class="nav-number">1.</span> <span class="nav-text">内存的堆和栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%9C%A8%E8%A2%AB%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%97%B6%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">变量在被函数调用时发生了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rust-%E7%9A%84%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="nav-number">2.1.</span> <span class="nav-text">Rust 的解决思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Move-%E8%AF%AD%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">Move 语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-%E8%AF%AD%E4%B9%89"><span class="nav-number">4.</span> <span class="nav-text">Copy 语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy-trait"><span class="nav-number">4.1.</span> <span class="nav-text">Copy trait</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Borrow-%E8%AF%AD%E4%B9%89"><span class="nav-number">5.</span> <span class="nav-text">Borrow 语义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E8%AF%BB%E5%80%9F%E7%94%A8"><span class="nav-number">5.1.</span> <span class="nav-text">只读借用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%80%9F%E7%94%A8%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%8F%8A%E5%85%B6%E7%BA%A6%E6%9D%9F"><span class="nav-number">5.2.</span> <span class="nav-text">借用的生命周期及其约束</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%93%E5%B1%95%E2%80%93-String-vs-amp-str-in-Rust"><span class="nav-number">6.</span> <span class="nav-text">拓展– String vs &amp;str in Rust</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Move"><span class="nav-number">7.</span> <span class="nav-text">Move</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy"><span class="nav-number">8.</span> <span class="nav-text">Copy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clone"><span class="nav-number">9.</span> <span class="nav-text">Clone</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Wang shushu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wang shushu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v6.3.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,34 +46,36 @@
   };
 </script>
 
-  <meta name="description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。">
+  <meta name="description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。    Motivation the number of positive samples are highly limited. overfitting  在跟踪过程中,当目标外观发生变化时，需">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB&#x2F;index.html">
+<meta property="og:url" content="http://yoursite.com/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Gbwss">
-<meta property="og:description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。">
-<meta property="og:locale" content="en">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Yd75xP.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YdxhGD.jpg">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YdxfPO.jpg">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Ydx6q1.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Ydz9Ln.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YdxRIK.jpg">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwMVfg.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ3DI.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ1KA.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQuCD.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQQvd.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQMgH.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwYL79.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQYUf.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQJVP.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;YwQ8bt.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0t0dH.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;14&#x2F;Y0tBod.png">
-<meta property="og:updated_time" content="2020-05-15T03:53:52.717Z">
+<meta property="og:description" content="这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。    Motivation the number of positive samples are highly limited. overfitting  在跟踪过程中,当目标外观发生变化时，需">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Yd75xP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxhGD.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxfPO.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Ydx6q1.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/Ydz9Ln.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YdxRIK.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwMVfg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ3DI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ1KA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQuCD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQQvd.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQMgH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwYL79.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQYUf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQJVP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/13/YwQ8bt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/14/Y0t0dH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/05/14/Y0tBod.png">
+<meta property="article:published_time" content="2020-05-13T11:07:04.000Z">
+<meta property="article:modified_time" content="2020-05-15T03:53:52.000Z">
+<meta property="article:author" content="Wang shushu">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;s1.ax1x.com&#x2F;2020&#x2F;05&#x2F;13&#x2F;Yd75xP.png">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/05/13/Yd75xP.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/13/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
 
@@ -233,7 +235,7 @@
 
       
         <p>这篇文章是韩国的一个组做的,一直没中, 直到19年中了ICCV，据说是第一篇将元学习引入目标跟踪的文章，用的架构是siamese网络的架构，但是在模型在线更新的时候使用了meta-learning的思想。</p>
-<a id="more"></a>
+<!---more--->
 
 <hr>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
@@ -259,8 +261,8 @@
 <p>好了 让我们开始正文吧！</p>
 <h1 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h1><p>文章的网络结构如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwMVfg.png" alt="YwMVfg.png"><br>蓝色的就是SiamFC的结构, 文章是提特征, 然后用conv5的特征算一个loss, 然后把梯度给Meta-learner这个网络, 去算一个权重出来, 还算了一个attention, 再把权重concate到原始conv5的weight上面, 然后用这个新的weight来计算最终的features, 在这两个feature上做互相关.</p>
 <hr>
-<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>首先我们来看蓝色的部分，实际上就是一个SiameseFc网络，使用具有5个卷积层的CNN，并在前两个卷积层之后应用2个内核大小为3和步幅为2的池化层。在每个卷积层之后插入批处理归一化层（Batch normalization layer）。<br>CNN的每层的内核大小和输入/输出尺寸为w1：11×11×3×128，w2：5×5×128×256，w3：3×3 ×256×384，w4：3×3×384×256，w5：1×1×256×192。对于输入，为x使用大小为127×127×3的RGB图像，为z使用大小为255×255×3的RGB图像，匹配网络生成大小为17×17的响应图。<br>实际上就是先做卷积，然后再求互相关：<br><img src="https://s1.ax1x.com/2020/05/13/YwQ3DI.png" alt="YwQ3DI.png"><br>式中 x为模版，z为搜索区域，w = {w1,w2, …,wN}表示每一层的一组权重，ϕw(⋅)表示整个网络权重为 w 时的使用Nlayer 特征提取器提取出的特征。</p>
-<p>meta-learner network根据matching network在之前追踪过程中产生的M个context patches z = {z1, …, zM}以及target x，来计算能够使追踪模版自适应更新的新增参数。</p>
+<h2 id="Components"><a href="#Components" class="headerlink" title="Components"></a>Components</h2><p>首先我们来看蓝色的部分，实际上就是一个SiameseFc网络，使用具有5个卷积层的CNN，并在前两个卷积层之后应用2个内核大小为3和步幅为2的池化层。在每个卷积层之后插入批处理归一化层（Batch normalization layer）。<br>CNN的每层的内核大小和输入&#x2F;输出尺寸为w1：11×11×3×128，w2：5×5×128×256，w3：3×3 ×256×384，w4：3×3×384×256，w5：1×1×256×192。对于输入，为x使用大小为127×127×3的RGB图像，为z使用大小为255×255×3的RGB图像，匹配网络生成大小为17×17的响应图。<br>实际上就是先做卷积，然后再求互相关：<br><img src="https://s1.ax1x.com/2020/05/13/YwQ3DI.png" alt="YwQ3DI.png"><br>式中 x为模版，z为搜索区域，w &#x3D; {w1,w2, …,wN}表示每一层的一组权重，ϕw(⋅)表示整个网络权重为 w 时的使用Nlayer 特征提取器提取出的特征。</p>
+<p>meta-learner network根据matching network在之前追踪过程中产生的M个context patches z &#x3D; {z1, …, zM}以及target x，来计算能够使追踪模版自适应更新的新增参数。</p>
 <p>首先使用matching network最后一层conv5来计算平均负梯度：<br><img src="https://s1.ax1x.com/2020/05/13/YwQ1KA.png" alt="YwQ1KA.png"><br>其中 yi表示根据ground-truth来计算出针对zi的二值标签图，也就是响应图（response map。meta-leaner设计的依据是目标发生变化，那么δ也发生变化（the characteristic of δ is empirically different according to a target）</p>
 <p>然后，以δ作为输入，meta-learner 网络 g（·）可以生成与输入对应的目标特定权重（target-specific weights），如下：<br><img src="https://s1.ax1x.com/2020/05/13/YwQuCD.png" alt="YwQuCD.png"><br>￼然后将两个权重拼接起来就来更新matching network原始的权重</p>
 <blockquote>
@@ -271,7 +273,7 @@
 <p>论文还说这里同时生成了一个channel-wise sig- moid attention weights这样的权重，文中也没有讲具体实现，同时我在后文中也没有看到如何使用</p>
 </blockquote>
 <hr>
-<h2 id="Tracking-algorithm"><a href="#Tracking-algorithm" class="headerlink" title="Tracking algorithm"></a>Tracking algorithm</h2><p>对于跟踪过程，首先保存K个context images as zmem = {z1 , …, zK }，以及对应的响应图 yˆ = {yˆ ,…,yˆK}.保存的原则是, 当在每一帧找出target之后, 会判断当前这个target的响应是否大于一个阈值 τ , 若是大于 τ , 便把这个patch加入到template的池中：<br><img src="https://s1.ax1x.com/2020/05/13/YwQMgH.png" alt="YwQMgH.png"><br>式子中的p对应于响应图中所有可能位置P的集合中的位置，而ρ（·）是归一化函数。<br>而在接下来计算要输入meta-learner网络的δ时，从template池中选择熵最小的,其实就是找响应比较大, 比较靠谱那M个template用来更新网络。</p>
+<h2 id="Tracking-algorithm"><a href="#Tracking-algorithm" class="headerlink" title="Tracking algorithm"></a>Tracking algorithm</h2><p>对于跟踪过程，首先保存K个context images as zmem &#x3D; {z1 , …, zK }，以及对应的响应图 yˆ &#x3D; {yˆ ,…,yˆK}.保存的原则是, 当在每一帧找出target之后, 会判断当前这个target的响应是否大于一个阈值 τ , 若是大于 τ , 便把这个patch加入到template的池中：<br><img src="https://s1.ax1x.com/2020/05/13/YwQMgH.png" alt="YwQMgH.png"><br>式子中的p对应于响应图中所有可能位置P的集合中的位置，而ρ（·）是归一化函数。<br>而在接下来计算要输入meta-learner网络的δ时，从template池中选择熵最小的,其实就是找响应比较大, 比较靠谱那M个template用来更新网络。</p>
 <blockquote>
 <p>文章中提到，这里提出了一个新的响应图yˆ ⊗ h，加入了一个余弦窗函数，这个h就是余弦窗函数，用来惩罚大位移，保证目标大小平滑变化。</p>
 </blockquote>
@@ -281,7 +283,7 @@
 <h2 id="Matching-Network"><a href="#Matching-Network" class="headerlink" title="Matching Network"></a>Matching Network</h2><h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p>5 convolutional layers<br>2 pooling layers of kernel size 3 and stride 2 are applied after the first two convolutional layers.<br>w1 : 11×11×3×128,<br>w2 : 5×5×128×256,<br>w3 : 3×3×256×384,<br>w4 : 3×3×384×256,<br>w5 : 1×1×256×192.<br>Inputs,<br>27×127×3  for x<br>255×255×3 for z<br>response map<br>17 × 17  </p>
 <h3 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h3><p>在训练时，对(x,z)从选定的视频序列中的目标轨迹中随机采样。然后，生成ground-truth响应映射y∈{−1，+1}17×17，其中值在目标位置为+1，否则为- 1。对于损失函数l(fw(x, z)， y)，文章使用logistic损失函数定义为：<br><img src="https://s1.ax1x.com/2020/05/13/YwQJVP.png" alt="YwQJVP.png"><br>式中，p表示响应图中每个可能位置P的集合中的一个位置，而ζ（y [p]）是减轻标签不平衡的加权函数。<br>损失函数使用Adam优化器进行了优化，使用批处理大小为8的学习率为10−4，并运行95000次迭代。</p>
 <h2 id="Meta-learner-Network"><a href="#Meta-learner-Network" class="headerlink" title="Meta-learner Network"></a>Meta-learner Network</h2><h3 id="Network-1"><a href="#Network-1" class="headerlink" title="Network"></a>Network</h3><p>3 fully-connected layers<br>Each intermediate layer is followed by a dropout layer with the keep probability of 0.7 when training.<br>For input, gradient δ of size<br>1×1×256×192<br>output Wtarget of size<br>1×1×256×32<br>合并之后的权重 [w5,wtarget]<br>1×1×256×(192+32)</p>
-<h3 id="Train-1"><a href="#Train-1" class="headerlink" title="Train"></a>Train</h3><p>训练的时候从一个训练序列中随机抽取M′个(M′≥M)context patch，也就是Zreg ={z1,…,zM′}然后从中取M个来计算梯度δ。接着利用公式2，来计算响应二值图。注意，这里的计算二值图，是在假定目标位于中心来进行计算的(assuming the target is located at the center i<br>of zi)。这样做的目的就是在于我前面提到的，训练meta-learner network并不追求单一任务上的最优，而是去寻找可以让所有task都能下降到分别的全局最优，所以这里假设目标在context patch的中心，这样不管目标去哪里，我们的x都能很快的响应。<br>meta-learner network的损失函数，针对meta-learne network进行最优化，matching network固定不变，如下式所示，<br><img src="https://s1.ax1x.com/2020/05/13/YwQ8bt.png" alt="YwQ8bt.png"></p>
+<h3 id="Train-1"><a href="#Train-1" class="headerlink" title="Train"></a>Train</h3><p>训练的时候从一个训练序列中随机抽取M′个(M′≥M)context patch，也就是Zreg &#x3D;{z1,…,zM′}然后从中取M个来计算梯度δ。接着利用公式2，来计算响应二值图。注意，这里的计算二值图，是在假定目标位于中心来进行计算的(assuming the target is located at the center i<br>of zi)。这样做的目的就是在于我前面提到的，训练meta-learner network并不追求单一任务上的最优，而是去寻找可以让所有task都能下降到分别的全局最优，所以这里假设目标在context patch的中心，这样不管目标去哪里，我们的x都能很快的响应。<br>meta-learner network的损失函数，针对meta-learne network进行最优化，matching network固定不变，如下式所示，<br><img src="https://s1.ax1x.com/2020/05/13/YwQ8bt.png" alt="YwQ8bt.png"></p>
 <hr>
 <h1 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h1><p><img src="https://s1.ax1x.com/2020/05/14/Y0t0dH.png" alt="Y0t0dH.png"><br>OTB[51]和LaSOT[12]数据集的定量结果。MLT为提出的算法。该算法在OTB数据集上表现出了较好的性能，在大规模LaSOT数据集上表现优于其他算法，并利用元学习器提供的额外特征空间获得了性能提升。</p>
 <p><img src="https://s1.ax1x.com/2020/05/14/Y0tBod.png" alt="Y0tBod.png"><br>MLT-mt    只加入了meta-learner<br>MLT-mt-ft 加入了Adam优化器进行finetuning</p>
@@ -298,14 +300,17 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2020/04/09/Mac%E4%B8%8Bmysql%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/" rel="next" title="Mac下mysql相关问题">
-                  <i class="fa fa-chevron-left"></i> Mac下mysql相关问题
+                <a href="/2020/03/07/ArcFaceSDK3-0-PythonDemo/" rel="next" title="ArcFaceSDK3.0 PythonDemo">
+                  <i class="fa fa-chevron-left"></i> ArcFaceSDK3.0 PythonDemo
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2021/03/17/C++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="C++学习笔记">
+                  C++学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -358,12 +363,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -393,13 +398,13 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Wang shushu</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v6.3.0
   </div>
   <span class="post-meta-divider">|</span>
   <div class="theme-info">Theme – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.5.0
@@ -427,9 +432,17 @@
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
 <script src="/js/schemes/muse.js"></script>
+
+
 <script src="/js/next-boot.js"></script>
+
 
 
 
