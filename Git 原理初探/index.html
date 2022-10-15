@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="为什么每次在提交前都需要添加到暂存区呢？  如果有一百个相同的文件是会存储一百次吗？ 本文将从Git的底层存储结构初窥Git的底层工作原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git原理初探">
+<meta property="og:url" content="http://yoursite.com/Git%20%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2/index.html">
+<meta property="og:site_name" content="瞎写写">
+<meta property="og:description" content="为什么每次在提交前都需要添加到暂存区呢？  如果有一百个相同的文件是会存储一百次吗？ 本文将从Git的底层存储结构初窥Git的底层工作原理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181127103822990.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3J1YnVsYWk=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181127104355432.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3J1YnVsYWk=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-ac1aa0ab4e4c062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-6b0f41a62e828d38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-9a84cfdfccaf0b13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-17049a5c52342eff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-d3f4ee2ff49ad2e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-dd7c37d9ad0131d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1038/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-4e9f5fa2d10b21ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1178/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-501af1daa07fa1ec.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-60de2a661410443b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-33e3fb9b10bdbc37.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp">
+<meta property="og:image" content="https://lushunjian.github.io/blog/2019/02/14/Git%E7%9A%84%E5%8E%9F%E7%90%86/git6.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181028121921915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM0OTA4OTY=,size_27,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181028121945114.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM0OTA4OTY=,size_27,color_FFFFFF,t_70">
+<meta property="og:image" content="https://www.waynerv.com/images/git-rebase-visual.png">
+<meta property="og:image" content="https://www.waynerv.com/images/Dec-30-2020-merge-example.gif">
+<meta property="og:image" content="https://www.waynerv.com/images/Dec-30-2020-rebase-example.gif">
+<meta property="article:published_time" content="2022-05-19T01:41:00.000Z">
+<meta property="article:modified_time" content="2022-05-19T01:41:00.000Z">
+<meta property="article:author" content="王帅帅">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181127103822990.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3J1YnVsYWk=,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://yoursite.com/Git%20%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Git原理初探 | 瞎写写</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">瞎写写</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Git%20%E5%8E%9F%E7%90%86%E5%88%9D%E6%8E%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王帅帅">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞎写写">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git原理初探
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-19 09:41:00" itemprop="dateCreated datePublished" datetime="2022-05-19T09:41:00+08:00">2022-05-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为什么每次在提交前都需要添加到暂存区呢？ </p>
+<p>如果有一百个相同的文件是会存储一百次吗？</p>
+<p>本文将从Git的底层存储结构初窥Git的底层工作原理</p>
+<p><escape><span id="more"></span></escape></p>
+<h2 id="Git保存版本的机制"><a href="#Git保存版本的机制" class="headerlink" title="Git保存版本的机制"></a>Git保存版本的机制</h2><p>1、集中式版本控制工具(如SVN)的文件管理机制：以文件变更列表的方式存储信息。</p>
+<p>这类系统将它们保存的信息看作是一组基本文件(对应下图的Version1)和每个文件随时间逐步累积的差异(对应下图的其他Version)，在文件管理的时候只保存当前版本相对于上一个版本的差异，这是一种增量式的版本控制。<br><img src="https://img-blog.csdnimg.cn/20181127103822990.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3J1YnVsYWk=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>2、Git 的文件管理机制：Git 把数据看作是小型文件系统的一组快照</p>
+<p>每次提交更新时 Git 都会对当前的全部文件制作一个快照并保存这个快照的索引。为了高效，如果文件没有修改，Git 不再重新存储该文件，而是只保留一个链接指向之前存储的文件。</p>
+<p>所以 Git 的工作方式可以称之为快照流。（这样的话就不用像集中式的 要一次次回退 才会去到历史版本 Git只需要切换到对应的版本指向的内容即可）</p>
+<p>下图中Version2及其之后的实线框中的文件表示该版本的该文件相较于上个版本有变动，虚线框中的文件表示该版本的该文件相较于上一版本没有变动(只保存上一个版本的指针，而无需保存文件)，这样根据当前版本的文件和指向上一版本的指针就可以找到该版本的所有文件的状态</p>
+<p><img src="https://img-blog.csdnimg.cn/20181127104355432.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3J1YnVsYWk=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>可以看出 git的版本控制依赖的是每一次的commit 那怎么区分每次commit呢 就依靠每次提交都会生成一个独一无二的commitID</p>
+<p>那么如何保证每次的 commitID 都是独一无二的呢？ Git 使用了Hash算法来进行保证和文件验证</p>
+<h2 id="Hash算法"><a href="#Hash算法" class="headerlink" title="Hash算法"></a>Hash算法</h2><p>哈希是一个系列的加密算法，各个不同的哈希算法虽然加密强度不同，但是有以下几个共同点：</p>
+<ol>
+<li><p>不管输入数据的数据量有多大，使用同一个哈希算法，得到的加密结果长度固定</p>
+</li>
+<li><p>哈希算法确定，输入数据确定，输出结果保证不变</p>
+</li>
+<li><p>哈希算法确定，输入数据有变化，输出结果一定有变化</p>
+</li>
+</ol>
+<p>哈希算法有很多种，如：MD5、SHA-1等。Git 底层采用的是 SHA-1 ，因为哈希算法可以被用来验证文件，Git 就是靠这种机制来从根本上保证数据完整性的</p>
+<h1 id="Git的实现原理"><a href="#Git的实现原理" class="headerlink" title="Git的实现原理"></a>Git的实现原理</h1><p>Git很好的解决了版本状态记录的问题，在此基础上实现了版本切换、差异比较、分支管理、分布式协作等等炫酷功能。那我们就一起通过实验看看Git数据库是如何工作的</p>
+<p>这里我们会利用到下面几个命令：</p>
+<ul>
+<li><strong>git init</strong>   用于创建一个空的git仓库，或重置一个已存在的git仓库</li>
+<li><strong>git cat-file</strong>   git底层命令，用于查看Git数据库中数据 （-t 查看类型 -p 查看内容）</li>
+<li><strong>watch</strong>  可以将命令的输出结果输出到标准输出设备,多用于周期性执行命令&#x2F;定时执行（这里我们结合tree 实时观察文件结构变化）</li>
+</ul>
+<h2 id="开始探索！"><a href="#开始探索！" class="headerlink" title="开始探索！"></a>开始探索！</h2><p>首先我们初始化一个仓库 并使用watch命令配合tree观察 .git文件</p>
+<p><code> watch -n .5 tree .git</code></p>
+<p>观察objects文件夹，这就是git数据库的<strong>存储位置</strong>。</p>
+<p>然后新建文件<br>git add</p>
+<p>观察 blob 文件</p>
+<p>git commit</p>
+<p>观察tree  - 100个相同文件</p>
+<p>观察commit 内容信息</p>
+<p>commit对象能够帮你记录什么时间，由什么人，因为什么原因提交了一个新的版本，这个新的版本的父版本又是谁。</p>
+<p>我们可以很清楚的看到，一个提交对象包含着所提交版本的树对象hash键值，author和commiter，以及修改和提交的时间，最后是本次提交的注释。</p>
+<p>然后再新增文件 git commit </p>
+<p>git log 观察commit文件</p>
+<p>至此 我们就基本了解了树对象（tree object）和 提交对象（commit object）</p>
+<p>利用树对象（tree object）解决文件名保存和文件组织问题</p>
+<p>利用提交对象（commit object）记录版本间的时序关系和版本注释</p>
+<p>看ppt 回顾一下上面的内容</p>
+<p>commit保存的快照是什么呢</p>
+<p>保存的是两个指针 一个指向上次的commit对象 另一个指向当前的这个tree</p>
+<p>其实抽象的来看 这个快照就是保存了当前版本的所有文件 更准确的说是所有文件的引用</p>
+<p>这也是我们可以迅速在各个版本间迭代的原因</p>
+<p>一百个文件 上面也解释了 git只关注文件内容 那么也就只会有一个blob文件。</p>
+<p>所以呢：</p>
+<p>每次我们运行 git add 和 git commit 命令时， </p>
+<p>Git 所做的实质工作是将被改写的文件保存为数据对象，更新暂存区，记录树对象，最后创建一个指明了顶层树对象和父提交的提交对象。 这三种主要的 Git 对象——数据对象、树对象、提交对象——最初均以单独文件的形式保存在 .git&#x2F;objects 目录下。</p>
+<p>但是到这里，我们对版本和数据对象的操作都是基于hash键值的，这些毫无直观含义的字符串让人很头疼，不会有人愿意一直急着最新提交对应的hash键值的。</p>
+<p>那git是如何进行分支管理的呢</p>
+<hr>
+<p>看ppt第一页</p>
+<p>开始演示</p>
+<p>git log</p>
+<p>cat .git&#x2F;refs&#x2F;heads&#x2F;master</p>
+<p>Git checkout -b dev</p>
+<p>再cat一下</p>
+<p>再新建一个文件</p>
+<p>git add</p>
+<p>git commit -m</p>
+<p>再cat一下前面那两个dev 和 master 发现是不一样的</p>
+<p>对了 如果好奇head的话 可以cat一下</p>
+<p>git log –oneline –graph</p>
+<p>再看看tree</p>
+<p>再看看ppt</p>
+<hr>
+<p>merge啦</p>
+<p>git switch master</p>
+<p>git merge dev</p>
+<h2 id="Git的引用（references）与分支"><a href="#Git的引用（references）与分支" class="headerlink" title="Git的引用（references）与分支"></a>Git的引用（references）与分支</h2><p>Git的引用（references）保存在.git&#x2F;refs目录下。git的引用类似于一个指针，它指向的是某一个hash键值。<br>Git 分支的本质：一个指向某一系列提交之首的指针或引用。</p>
+<h1 id="Git基本原理总结"><a href="#Git基本原理总结" class="headerlink" title="Git基本原理总结"></a><strong>Git基本原理总结</strong></h1><p>Git的核心是它的对象数据库，其中保存着git的对象，其中最重要的是<strong>blob</strong>、<strong>tree</strong>和<strong>commit</strong>对象。</p>
+<p>blob对象实现了对文件内容的记录，tree对象实现了对文件名、文件目录结构的记录，commit对象实现了对版本提交时间、版本作者、版本序列、版本说明等附加信息的记录。</p>
+<p>这三类对象，完美实现了git的基础功能：对版本状态的记录。</p>
+<p> Git引用是指向git对象hash键值的类似指针的文件。</p>
+<p>通过Git引用，我们可以更加方便的定位到某一版本的提交。Git的<strong>branch</strong>、<strong>tags</strong>等功能都是基于Git引用实现的。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34342207/article/details/89464929?spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1.pc_relevant_default&amp;utm_relevant_index=2">https://blog.csdn.net/weixin_34342207/article/details/89464929?spm=1001.2101.3001.6650.1&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_default&amp;utm_relevant_index=2</a></p>
+<ol>
+<li>merge时有冲突，合并时发生了什么</li>
+<li>merge时的diff对比怎么做到的</li>
+<li>revert时候发生了什么</li>
+<li>rebase的时候做了什么</li>
+<li>贮藏是怎么做到了</li>
+<li>树状结构仔细讲讲</li>
+</ol>
+<h2 id="git-merge"><a href="#git-merge" class="headerlink" title="git merge"></a>git merge</h2><h3 id="merge基本原理"><a href="#merge基本原理" class="headerlink" title="merge基本原理"></a>merge基本原理</h3><p>我们知道git 合并文件是以行为单位进行一行一行进行合并的，但是有些时候并不是两行内容不一样git就会报冲突，因为smart git 会帮我们自动帮我们进行取舍，分析出那个结果才是我们所期望的，如果smart git 都无法进行取舍时候才会报冲突，这个时候才需要我们进行人工干预。那git 是如何帮我们进行Smart 操作的呢？</p>
+<h3 id="二路合并"><a href="#二路合并" class="headerlink" title="二路合并"></a>二路合并</h3><p>二路合并算法就是讲两个文件进行逐行对别，如果行内容不同就报冲突。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-ac1aa0ab4e4c062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"><br> 假设对于同一个文件，出现你和其他人一起修改，此时如果git来进行合并，git就懵逼了，因为Git既不敢得罪你(Mine)，也不能得罪他们(Theirs) 无理无据，git只能让你自己搞了，但是这种情况太多了而且也没有必要…</p>
+<h3 id="三路合并"><a href="#三路合并" class="headerlink" title="三路合并"></a>三路合并</h3><p>三路合并就是先找出一个基准，然后以基准为Base 进行合并，如果2个文件相对基准(base)都发生了改变 那git 就报冲突，然后让你人工决断。否则，git将取相对于基准(base)变化的那个为最终结果。<br> 这样当git进行合并的时候，git就知道是其他人修改了，本地没有更改，git就会自动把最终结果变成如下：<br><img src="https://upload-images.jianshu.io/upload_images/11893784-6b0f41a62e828d38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"><br>如果换成下面的这样，就需要人工解决了:<br><img src="https://upload-images.jianshu.io/upload_images/11893784-9a84cfdfccaf0b13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<h4 id="递归三路合并原理"><a href="#递归三路合并原理" class="headerlink" title="递归三路合并原理"></a>递归三路合并原理</h4><p>我们来看这样一个例子 现在如果我们要合并 ⑦(source) -&gt; ⑥(destination)：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-17049a5c52342eff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>简短描述下 如何会出现上面的图：</p>
+<p><strong>我们分别来看：</strong></p>
+<p>如果选择③作为公共祖先 根据最基本的三路合并，可以看到最终结果⑧ 将需要手动解决冲突 &#x2F;foo.c &#x3D; BC???</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-d3f4ee2ff49ad2e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"><br> 如果选择④作为公共祖先 根据最基本的三路合并，可以看到最终结果⑧ 将得到 &#x2F;foo.c&#x3D;C</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-dd7c37d9ad0131d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1038/format/webp" alt="img"></p>
+<p>Git 其实是这样进行合并的：</p>
+<ul>
+<li>git 既不是直接用③，也不是用④，而是将2个祖先进行合并成一个虚拟的 X &#x2F;foo.c &#x3D; B, 因为③ 和 ④ 公共祖先是 〇&#x2F;foo.c &#x3D; A</li>
+<li>git 用 X 做为 base 合并 ⑥ 和 ⑦ 结果就是 &#x2F;foo.c &#x3D; C</li>
+</ul>
+<p>那什么又叫递归(recursive)合并呢 ? 我们合并 ⑥ 和 ⑦ 的时候，我们将其 2 个公共祖先③ 和 ④ 进行 merge 为 X ,在合并 ③ 和 ④时候 我们又需要找到 他们的公共祖先，此时可能又有多个公共祖先，我们又需要将他们先进行合并，如此就是递归了 也就是 recursive merge，如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-4e9f5fa2d10b21ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1178/format/webp" alt="img"></p>
+<h3 id="合并策略（git-merge）"><a href="#合并策略（git-merge）" class="headerlink" title="合并策略（git merge）"></a>合并策略（git merge）</h3><p>当项目中包含多条功能分支时，有时就需要使用 git merge 命令，指定将某个分支的提交合并到当前分支。Git 中有两个合并策略：fast-forward 和 no-fast-forward。</p>
+<h4 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h4><p>fast-forward（–ff） 意为快进式合并，如果当前分支在合并分支前，没有做过额外提交。那么合并分支的过程不会产生的新的提交记录，而是直接将分支上的提交添加进来，这称为 fast-forward 合并。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-501af1daa07fa1ec.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp" alt="img"><br>很多时候我们在找2个修改集合X,Y 公共祖先的时候，会发现公共祖先就是他们中的一个，此时我们进行merge 的时候，就是Fast-Forward即可，不会产生一个新的Commit 用于merge X和Y 。看懂下面这个例子你就明白了：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/11893784-60de2a661410443b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
+<p>当merge ② 和 ⑥时候 由于②是公共祖先，所以进行Fast-Forward 合并，直接指向⑥ 不用生成一个新的⑧进行merge了。</p>
+<h4 id="no-fast-forward"><a href="#no-fast-forward" class="headerlink" title="no-fast-forward"></a>no-fast-forward</h4><p>no-fast-forward（–no-ff）意为非快进式合并，fast-forward的场景很少遇到，基本是：在当前分支分离出子分支后（比如分支dev），后续会有其他分支合并进来的修改，而分离出的dev分支也做了修改。这个时候再使用git merge，就会触发 no-fast-forward 策略了。</p>
+<p>在 no-fast-forward 策略下，Git 会在当前分支（active branch）额外创建一个新的 合并提交（merging commit）。这条提交记录既指向当前分支，又指向合并分支。<br><img src="https://upload-images.jianshu.io/upload_images/11893784-33e3fb9b10bdbc37.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/640/format/webp" alt="img"></p>
+<h2 id="frevert-amp-reset"><a href="#frevert-amp-reset" class="headerlink" title="frevert &amp; reset"></a>frevert &amp; reset</h2><p>在使用Git的过程中。某些时候，当你不小心改错了内容，或者错误地在本地commit了某些本不该提交的修改，我们就需要进行版本的回退。版本回退最常用的命令包括<code>git reset</code>和<code>git revert</code>。这两个命令允许我们在版本的历史之间穿梭。</p>
+<h3 id="Git-reset"><a href="#Git-reset" class="headerlink" title="Git reset"></a>Git reset</h3><p><code>git reset</code> 命令是用来将当前 branch 重置到另外一个 commit 的，这个动作可能同时影响到 index 以及 work directory。先举个例子，来一个感性的认识。现在有一个hotfix分支。</p>
+<p><img src="https://lushunjian.github.io/blog/2019/02/14/Git%E7%9A%84%E5%8E%9F%E7%90%86/git6.png" alt="img"></p>
+<p>在执行下面这两条命令让 hotfix分支向后回退两个提交。上图就是命令执行前后，分支状态的对比。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout hotfix</span><br><span class="line">git reset HEAD~2</span><br></pre></td></tr></table></figure>
+
+<p>hotfix 分支末端的两个提交现在变成了孤儿提交。下次 Git 执行垃圾回收的时候，这两个提交会被删除。如果你的提交还没有共享给别人，可以用<code>git reset</code>撤销这些提交。因此<code>git reset</code>的使用场景是在本地版本需要回退时使用（前提是没有推送到远程库）。回退前，用<code>git log</code>可以查看提交历史，以便确定要回退到哪个版本；要重返未来，用<code>git reflog</code>查看命令历史，以便确定要回到未来的哪个版本。</p>
+<p>如果你不想保留修改的文件，可以使用–hard参数直接回退到指定的commit，该参数会将HEAD指向该commit，并且工作区中的文件也会和该comit保持一致，该commit后的修改会被直接丢弃。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git reset HEAD --hard</span><br><span class="line">HEAD is now at 4f73993 some change</span><br><span class="line">$ git status</span><br><span class="line">On branch work</span><br><span class="line">nothing to commit, working directory clean</span><br></pre></td></tr></table></figure>
+
+<h3 id="git-revert"><a href="#git-revert" class="headerlink" title="git revert"></a>git revert</h3><p>Git revert用来撤销某次操作，此次操作之前和之后的commit和history都会保留，并且把这次撤销作为一次最新的提交。<code>git revert</code>是提交一个新的版本，将需要revert的版本的内容再反向修改回去，版本会递增，不影响之前提交的内容。虽然代码回退了，但是版本依然是向前的，所以，当你用revert回退之后，所有人pull之后，他们的代码也自动的回退了。</p>
+<p><code>git revert</code>和<code>git reset</code>都可以进行版本的回退，将工作区回退到历史的某个状态，二者有如下的区别：</p>
+<ul>
+<li><code>git revert</code>是用一次新的commit来回滚之前的commit，而git reset是直接删除指定的commit（并没有真正的删除，通过<code>git reflog</code>可以找回），这是二者最显著的区别；</li>
+<li><code>git reset</code> 是把HEAD向后移动了一下，而<code>git revert</code>是HEAD继续前进，只是新的commit的内容和要revert的内容正好相反，能够抵消要被revert的内容；</li>
+</ul>
+<p>使用revert HEAD是撤销最近的一次提交，如果你最近一次提交是用revert命令产生的，那么你再执行一次，就相当于撤销了上次的撤销操作，换句话说，你连续执行两次revert HEAD命令，就跟没执行是一样的。</p>
+<p>git revert 命令的好处就是不会丢掉别人的提交，即使你撤销后覆盖了别人的提交，他更新代码后，可以在本地用 reset 向前回滚，找到自己的代码，然后拉一下分支，再回来合并上去就可以找回被你覆盖的提交了。</p>
+<p>通过git revert回退刚才的改动，或者修改代码后再次提交，但这样的话你的提交log会显得非常凌乱；</p>
+<p>如果不想把中间过程的commit push到远程仓库，可以通过git reset 回退刚才的改动。</p>
+<h2 id="git-cherry-pick"><a href="#git-cherry-pick" class="headerlink" title="git cherry-pick"></a>git cherry-pick</h2><p>拣选会提取某次提交的补丁，之后尝试将其重新应用到当前分支上。 这种方式在你只想引入特性分支中的某个提交时很有用。</p>
+<p>假设你的项目提交历史如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20181028121921915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM0OTA4OTY=,size_27,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>如果你希望将提交 e43a6 拉取到 master 分支，你可以运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 当前在master</span><br><span class="line">git cherry-pick e43a6</span><br></pre></td></tr></table></figure>
+
+
+
+<p>这样会拉取和 e43a6 相同的更改，但是因为应用的日期不同，你会得到一个新的提交 SHA-1 值。 现在你的历史会变成这样：</p>
+<p><img src="https://img-blog.csdnimg.cn/20181028121945114.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTM0OTA4OTY=,size_27,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="git-rebase"><a href="#git-rebase" class="headerlink" title="git rebase"></a>git rebase</h2><p><code>git rebase</code> 命令的文档描述是 <code>Reapply commits on top of another base tip</code>，从字面上理解是「在另一个基端之上重新应用提交」，这个定义听起来有点抽象，换个角度可以理解为「将分支的基础从一个提交改成另一个提交，使其看起来就像是从另一个提交中创建了分支一样」，如下图：</p>
+<p><img src="https://www.waynerv.com/images/git-rebase-visual.png" alt="git-rebase.png"></p>
+<p>假设我们从 <code>Master</code> 的提交 A 创建了 <code>Feature</code> 分支进行新的功能开发，这时 A 就是 <code>Feature</code> 的基端。接着 <code>Matser</code> 新增了两个提交 B 和 C， <code>Feature</code> 新增了两个提交 D 和 E。现在我们出于某种原因，比如新功能的开发依赖 B、C 提交，需要将 <code>Master</code> 的两个新提交整合到 <code>Feature</code> 分支，为了保持提交历史的整洁，我们可以切换到 <code>Feature</code> 分支执行 <code>rebase</code> 操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
+
+<p><code>rebase</code> 的执行过程是首先找到这两个分支（即当前分支 <code>Feature</code>、 <code>rebase</code> 操作的目标基底分支 <code>Master</code>） 的最近共同祖先提交 A，然后对比当前分支相对于该祖先提交的历次提交（D 和 E），提取相应的修改并存为临时文件，然后将当前分支指向目标基底 <code>Master</code> 所指向的提交 C, 最后以此作为新的基端将之前另存为临时文件的修改依序应用。</p>
+<p>我们也可以按上文理解成将 <code>Feature</code> 分支的基础从提交 A 改成了提交 C，看起来就像是从提交 C 创建了该分支，并提交了 D 和 E。但实际上这只是「看起来」，在内部 Git 复制了提交 D 和 E 的内容，创建新的提交 D’ 和 E’ 并将其应用到特定基础上（A→B→C）。尽管新的 <code>Feature</code> 分支和之前看起来是一样的，但它是由全新的提交组成的。</p>
+<p><code>rebase</code> 操作的实质是丢弃一些现有的提交，然后相应地新建一些内容一样但实际上不同的提交。</p>
+<p><code>rebase</code> 通常用于重写提交历史。下面的使用场景在大多数 Git 工作流中是十分常见的：</p>
+<ul>
+<li>我们从 <code>master</code> 分支拉取了一条 <code>feature</code> 分支在本地进行功能开发</li>
+<li>远程的 <code>master</code> 分支在之后又合并了一些新的提交</li>
+<li>我们想在 <code>feature</code> 分支集成 <code>master</code> 的最新更改</li>
+</ul>
+<h3 id="rebase-和-merge-的区别"><a href="#rebase-和-merge-的区别" class="headerlink" title="rebase 和 merge 的区别"></a><a target="_blank" rel="noopener" href="https://www.waynerv.com/posts/git-rebase-intro/#contents:rebase-%E5%92%8C-merge-%E7%9A%84%E5%8C%BA%E5%88%AB">rebase 和 merge 的区别</a></h3><p>以上场景同样可以使用 <code>merge</code> 来达成目的，但使用 <code>rebase</code> 可以使我们保持一个线性且更加整洁的提交历史。假设我们有如下分支：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  D---E feature</span><br><span class="line"> /</span><br><span class="line">A---B---C master</span><br></pre></td></tr></table></figure>
+
+<p>现在我们将分别使用 <code>merge</code> 和 <code>rebase</code>，把 <code>master</code> 分支的 B、C 提交集成到 <code>feature</code> 分支，并在 <code>feature</code> 分支新增一个提交 F，然后再将 <code>feature</code> 分支合入 <code>master</code> ，最后对比两种方法所形成的提交历史的区别。</p>
+<ul>
+<li><p>使用 <code>merge</code></p>
+<ol>
+<li>切换到 <code>feature</code> 分支： <code>git checkout feature</code>。</li>
+<li>合并 <code>master</code> 分支的更新： <code>git merge master</code>。</li>
+<li>新增一个提交 F： <code>git add . &amp;&amp; git commit -m &quot;commit F&quot;</code> 。</li>
+<li>切回 <code>master</code> 分支并执行快进合并： <code>git chekcout master &amp;&amp; git merge feature</code>。</li>
+</ol>
+<p>  执行过程如下图所示：</p>
+<p>  <img src="https://www.waynerv.com/images/Dec-30-2020-merge-example.gif" alt="Dec-30-2020-merge-example"></p>
+<p>  我们将得到如下提交历史：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">* 6fa5484 (HEAD -&gt; master, feature) commit F</span><br><span class="line">*   875906b Merge branch &#x27;master&#x27; into feature</span><br><span class="line">|\  </span><br><span class="line">| | 5b05585 commit E</span><br><span class="line">| | f5b0fc0 commit D</span><br><span class="line">* * d017dff commit C</span><br><span class="line">* * 9df916f commit B</span><br><span class="line">|/  </span><br><span class="line">* cb932a6 commit A</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 <code>rebase</code></p>
+<p>  步骤与使用 <code>merge</code> 基本相同，唯一的区别是第 2 步的命令替换成： <code>git rebase master</code>。</p>
+<p>  执行过程如下图所示：</p>
+<p>  <img src="https://www.waynerv.com/images/Dec-30-2020-rebase-example.gif" alt="Dec-30-2020-rebase-example"></p>
+<p>  我们将得到如下提交历史：</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">* 74199ce (HEAD -&gt; master, feature) commit F</span><br><span class="line">* e7c7111 commit E</span><br><span class="line">* d9623b0 commit D</span><br><span class="line">* 73deeed commit C</span><br><span class="line">* c50221f commit B</span><br><span class="line">* ef13725 commit A</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>可以看到，使用 <code>rebase</code> 方法形成的提交历史是完全线性的，同时相比 <code>merge</code> 方法少了一次 <code>merge</code> 提交，看上去更加整洁。</p>
+<h3 id="为什么要保持提交历史的整洁"><a href="#为什么要保持提交历史的整洁" class="headerlink" title="为什么要保持提交历史的整洁"></a><a target="_blank" rel="noopener" href="https://www.waynerv.com/posts/git-rebase-intro/#contents:%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BF%9D%E6%8C%81%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2%E7%9A%84%E6%95%B4%E6%B4%81">为什么要保持提交历史的整洁</a></h3><p>一个看上更整洁的提交历史有什么好处？</p>
+<ol>
+<li>满足某些者的洁癖。</li>
+<li>当你因为某些 bug 需要回溯提交历史时，更容易定位到 bug 是从哪一个提交引入。尤其是当你需要通过 <code>git bisect</code> 从几十上百个提交中排查 bug，或者有一些体量较大的功能分支需要频繁的从远程的主分支拉取更新时。</li>
+</ol>
+<p>使用 <code>rebase</code> 来将远程的变更整合到本地仓库是一种更好的选择。用 <code>merge</code> 拉取远程变更的结果是，每次你想获取项目的最新进展时，都会有一个多余的 <code>merge</code> 提交。而使用 <code>rebase</code> 的结果更符合我们的本意：我想在其他人的已完成工作的基础上进行我的更改。</p>
+<h3 id="其他重写提交历史的方法"><a href="#其他重写提交历史的方法" class="headerlink" title="其他重写提交历史的方法"></a>其他重写提交历史的方法</h3><p>当我们仅仅只想修改最近的一次提交时，使用 <code>git commit --amend</code> 会更加方便。</p>
+<p>它适用于以下场景：</p>
+<ul>
+<li>我们刚刚完成了一次提交，但还没有推送到公共的分支。</li>
+<li>突然发现上个提交还留了些小尾巴没有完成，比如一行忘记删除的注释或者一个很小的笔误，我们可以很快速的完成修改，但又不想再新增一个单独的提交。</li>
+<li>或者我们只是觉得上一次提交的提交信息写的不够好，想做一些修改。</li>
+</ul>
+<p>这时候我们可以添加新增的修改（或跳过），使用 <code>git commit --amend</code> 命令执行提交，执行后会进入一个新的编辑器窗口，可以对上一次提交的提交信息进行修改，保存后就会将所做的这些更改应用到上一次提交。</p>
+<p>如果我们已经将上一次提交推送到了远程的分支，现在再执行推送将会提示出错并被拒绝，在确保该分支不是一个公共分支的前提下，我们可以使用 <code>git push --force</code> 强制推送。</p>
+<p>注意与 <code>rebase</code> 一样，Git 在内部并不会真正地修改并替换上一个提交，而是创建了一个全新的提交并重新指向这个新的提交。</p>
+<h3 id="找回丢失的提交"><a href="#找回丢失的提交" class="headerlink" title="找回丢失的提交"></a>找回丢失的提交</h3><p>在交互式模式下进行 <code>rebase</code> 并对提交执行 <code>squash</code> 或 <code>drop</code> 等命令后，会从分支的 <code>git log</code> 中直接删除提交。如果你不小心操作失误，会以为这些提交已经永久消失了而吓出一身冷汗。</p>
+<p>但这些提交并没有真正地被删除，如上所说，Git 并不会修改（或删除）原来的提交，而是重新创建了一批新的提交，并将当前分支顶端指向了新提交。因此我们可以使用 <code>git reflog</code> 找到并且重新指向原来的提交来恢复它们，这会撤销整个 <code>rebase</code>。感谢 Git ，即使你执行 <code>rebase</code> 或者 <code>commit --amend</code> 等重写提交历史的操作，它也不会真正地丢失任何提交。</p>
+<h4 id="git-reflog-命令"><a href="#git-reflog-命令" class="headerlink" title="git reflog 命令"></a><code>git reflog</code> 命令</h4><p>reflogs 是 Git 用来记录本地仓库分支顶端的更新的一种机制，它会记录所有分支顶端曾经指向过的提交，因此 reflogs 允许我们找到并切换到一个当前没有被任何分支或标签引用的提交。</p>
+<p>每当分支顶端由于任何原因被更新（通过切换分支、拉取新的变更、重写历史或者添加新的提交），一条新的记录将被添加到 reflogs 中。如此一来，我们在本地所创建过的每一次提交都一定会被记录在 reflogs 中。即使在重写了提交历史之后， reflogs 也会包含关于分支的旧状态的信息，并允许我们在需要时恢复到该状态。</p>
+<p>注意 reflogs 并不会永久保存，它有 90 天的过期时间。</p>
+<h4 id="还原提交历史"><a href="#还原提交历史" class="headerlink" title="还原提交历史"></a>还原提交历史</h4><p>我们从上一个例子继续，假设我们想恢复 <code>feature</code> 分支在 <code>rebase</code> 之前的 A→B→C→D→E→F 提交历史，但这时候的 <code>git log</code> 中已经没有后面 5 个提交，所以需要从 reflogs 中寻找，运行 <code>git reflog</code> 结果如下:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">64710dc (HEAD -&gt; feature) HEAD@&#123;0&#125;: rebase (continue) (finish): returning to refs/heads/feature</span><br><span class="line">64710dc (HEAD -&gt; feature) HEAD@&#123;1&#125;: rebase (continue): commit H</span><br><span class="line">8ab4506 HEAD@&#123;2&#125;: rebase (continue): commit G</span><br><span class="line">1e186f8 HEAD@&#123;3&#125;: rebase (squash): commit C</span><br><span class="line">c50221f HEAD@&#123;4&#125;: rebase (start): checkout ef1372522cdad136ce7e6dc3e02aab4d6ad73f79</span><br><span class="line">74199ce HEAD@&#123;5&#125;: checkout: moving from master to feature</span><br><span class="line">......</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>reflogs</code> 完整的记录了我们切换分支并进行 <code>rebase</code> 的全过程，继续向下检索，我们找到了从 <code>git log</code> 中消失的提交 F:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">74199ce HEAD@&#123;15&#125;: commit: commit F</span><br></pre></td></tr></table></figure>
+
+
+<p>接下来我们通过 <code>git reset</code> 将 <code>feature</code> 分支的顶端重新指向原来的提交 F：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 我们想将工作区中的文件也一并还原，因此使用了--hard选项   </span><br><span class="line">$ git reset --hard 74199ce                                      </span><br><span class="line">HEAD 现在位于 74199ce commit F</span><br></pre></td></tr></table></figure>
+
+<p>再运行 <code>git log</code> 会发现一切又回到了从前：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">74199cebdd34d107bb67b6da5533a2e405f4c330 (HEAD -&gt; feature) commit F</span><br><span class="line">e7c7111d807c1d5209b97a9c75b09da5cd2810d4 commit E</span><br><span class="line">d9623b0ef9d722b4a83d58a334e1ce85545ea524 commit D</span><br><span class="line">73deeedaa944ef459b17d42601677c2fcc4c4703 commit C</span><br><span class="line">c50221f93a39f3474ac59228d69732402556c93b commit B</span><br><span class="line">ef1372522cdad136ce7e6dc3e02aab4d6ad73f79 commit A</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Swift-Any&AnyObject%20/" rel="prev" title="Swift-ANY&ANYOBJECT">
+      <i class="fa fa-chevron-left"></i> Swift-ANY&ANYOBJECT
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/iOS-NavigationBar%E7%9A%84backgroundColor/" rel="next" title="iOS-NavigationBar的backgroundColor">
+      iOS-NavigationBar的backgroundColor <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E4%BF%9D%E5%AD%98%E7%89%88%E6%9C%AC%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">Git保存版本的机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Hash算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number"></span> <span class="nav-text">Git的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%8E%A2%E7%B4%A2%EF%BC%81"><span class="nav-number">1.</span> <span class="nav-text">开始探索！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git%E7%9A%84%E5%BC%95%E7%94%A8%EF%BC%88references%EF%BC%89%E4%B8%8E%E5%88%86%E6%94%AF"><span class="nav-number">2.</span> <span class="nav-text">Git的引用（references）与分支</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E6%80%BB%E7%BB%93"><span class="nav-number"></span> <span class="nav-text">Git基本原理总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-merge"><span class="nav-number">1.</span> <span class="nav-text">git merge</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#merge%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">merge基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E8%B7%AF%E5%90%88%E5%B9%B6"><span class="nav-number">1.2.</span> <span class="nav-text">二路合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%B7%AF%E5%90%88%E5%B9%B6"><span class="nav-number">1.3.</span> <span class="nav-text">三路合并</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E4%B8%89%E8%B7%AF%E5%90%88%E5%B9%B6%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">递归三路合并原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E5%B9%B6%E7%AD%96%E7%95%A5%EF%BC%88git-merge%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">合并策略（git merge）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fast-forward"><span class="nav-number">1.4.1.</span> <span class="nav-text">fast-forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#no-fast-forward"><span class="nav-number">1.4.2.</span> <span class="nav-text">no-fast-forward</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#frevert-amp-reset"><span class="nav-number">2.</span> <span class="nav-text">frevert &amp; reset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-reset"><span class="nav-number">2.1.</span> <span class="nav-text">Git reset</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#git-revert"><span class="nav-number">2.2.</span> <span class="nav-text">git revert</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-cherry-pick"><span class="nav-number">3.</span> <span class="nav-text">git cherry-pick</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-rebase"><span class="nav-number">4.</span> <span class="nav-text">git rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rebase-%E5%92%8C-merge-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.</span> <span class="nav-text">rebase 和 merge 的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BF%9D%E6%8C%81%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2%E7%9A%84%E6%95%B4%E6%B4%81"><span class="nav-number">4.2.</span> <span class="nav-text">为什么要保持提交历史的整洁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%87%8D%E5%86%99%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">其他重写提交历史的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%BE%E5%9B%9E%E4%B8%A2%E5%A4%B1%E7%9A%84%E6%8F%90%E4%BA%A4"><span class="nav-number">4.4.</span> <span class="nav-text">找回丢失的提交</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#git-reflog-%E5%91%BD%E4%BB%A4"><span class="nav-number">4.4.1.</span> <span class="nav-text">git reflog 命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%98%E5%8E%9F%E6%8F%90%E4%BA%A4%E5%8E%86%E5%8F%B2"><span class="nav-number">4.4.2.</span> <span class="nav-text">还原提交历史</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王帅帅</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王帅帅</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

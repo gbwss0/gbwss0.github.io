@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="做服务外包项目需要是用虹软的人脸对比SDK，项目使用Python进行开发，但是网上以及官方社区没有基于Python的3.0版本项目，所以自己根据社区里大佬1.1和2.0的Demo写了一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ArcFaceSDK3.0 PythonDemo">
+<meta property="og:url" content="http://yoursite.com/ArcFaceSDK3-0-PythonDemo/index.html">
+<meta property="og:site_name" content="瞎写写">
+<meta property="og:description" content="做服务外包项目需要是用虹软的人脸对比SDK，项目使用Python进行开发，但是网上以及官方社区没有基于Python的3.0版本项目，所以自己根据社区里大佬1.1和2.0的Demo写了一个">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-07T11:13:11.000Z">
+<meta property="article:modified_time" content="2020-03-07T11:13:11.000Z">
+<meta property="article:author" content="王帅帅">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/ArcFaceSDK3-0-PythonDemo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>ArcFaceSDK3.0 PythonDemo | 瞎写写</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">瞎写写</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/ArcFaceSDK3-0-PythonDemo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王帅帅">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞎写写">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ArcFaceSDK3.0 PythonDemo
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-07 19:13:11" itemprop="dateCreated datePublished" datetime="2020-03-07T19:13:11+08:00">2020-03-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>做服务外包项目需要是用虹软的人脸对比SDK，项目使用Python进行开发，但是网上以及官方社区没有基于Python的3.0版本项目，所以自己根据社区里大佬1.1和2.0的Demo写了一个</p>
+<p><escape><span id="more"></span></escape></p>
+<h2 id="face-class"><a href="#face-class" class="headerlink" title="face_class"></a>face_class</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 人脸框</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MRECT</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">u&#x27;left1&#x27;</span>, c_int32), (<span class="string">u&#x27;top1&#x27;</span>, c_int32),</span><br><span class="line">                (<span class="string">u&#x27;right1&#x27;</span>, c_int32), (<span class="string">u&#x27;bottom1&#x27;</span>, c_int32)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 版本信息     版本号,构建日期,版权说明</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ASF_VERSION</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&#x27;Version&#x27;</span>, c_char_p), (<span class="string">&#x27;BuildDate&#x27;</span>,</span><br><span class="line">                                        c_char_p), (<span class="string">&#x27;CopyRight&#x27;</span>, c_char_p)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单人人脸信息  人脸狂,人脸角度</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ASF_SingleFaceInfo</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&#x27;faceRect&#x27;</span>, MRECT), (<span class="string">&#x27;faceOrient&#x27;</span>, c_int32)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 多人人脸信息 人脸框数组,人脸角度数组,人脸数</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ASF_MultiFaceInfo</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    <span class="comment"># _fields_=[(&#x27;faceRect&#x27;,POINTER(MRECT)),(&#x27;faceOrient&#x27;,POINTER( c_int32)),(&#x27;faceNum&#x27;,c_int32)]</span></span><br><span class="line">    _fields_ = [(<span class="string">u&#x27;faceRect&#x27;</span>, POINTER(MRECT)), (<span class="string">u&#x27;faceOrient&#x27;</span>,</span><br><span class="line">                                                POINTER(c_int32)), (<span class="string">u&#x27;faceNum&#x27;</span>, c_int32)]</span><br><span class="line">    <span class="comment"># _fields_=[(u&#x27;faceRect&#x27;,MRECT*50),(u&#x27;faceOrient&#x27;,c_int32*50),(u&#x27;faceNum&#x27;,c_int32)]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 人脸特征 人脸特征,人脸特征长度</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ASF_FaceFeature</span>(<span class="title class_ inherited__">Structure</span>):</span><br><span class="line">    _fields_ = [(<span class="string">&#x27;feature&#x27;</span>, c_void_p), (<span class="string">&#x27;featureSize&#x27;</span>, c_int32)]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义图片类face_dll</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IM</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.filepath = <span class="literal">None</span></span><br><span class="line">        self.date = <span class="literal">None</span></span><br><span class="line">        self.width = <span class="number">0</span></span><br><span class="line">        self.height = <span class="number">0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="face-dll"><a href="#face-dll" class="headerlink" title="face_dll"></a>face_dll</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">wuyongdll = CDLL(<span class="string">&#x27;/media/psf/Home/code/fwwb/face/so/libarcsoft_face.so&#x27;</span>)</span><br><span class="line">dll = CDLL(<span class="string">&#x27;/media/psf/Home/code/fwwb/face/so/libarcsoft_face_engine.so&#x27;</span>)</span><br><span class="line">libc = CDLL(<span class="string">&#x27;libc.so.6&#x27;</span>)</span><br><span class="line"><span class="comment">#这里不同操作系统使用的动态库链接文件是不同的，我使用的是linux用了libc.so</span></span><br><span class="line"></span><br><span class="line">ASF_DETECT_MODE_VIDEO = <span class="number">0x00000000</span></span><br><span class="line">ASF_DETECT_MODE_IMAGE = <span class="number">0xFFFFFFFF</span></span><br><span class="line">c_ubyte_p = POINTER(c_ubyte)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活</span></span><br><span class="line">jihuo = dll.ASFActivation</span><br><span class="line">jihuo.restype = c_int32</span><br><span class="line">jihuo.argtypes = (c_char_p, c_char_p)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化</span></span><br><span class="line">chushihua = dll.ASFInitEngine</span><br><span class="line">chushihua.restype = c_int32</span><br><span class="line">chushihua.argtypes = (</span><br><span class="line">    c_long,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    POINTER(c_void_p))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 人脸识别</span></span><br><span class="line">shibie = dll.ASFDetectFaces</span><br><span class="line">shibie.restype = c_int32</span><br><span class="line">shibie.argtypes = (</span><br><span class="line">    c_void_p,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    POINTER(c_ubyte),</span><br><span class="line">    POINTER(ASF_MultiFaceInfo))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征提取</span></span><br><span class="line">tezheng = dll.ASFFaceFeatureExtract</span><br><span class="line">tezheng.restype = c_int32</span><br><span class="line">tezheng.argtypes = (</span><br><span class="line">    c_void_p,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    c_int32,</span><br><span class="line">    POINTER(c_ubyte),</span><br><span class="line">    POINTER(ASF_SingleFaceInfo),</span><br><span class="line">    POINTER(ASF_FaceFeature))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征比对</span></span><br><span class="line">bidui = dll.ASFFaceFeatureCompare</span><br><span class="line">bidui.restype = c_int32</span><br><span class="line">bidui.argtypes = (</span><br><span class="line">    c_void_p,</span><br><span class="line">    POINTER(ASF_FaceFeature),</span><br><span class="line">    POINTER(ASF_FaceFeature),</span><br><span class="line">    POINTER(c_float))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 内存控制</span></span><br><span class="line">malloc = libc.malloc</span><br><span class="line">free = libc.free</span><br><span class="line">memcpy = libc.memcpy</span><br><span class="line">malloc.restype = c_void_p</span><br><span class="line">malloc.argtypes = (c_size_t, )</span><br><span class="line">free.restype = <span class="literal">None</span></span><br><span class="line">free.argtypes = (c_void_p, )</span><br><span class="line">memcpy.restype = c_void_p</span><br><span class="line">memcpy.argtypes = (c_void_p, c_void_p, c_size_t)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="face-function"><a href="#face-function" class="headerlink" title="face_function"></a>face_function</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> face_dll</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> face_class</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line">Handle = c_void_p()</span><br><span class="line">c_ubyte_p = POINTER(c_ubyte)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">JH</span>(<span class="params">appkey, sdkey</span>):</span><br><span class="line">    ret = face_dll.jihuo(appkey, sdkey)</span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CSH</span>():  <span class="comment"># 1：视频或图片模式,2角度,3最小人脸尺寸推荐16,4最多人脸数最大50,5功能,6返回激活句柄</span></span><br><span class="line">    ret = face_dll.chushihua(<span class="number">0xFFFFFFFF</span>, <span class="number">0x1</span>, <span class="number">16</span>, <span class="number">50</span>, <span class="number">5</span>, byref(Handle))</span><br><span class="line">    <span class="comment"># Main.Handle=Handle</span></span><br><span class="line">    <span class="keyword">return</span> ret, Handle</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># cv2记载图片并处理</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">LoadImg</span>(<span class="params">im</span>):</span><br><span class="line">    img = cv2.imread(im.filepath)</span><br><span class="line">    sp = img.shape</span><br><span class="line">    img = cv2.resize(img, (sp[<span class="number">1</span>] // <span class="number">4</span> * <span class="number">4</span>, sp[<span class="number">0</span>] // <span class="number">4</span> * <span class="number">4</span>))</span><br><span class="line">    sp = img.shape</span><br><span class="line">    im.data = img</span><br><span class="line">    im.width = sp[<span class="number">1</span>]</span><br><span class="line">    im.height = sp[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> im</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">LoadWebImg</span>(<span class="params">img</span>):</span><br><span class="line">    <span class="built_in">print</span>(img)</span><br><span class="line">    sp = img.shape</span><br><span class="line">    im = cv2.resize(img, (sp[<span class="number">1</span>] // <span class="number">4</span> * <span class="number">4</span>, sp[<span class="number">0</span>] // <span class="number">4</span> * <span class="number">4</span>))</span><br><span class="line">    sp = im.shape</span><br><span class="line">    img.data = im</span><br><span class="line">    img.width = sp[<span class="number">1</span>]</span><br><span class="line">    img.height = sp[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">RLSB</span>(<span class="params">im</span>):</span><br><span class="line">    faces = face_class.ASF_MultiFaceInfo()</span><br><span class="line">    img = im.data</span><br><span class="line">    imgby = <span class="built_in">bytes</span>(im.data)</span><br><span class="line">    imgcuby = cast(imgby, c_ubyte_p)</span><br><span class="line">    ret = face_dll.shibie(</span><br><span class="line">        Handle,</span><br><span class="line">        im.width,</span><br><span class="line">        im.height,</span><br><span class="line">        <span class="number">0x201</span>,</span><br><span class="line">        imgcuby,</span><br><span class="line">        byref(faces))</span><br><span class="line">    <span class="keyword">return</span> ret, faces</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示人脸识别图片**unfinish</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">showimg</span>(<span class="params">im, faces</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;facenum is:&#x27;</span>, faces.faceNum)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, faces.faceNum):</span><br><span class="line">        ra = faces.faceRect[i]</span><br><span class="line">        cv2.rectangle(im.data, (ra.left1, ra.top1),</span><br><span class="line">                      (ra.right1, ra.bottom1), (<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>,), <span class="number">2</span>)</span><br><span class="line">    cv2.imshow(<span class="string">&#x27;faces&#x27;</span>, im.data)</span><br><span class="line">    cv2.waitKey(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取人脸特征</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">RLTZ</span>(<span class="params">im, ft</span>):</span><br><span class="line">    detectedFaces = face_class.ASF_FaceFeature()</span><br><span class="line">    img = im.data</span><br><span class="line">    imgby = <span class="built_in">bytes</span>(im.data)</span><br><span class="line">    imgcuby = cast(imgby, c_ubyte_p)</span><br><span class="line">    ret = face_dll.tezheng(</span><br><span class="line">        Handle,</span><br><span class="line">        im.width,</span><br><span class="line">        im.height,</span><br><span class="line">        <span class="number">0x201</span>,</span><br><span class="line">        imgcuby,</span><br><span class="line">        ft,</span><br><span class="line">        byref(detectedFaces))</span><br><span class="line">    <span class="keyword">if</span> ret == <span class="number">0</span>:</span><br><span class="line">        retz = face_class.ASF_FaceFeature()</span><br><span class="line">        retz.featureSize = detectedFaces.featureSize</span><br><span class="line">        <span class="comment"># 必须操作内存来保留特征值,因为c++会在过程结束后自动释放内存</span></span><br><span class="line">        retz.feature = face_dll.malloc(detectedFaces.featureSize)</span><br><span class="line">        face_dll.memcpy(</span><br><span class="line">            retz.feature,</span><br><span class="line">            detectedFaces.feature,</span><br><span class="line">            detectedFaces.featureSize)</span><br><span class="line">        <span class="comment">#print(&#x27;提取特征成功:&#x27;, detectedFaces.featureSize, mem)</span></span><br><span class="line">        <span class="keyword">return</span> ret, retz</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征值比对,返回比对结果</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">BD</span>(<span class="params">tz1, tz2</span>):</span><br><span class="line">    jg = c_float()</span><br><span class="line">    ret = face_dll.bidui(Handle, tz1, tz2, byref(jg))</span><br><span class="line">    <span class="keyword">return</span> ret, jg.value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单人特征写入文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">writeFTFile</span>(<span class="params">feature, filepath</span>):</span><br><span class="line">    f = BytesIO(string_at(feature.feature, feature.featureSize))</span><br><span class="line">    a = <span class="built_in">open</span>(filepath, <span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line">    a.write(f.getvalue())</span><br><span class="line">    a.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从多人中提取单人数据</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">getsingleface</span>(<span class="params">singleface, index</span>):</span><br><span class="line">    ft = face_class.ASF_SingleFaceInfo()</span><br><span class="line">    ra = singleface.faceRect[index]</span><br><span class="line">    ft.faceRect.left1 = ra.left1</span><br><span class="line">    ft.faceRect.right1 = ra.right1</span><br><span class="line">    ft.faceRect.top1 = ra.top1</span><br><span class="line">    ft.faceRect.bottom1 = ra.bottom1</span><br><span class="line">    ft.faceOrient = singleface.faceOrient[index]</span><br><span class="line">    <span class="keyword">return</span> ft</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 从文件获取特征值</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ftfromfile</span>(<span class="params">filepath</span>):</span><br><span class="line">    fas = face_class.ASF_FaceFeature()</span><br><span class="line">    f = <span class="built_in">open</span>(<span class="string">&#x27;./1.dat&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">    b = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    fas.featureSize = b.__len__()</span><br><span class="line">    fas.feature = face_dll.malloc(fas.featureSize)</span><br><span class="line">    face_dll.memcpy(fas.feature, b, fas.featureSize)</span><br><span class="line">    <span class="keyword">return</span> fas</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="关于ctypes类型转换"><a href="#关于ctypes类型转换" class="headerlink" title="关于ctypes类型转换"></a>关于ctypes类型转换</h2><table>
+<thead>
+<tr>
+<th align="center">C类型</th>
+<th align="center">Python类型</th>
+<th align="center">ctypes 类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">char</td>
+<td align="center">1-character&#x2F;string</td>
+<td align="center">c_char</td>
+</tr>
+<tr>
+<td align="center">wchar_t</td>
+<td align="center">1-character&#x2F;Unicode、string</td>
+<td align="center">c_wchar</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_byte</td>
+</tr>
+<tr>
+<td align="center">char</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_ubyte</td>
+</tr>
+<tr>
+<td align="center">short</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_short</td>
+</tr>
+<tr>
+<td align="center">unsigned short</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_ushort</td>
+</tr>
+<tr>
+<td align="center">int</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_int</td>
+</tr>
+<tr>
+<td align="center">unsigned int</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_uint</td>
+</tr>
+<tr>
+<td align="center">long</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_long</td>
+</tr>
+<tr>
+<td align="center">unsigned long</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_ulong</td>
+</tr>
+<tr>
+<td align="center">long long</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_longlong</td>
+</tr>
+<tr>
+<td align="center">unsigned long long</td>
+<td align="center">int&#x2F;long</td>
+<td align="center">c_ulonglong</td>
+</tr>
+<tr>
+<td align="center">float</td>
+<td align="center">float</td>
+<td align="center">c_float</td>
+</tr>
+<tr>
+<td align="center">double</td>
+<td align="center">float</td>
+<td align="center">c_double</td>
+</tr>
+<tr>
+<td align="center">char *(NULL terminated)</td>
+<td align="center">string or none</td>
+<td align="center">c_char_p</td>
+</tr>
+<tr>
+<td align="center">wchar_t *(NULL terminated)</td>
+<td align="center">unicode or none</td>
+<td align="center">c_wchar_p</td>
+</tr>
+<tr>
+<td align="center">void *</td>
+<td align="center">int&#x2F;long or none</td>
+<td align="center">c_void_p</td>
+</tr>
+</tbody></table>
+<p>当一个函数期望一个指针作为参数时,可以像这样调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function_main(byref(parameter))</span><br></pre></td></tr></table></figure>
+
+<p>struct例子<br>下面的例子是定义一个结构<br>C语言例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct beer_recipe</span><br><span class="line">&#123;</span><br><span class="line">int amt_barley;</span><br><span class="line">int amt_water;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Python例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class beer_recipe(Structure):</span><br><span class="line">    _fields_ = [</span><br><span class="line">    (&quot;amt_barley&quot;, c_int),</span><br><span class="line">    (&quot;amt_water&quot;, c_int),</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>ArcFaceSDK3.0还加入了很多新功能 比如说1:N的识别等 如果后期继续做相关应该会继续补到function里面</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/zsh%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/" rel="prev" title="zsh配置记录">
+      <i class="fa fa-chevron-left"></i> zsh配置记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Deep-Meta-Learning-for-Real-Time-Target-Aware-Visual-Tracking-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" rel="next" title="Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读">
+      Deep Meta Learning for Real-Time Target-Aware Visual Tracking 论文阅读 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#face-class"><span class="nav-number">1.</span> <span class="nav-text">face_class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#face-dll"><span class="nav-number">2.</span> <span class="nav-text">face_dll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#face-function"><span class="nav-number">3.</span> <span class="nav-text">face_function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ectypes%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">关于ctypes类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%90%8E%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text">写在后面</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王帅帅</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王帅帅</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
