@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Grand Central Dispatch（GCD） 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6中首次推出，也可在 iOS 4 及以上版本使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS-GCD初探">
+<meta property="og:url" content="http://yoursite.com/iOS-GCD/index.html">
+<meta property="og:site_name" content="瞎写写">
+<meta property="og:description" content="Grand Central Dispatch（GCD） 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6中首次推出，也可在 iOS 4 及以上版本使用。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/09/14/zQrmFGJS5ae9tPD.png">
+<meta property="og:image" content="https://i.loli.net/2021/09/08/csauALU3W7VYkHy.png">
+<meta property="article:published_time" content="2021-10-23T01:41:00.000Z">
+<meta property="article:modified_time" content="2021-10-23T01:41:00.000Z">
+<meta property="article:author" content="王帅帅">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/09/14/zQrmFGJS5ae9tPD.png">
+
+<link rel="canonical" href="http://yoursite.com/iOS-GCD/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>iOS-GCD初探 | 瞎写写</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">瞎写写</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/iOS-GCD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王帅帅">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞎写写">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS-GCD初探
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-23 09:41:00" itemprop="dateCreated datePublished" datetime="2021-10-23T09:41:00+08:00">2021-10-23</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Grand Central Dispatch（GCD） 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6中首次推出，也可在 iOS 4 及以上版本使用。</p>
+<p><escape><span id="more"></span></escape></p>
+<h2 id="GCD任务和队列"><a href="#GCD任务和队列" class="headerlink" title="GCD任务和队列"></a>GCD任务和队列</h2><h3 id="GCD的概念"><a href="#GCD的概念" class="headerlink" title="GCD的概念"></a>GCD的概念</h3><blockquote>
+<p><strong>Grand Central Dispatch（GCD）</strong> 是 Apple 开发的一个多核编程的较新的解决方法。它主要用于优化应程序以支持多核处理器以及其他对称多处理系统。它是一个在线程池模式的基础上执行的并发任务。在 Mac OS X 10.6中首次推出，也可在 iOS 4 及以上版本使用。(来自百度百科)</p>
+</blockquote>
+<p>翻译过来就是大规模中央调度，官方文档中介绍它运行在系统级别，通过向他管理的调度队列中提交任务，来达到满足应用需求和资源占用。这套机制可以让我们充分利用多核性能，并且不用再使用底层的线程API，把这些调度工作交给GCD去做。</p>
+<p>GCD 的核心就是为了解决如何让程序有序、高效的运行，由此衍生出队列等概念和一系列的方法。</p>
+<h3 id="任务的概念"><a href="#任务的概念" class="headerlink" title="任务的概念"></a>任务的概念</h3><p>就是执行操作的意思，换句话说就是在线程中执行的那段代码。在 GCD 中是放在 block 中的。</p>
+<p>执行任务有两种方式：<strong>『同步执行』</strong> 和 <strong>『异步执行』</strong>。两者的主要区别是：<strong>是否等待队列的任务执行结束，以及是否具备开启新线程的能力。</strong></p>
+<p>就像在网络那一节提过的那样，同步和异步主要关注的是消息的通讯机制，他们最主要的区别是是否会等待回调结果。</p>
+<ul>
+<li><p>同步执行（sync）</p>
+<ul>
+<li>同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。</li>
+<li>只能在当前线程中执行任务，不具备开启新线程的能力。</li>
+</ul>
+</li>
+<li><p>异步执行（async）</p>
+<ul>
+<li>异步添加任务到指定的队列中，它不会做任何等待，可以继续执行任务。</li>
+<li>可以在新的线程中执行任务，具备开启新线程的能力。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注意：</p>
+<p><strong>异步执行（async）</strong>虽然具有开启新线程的能力，但是并不一定开启新线程。这跟任务所指定的队列类型有关（下面会讲）。</p>
+</blockquote>
+<h3 id="队列的概念"><a href="#队列的概念" class="headerlink" title="队列的概念"></a>队列的概念</h3><p>队列指执行任务的等待队列，即用来存放任务的队列。队列是一种特殊的线性表，采用<strong>FIFO</strong>的原则。</p>
+<p>在GCD中有两种队列：<strong>『串行队列』</strong> 和 <strong>『并发队列』</strong>。两者都符合 FIFO（先进先出）的原则。两者的主要区别是：<strong>执行顺序不同，以及开启线程数不同。</strong></p>
+<ul>
+<li><p>串行队列（Serial Dispatch Queue）</p>
+<ul>
+<li>每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）</li>
+</ul>
+</li>
+<li><p>并发队列（Concurrent Dispatch Queue）</p>
+<ul>
+<li>可以让多个任务并发（同时）执行。（可以开启多个线程，并且同时执行任务）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注意：<strong>并发队列</strong> 的并发功能只有在异步（dispatch_async）方法下才有效。</p>
+</blockquote>
+<p>在开始之前 我们看看关于任务都有哪些需求：</p>
+<ol>
+<li>默认情况下，程序是按代码顺序执行的，但我们有时希望应用能同时做多件事情，比如同时下载歌词和音乐。这就有了第一个需求：让多个任务同时进行。</li>
+<li>对于下载这个任务，可以一次下载多首音乐，各下各的，不需要互相等待；然而当全部下载完了播放时，通常是一首接一首的播放，播放一首音乐这个任务是需要等待前面的播放任务完成了才能进行。这就有了第二个需求：有的任务需要等待它完成了才能进行下一个任务，有的任务不需要等待它完成。</li>
+<li>如果一首音乐还没下载，我们就点了播放键，我们看看需要做哪些事情：它需要把歌词、音乐分别下载了，等他们都下载完了，告诉应用你可以播放了，然后应用把歌词、音乐同时播放。那我们怎么知道歌词、音乐都下载完了呢？这就有了第三个需求：如果有个东西能把几个任务捆绑到一起就好了，当整个包都完成了再通知我。</li>
+<li>还是下载，如果我们勾选了一堆的音乐要下载，中间我想暂停一下，过一会再让它继续，这就要求这一系列的下载任务要可以暂停和继续。</li>
+<li>一般下载工具都可以设置同时最大下载数，这就要求有一个方法可以控制同时进行的任务数。</li>
+<li>很多播放器会有一个功能：播放 20 分钟后就停止，非常适合睡觉前用。这个时候需要有个任务，在 20 分钟后把音乐关了。延迟执行任务就是它需要的特性。</li>
+</ol>
+<p>以上列举了 6 个经典的任务执行需要的特性，在 GCD 中分别提供了以下方法来支持它们：</p>
+<ol>
+<li>串行队列、并行队列</li>
+<li>同步任务、异步任务</li>
+<li>任务组、栅栏任务</li>
+<li>挂起、唤醒队列</li>
+<li>信号量</li>
+<li>延迟加入队列</li>
+</ol>
+<h2 id="创建队列"><a href="#创建队列" class="headerlink" title="创建队列"></a>创建队列</h2><p>GCD提供了三种主要类型的队列：</p>
+<h3 id="主队列（Main-queue）"><a href="#主队列（Main-queue）" class="headerlink" title="主队列（Main queue）"></a>主队列（Main queue）</h3><p>主队列是一个串行队列，它主要处理 UI 相关任务，也可以处理其他类型任务，但为了性能考虑，尽量让主队列执行 UI 相关或少量不耗时间和资源的操作。它通过类属性获取：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> mainQueue <span class="operator">=</span> <span class="type">DispatchQueue</span>.main</span><br></pre></td></tr></table></figure>
+
+<h3 id="全局队列（Global-queues）"><a href="#全局队列（Global-queues）" class="headerlink" title="全局队列（Global queues）"></a>全局队列（Global queues）</h3><p>全局并发队列，存在 5 个不同的 QoS 级别，可以使用默认优先级，也可以单独指定：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> globalQueue <span class="operator">=</span> <span class="type">DispatchQueue</span>.global() <span class="comment">//  qos: .default</span></span><br><span class="line"><span class="keyword">let</span> globalQueue <span class="operator">=</span> <span class="type">DispatchQueue</span>.global(qos: .background) <span class="comment">// 后台运行级别</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="自定义队列（custom-queues）"><a href="#自定义队列（custom-queues）" class="headerlink" title="自定义队列（custom queues）"></a>自定义队列（custom queues）</h3><p>这个使我们自己创建的队列，可以是并行可以是串行。但是这些队列中的请求最终都会进入上面系统提供的六条队列之一。</p>
+<h4 id="串行队列"><a href="#串行队列" class="headerlink" title="串行队列"></a>串行队列</h4><p>系统为串行队列一般只分配一个线程（也有特例，下一章任务特性部分有解释），队列中如果有任务正在执行时，是不允许队列中的其他任务插队的（即暂停当前任务，转而执行其他任务），这个特性也可以理解为：串行队列中执行任务的线程不允许被<strong>当前队列中的任务</strong>阻塞（此时会死锁），但可以被别的队列任务阻塞。</p>
+<p>创建时指定 <code>label</code> 便于调试，一般使用 <code>Bundle Identifier</code> 类似的命名方式：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> queue <span class="operator">=</span> <span class="type">DispatchQueue</span>(label: <span class="string">&quot;com.xxx.xxx.queueName&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="并行队列"><a href="#并行队列" class="headerlink" title="并行队列"></a>并行队列</h4><p>系统会为并行队列至少分配一个线程，线程允许被任何队列的任务阻塞。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> queue <span class="operator">=</span> <span class="type">DispatchQueue</span>(label: <span class="string">&quot;com.xxx.xxx.queueName&quot;</span>, attributes: .concurrent)</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加队列任务"><a href="#添加队列任务" class="headerlink" title="添加队列任务"></a>添加队列任务</h2><p>有些任务我们必须等待它的执行结果才能进行下一步，这种执行任务的方式称为同步，简称同步任务；有些任务只要把它放入队列就可以不管它了，可以继续执行其他任务，按这种方式执行的任务，称为异步任务。</p>
+<h3 id="同步任务"><a href="#同步任务" class="headerlink" title="同步任务"></a>同步任务</h3><h4 id="串行队列中新增同步任务"><a href="#串行队列中新增同步任务" class="headerlink" title="串行队列中新增同步任务"></a>串行队列中新增同步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testSyncTaskInSerialQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢串行队列中新增同步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    serialQueue.sync &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列中新增同步任务&quot;</span>)</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;串行队列&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>📢串行队列中新增同步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x2823d86c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️串行队列中新增同步任务</strong></p>
+<p><strong>串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x2823d86c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x2823d86c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+</blockquote>
+<p>执行结果，任务是在主线程中执行的，结束后又回到了主线程，可以理解为这个同步任务把主线程阻塞了，让自己优先插队执行</p>
+<h4 id="串行队列任务中嵌套本队列的同步任务"><a href="#串行队列任务中嵌套本队列的同步任务" class="headerlink" title="串行队列任务中嵌套本队列的同步任务"></a>串行队列任务中嵌套本队列的同步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testSyncTaskNestedInSameSerialQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢串行队列任务中嵌套本队列的同步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    serialQueue.sync &#123;</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;被嵌套的串行队列&quot;</span>)</span><br><span class="line">        serialQueue.sync &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列任务中嵌套本队列的同步任务&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;串行队列&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢串行队列任务中嵌套本队列的同步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x2823d86c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>被嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x2823d86c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>(lldb)</strong> Thread 1: EXC_BREAKPOINT (code&#x3D;1, subcode&#x3D;0x1025bf4f8)</p>
+</blockquote>
+<p>执行结果崩溃 是因为死锁造成的，因为串行队列中执行任务的线程不允许被当前队列中的任务阻塞。<br>我理解队列的作用就是这样，规定了task的执行顺序，如果不按照顺序来，就会造成死锁。</p>
+<p>下面例子中串行队列嵌套其他队列的同步任务，这样虽然是阻塞了当前的串行队列，但是没有改变串行队列中task的运行顺序，所以可以正常运行。</p>
+<h4 id="串行队列中嵌套其他队列的同步任务"><a href="#串行队列中嵌套其他队列的同步任务" class="headerlink" title="串行队列中嵌套其他队列的同步任务"></a>串行队列中嵌套其他队列的同步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testSyncTaskNestedInOtherSerialQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢串行队列中嵌套其他队列的同步任务&quot;</span>)</span><br><span class="line">    <span class="comment">// 创新另一个串行队列</span></span><br><span class="line">    <span class="keyword">let</span> serialQueue2 <span class="operator">=</span> <span class="type">DispatchQueue</span>(</span><br><span class="line">        label: <span class="string">&quot;com.test.serialQueue2&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    serialQueue.sync &#123;</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;被嵌套的串行队列&quot;</span>)</span><br><span class="line">        serialQueue2.sync &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列中嵌套其他队列的同步任务&quot;</span>)</span><br><span class="line">            helper.printCurrentThread(with: <span class="string">&quot;嵌套的串行队列&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢串行队列中嵌套其他队列的同步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>被嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️串行队列中嵌套其他队列的同步任务</strong></p>
+<p><strong>嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+</blockquote>
+<h4 id="并行队列中新增同步任务"><a href="#并行队列中新增同步任务" class="headerlink" title="并行队列中新增同步任务"></a>并行队列中新增同步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testSyncTaskInConcurrentQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢并行队列中新增同步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    concurrentQueue.sync &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增同步任务&quot;</span>)</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    concurrentQueue.sync &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中再整一个同步任务&quot;</span>)</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    concurrentQueue.sync &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中又整一个同步任务&quot;</span>)</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢并行队列中新增同步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️并行队列中新增同步任务</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️并行队列中再整一个同步任务</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️并行队列中又整一个同步任务</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+</blockquote>
+<p>从执行结果中我们可以看到，同步任务直接在当前线程运行。</p>
+<h3 id="异步任务"><a href="#异步任务" class="headerlink" title="异步任务"></a>异步任务</h3><p>特性：任务提交后不会阻塞当前线程，会由队列安排另一个线程执行。</p>
+<h4 id="并行队列中新增异步任务"><a href="#并行队列中新增异步任务" class="headerlink" title="并行队列中新增异步任务"></a>并行队列中新增异步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testAsyncTaskInConcurrentQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢并行队列中新增异步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    concurrentQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    concurrentQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中再整一个异步任务&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    concurrentQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中又整一个异步任务&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢并行队列中新增异步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p><strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p><strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+<p><strong>⚠️并行队列中新增异步任务</strong></p>
+<p><strong>⚠️并行队列中再整一个异步任务</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p><strong>&lt;NSThread: 0x282cd8800&gt;{number &#x3D; 7, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️并行队列中又整一个异步任务</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p><strong>&lt;NSThread: 0x282cd0c00&gt;{number &#x3D; 8, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p><strong>&lt;NSThread: 0x282cd8800&gt;{number &#x3D; 7, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+</blockquote>
+<p>从运行结果中我们可以看到，并行队列里的异步任务都自己开了个新线程去运行了。</p>
+<blockquote>
+<p>这里我发现了一个好玩的事情，上面的代码段和前面向并行队列中添加同步任务只相差了一个“a”,将sync改为了async。但是当我改为异步任务时，尾随闭包中的代码报错了，他提示我必须要写出self才能让捕获的语义明确。</p>
+<p>这里强制用self的原因是因为使用DispatchQueue.async在dispatch queue上安排了一个异步任务。</p>
+<p>显而易见，这个闭包任务的生命周期会比async的作用时间要长，闭包可能会逃离函数的作用域，所以这里是一个逃逸闭包。虽然这种不写self的方式确实很方便，但是也同时带来一个问题–循环引用，在闭包中访问了当前的对象中的任意属性或实例方法，闭包会持续持有当前对象。</p>
+<p>当然在同步任务中不会出现循环引用，他的闭包默认是非逃逸的，非逃逸的闭包可以保证在函数返回时闭包会释放他所持有的对象。</p>
+<p> 但是这个在异步任务的逃避闭包中很致命，所以编译器强制要求在逃逸闭包中显式的写出self，来强迫我们考虑潜在的循环引用。</p>
+</blockquote>
+<h4 id="串行队列中新增异步任务"><a href="#串行队列中新增异步任务" class="headerlink" title="串行队列中新增异步任务"></a>串行队列中新增异步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testAsyncTaskInSerialQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢串行队列中新增异步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    serialQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列中新增异步任务&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;串行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    serialQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列中再整一个异步任务&quot;</span>)</span><br><span class="line">        sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;串行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    serialQueue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列中又整一个异步任务&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;串行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢串行队列中新增异步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️串行队列中新增异步任务</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+<p><strong>串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️串行队列中再整一个异步任务</strong></p>
+<p><strong>串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️串行队列中又整一个异步任务</strong></p>
+<p><strong>串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+</blockquote>
+<p>从这里的执行结果我们可以看到，串行队列在非主线程开始了他的异步任务，这个结果也符合预期，串行队列中的所有任务都在同一个线程中运行。</p>
+<p>但是注意下面这个例子</p>
+<h4 id="串行队列任务中嵌套本队列的异步任务"><a href="#串行队列任务中嵌套本队列的异步任务" class="headerlink" title="串行队列任务中嵌套本队列的异步任务"></a>串行队列任务中嵌套本队列的异步任务</h4><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">testAsyncTaskNestedInSameSerialQueue</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢串行队列任务中嵌套本队列的异步任务&quot;</span>)</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line">    serialQueue.sync &#123;</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;被嵌套的串行队列&quot;</span>)</span><br><span class="line">        serialQueue.async &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列任务中嵌套本队列的异步任务&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;嵌套的串行队列&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.serialQueue.async &#123;</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;⚠️我愿意称它为套中套1&quot;</span>)</span><br><span class="line">                <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;套中套1&quot;</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        serialQueue.async &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列任务中再嵌套本队列的异步任务&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;再嵌套的串行队列&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.serialQueue.async &#123;</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;⚠️我愿意称它为套中套2&quot;</span>)</span><br><span class="line">                <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;套中套2&quot;</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        serialQueue.async &#123;</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;⚠️串行队列任务中又嵌套本队列的异步任务&quot;</span>)</span><br><span class="line">            <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;又嵌套的串行队列&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;‼️串行队列任务中嵌套本队列的异步任务添加完成&quot;</span>)</span><br><span class="line">        helper.printCurrentThread(with: <span class="string">&quot;被嵌套的串行队列&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;结束测试&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;---------------------------&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢串行队列任务中嵌套本队列的异步任务</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>被嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>‼️串行队列任务中嵌套本队列的异步任务添加完成</strong></p>
+<p><strong>被嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>结束测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282c9c700&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>—————————</strong></p>
+<p><strong>⚠️串行队列任务中嵌套本队列的异步任务</strong></p>
+<p><strong>嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️串行队列任务中再嵌套本队列的异步任务</strong></p>
+<p><strong>再嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️串行队列任务中又嵌套本队列的异步任务</strong></p>
+<p><strong>又嵌套的串行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️我愿意称它为套中套1</strong></p>
+<p><strong>套中套1的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️我愿意称它为套中套2</strong></p>
+<p><strong>套中套2的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x282cd9340&gt;{number &#x3D; 10, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+</blockquote>
+<p>从运行结果中我们发现了一个震惊的事情，这次串行队列用了两个线程，他的同步任务直接在主线程运行了，但是在嵌套中添加的异步任务却切换了线程。</p>
+<hr>
+<p>这里我们就能得出队列和任务的特性了：</p>
+<p>   串行队列<strong>同一时间</strong>只会使用同一线程、运行同一任务，并严格按照任务顺序执行。</p>
+<p>   并行队列<strong>同一时间</strong>可以使用多个线程、运行多个任务，执行顺序不分先后。</p>
+<p>   如何避免死锁：不要在串行或主队列中嵌套执行同步任务。</p>
+<h3 id="栅栏任务"><a href="#栅栏任务" class="headerlink" title="栅栏任务"></a>栅栏任务</h3><p> 栅栏任务的主要特性是可以对队列中的任务进行阻隔，执行栅栏任务时，它会先等待队列中已有的任务全部执行完成，然后它再执行，在它之后加入的任务也必须等栅栏任务执行完后才能执行。<br>   这个特性更适合并行队列，而且对栅栏任务使用同步或异步方法效果都相同。<br>   其实串行队列用这个并没有什么意义，因为串行队列还是会按照已有的顺序进行</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">barrierTask</span>() &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📢栅栏任务测试&quot;</span>)</span><br><span class="line">    <span class="keyword">let</span> queue <span class="operator">=</span> concurrentQueue</span><br><span class="line">    <span class="keyword">let</span> barrierTask <span class="operator">=</span> <span class="type">DispatchWorkItem</span>(flags: .barrier) &#123;</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;📌添加栅栏任务&quot;</span>)</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    helper.printCurrentThread(with: <span class="string">&quot;开始测试&quot;</span>)</span><br><span class="line"></span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务1&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务2&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务3&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    queue.async(execute: barrierTask)</span><br><span class="line"></span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务4&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务5&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    queue.async &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;⚠️并行队列中新增异步任务6&quot;</span>)</span><br><span class="line">        <span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;并行队列&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;-----------&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>📢栅栏任务测试</strong></p>
+<p><strong>开始测试的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003d849c0&gt;{number &#x3D; 1, name &#x3D; main}</strong></p>
+<p><strong>⚠️并行队列中新增异步任务1</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003d07bc0&gt;{number &#x3D; 7, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️并行队列中新增异步任务2</strong></p>
+<p><strong>⚠️并行队列中新增异步任务3</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003dc4b40&gt;{number &#x3D; 6, name &#x3D; (null)}</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003d07bc0&gt;{number &#x3D; 7, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>📌添加栅栏任务的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003dc4b40&gt;{number &#x3D; 6, name &#x3D; (null)}</strong></p>
+<p><strong>⚠️并行队列中新增异步任务4</strong></p>
+<p><strong>⚠️并行队列中新增异步任务5</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003dc4b40&gt;{number &#x3D; 6, name &#x3D; (null)}</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003d07bc0&gt;{number &#x3D; 7, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>⚠️并行队列中新增异步任务6</strong></p>
+<p><strong>———–</strong></p>
+<p><strong>并行队列的当前线程:</strong></p>
+<p> <strong>&lt;NSThread: 0x600003df5280&gt;{number &#x3D; 8, name &#x3D; (null)}</strong></p>
+<p><strong>———–</strong></p>
+</blockquote>
+<p>从结果中可以看到，栅栏任务很好的阻隔了任务，就像一个栅栏一样，将在他之前添加进队列的任务和在他之后添加进队列的任务阻隔开来。</p>
+<h3 id="迭代任务"><a href="#迭代任务" class="headerlink" title="迭代任务"></a>迭代任务</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">func</span> <span class="title function_">concurrentPerformTest</span>() &#123;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span><span class="operator">...</span><span class="number">100000</span>&#123;</span><br><span class="line">        <span class="built_in">print</span>(i)</span><br><span class="line">        globalQueue.async &#123;</span><br><span class="line">            <span class="type">DispatchQueue</span>.concurrentPerform(iterations: <span class="number">99</span>) &#123; index <span class="keyword">in</span></span><br><span class="line">            	<span class="keyword">self</span>.helper.printCurrentThread(with: <span class="string">&quot;输出<span class="subst">\(index)</span>&quot;</span>)</span><br><span class="line">        	&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><img src="https://i.loli.net/2021/09/14/zQrmFGJS5ae9tPD.png" alt="截屏2021-09-14 上午10.58.27"><br><img src="https://i.loli.net/2021/09/08/csauALU3W7VYkHy.png" alt="截屏2021-09-08 下午3.09.49" style="zoom: 50%;" /><br>上面是我在虚拟机和iPhone 12 Pro Max上测试得到的结果，发现他们都能跑满设备的全部核心，分别同时跑了12和6个线程。</p>
+</blockquote>
+<p><strong>串行与并行针对的是队列，而同步与异步，针对的则是线程。</strong><br>最大的区别在于，同步线程要阻塞当前线程，必须要等待同步线程中的任务执行完，返回以后，才能继续执行下一任务；而异步线程则是不用等待。</p>
+<p>另外，全局并发队列只有一个，并不是调用一次系统就创建一个，经过测试，它们是相等的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">let queue1 = DispatchQueue.global()</span><br><span class="line">let queue2 = DispatchQueue.global()</span><br><span class="line"></span><br><span class="line">if queue1 == queue2 &#123; print(&quot;相等&quot;) &#125;</span><br><span class="line"></span><br><span class="line">// Prints &quot;相等&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="在串行队列嵌套任务的问题探讨"><a href="#在串行队列嵌套任务的问题探讨" class="headerlink" title="在串行队列嵌套任务的问题探讨"></a>在串行队列嵌套任务的问题探讨</h3><p>首先明确如下的前提：</p>
+<pre><code>1. 我们这里探讨的串行队列是一个严格的FIFO队列，严格遵守先入先出的执行顺序
+2. 串行队列同一时间只有一个任务在执行，同一时间也只会使用一个线程
+3. 任务入队是在当前执行的线程里面入队的，和异步任务的线程无关，当然如果入队操作发生在异步线程也是可以的。
+4. 同步任务会直接在当前线程执行，没有创建新线程的能力
+</code></pre>
+<p>有了这几个前提，我们来探讨一下这个在串行队列嵌套任务的问题：</p>
+<p>首先，我们有四个异步任务：A， B， C， D；</p>
+<p>其中，A，B，D都是在主线程入队，C嵌套在任务B之中，所以任务C的入队线程是在任务B的执行线程中。</p>
+<p>在任务B和任务D之前有一个让当前线程睡眠的Sleep(5)。</p>
+<p>问题：</p>
+<pre><code>1. 如果没有sleep，这四个任务的执行顺序是什么
+2. 加上sleep，这四个任务的执行顺序是什么
+3. 如果将这四个任务作为一个同步执行的任务添加到串行队列中，执行顺序是什么
+</code></pre>
+<p>第一个问题：</p>
+<p>如果没有这个sleep，那么执行顺序应该是：A–&gt;B–&gt;D–&gt;C</p>
+<p>因为A，B，D 都在主线程入队，执行到B的时候才会将C加入这个串行队列里面，所以C会被放在串行队列的最后，而这个是串行队列，在同一时间只能有一个任务在执行，所以就算他们是异步任务，也只能开一个新线程来处理这个队列里的任务。</p>
+<p>第二个问题：</p>
+<p>来看看这个sleep，这个sleep在D入队前，所以在D入队之前的五秒，我们的串行队列没有任务加入进来。入队操作是在主线程的，但是他们是异步任务，所以串行队列会开一个线程来执行队列中的任务，如果在五秒之内，队列中执行完了A，并且执行到B中将C入队的操作，那么执行顺序就会变为：A–&gt;B–&gt;C–&gt;D，因为D是在C之后入队的，串行队列按顺序执行。</p>
+<p>！！！注意这里D使用的线程不一定和ABC一样，这里使用哪个线程是由GCD决定的！！！</p>
+<blockquote>
+<p> 通常来说：<br> 同步任务会阻塞当前线程，并在当前线程执行。<br> 异步任务不会阻塞当前线程，并在与当前线程不同的线程执行。</p>
+</blockquote>
+<p>第三个问题：</p>
+<p>我们知道串行队列同一时间只能执行一个线程一个任务，同时同步任务是不具备开启新线程的能力的，只能在当前线程执行，而我们的任务们却又嵌套在这个同步任务中，所以我们的任务A，B会先行入队，入队后执行主线程睡眠（因为我们正在执行当前队列的同步任务，所以不能执行已经入队的异步任务），主线程睡眠结束后，继续执行任务D入队，入队完成之后才会另开新线程，执行已入队的任务A，B，D。和不带睡眠的队列一样，C会在任务B执行的线程入队，然后在最后执行，所以问题三的执行顺序是：A–&gt;B–&gt;D–&gt;C</p>
+<h3 id="挂起和唤醒队列"><a href="#挂起和唤醒队列" class="headerlink" title="挂起和唤醒队列"></a>挂起和唤醒队列</h3><p>GCD 提供了一套机制，可以挂起队列中尚未执行的任务，已经在执行的任务会继续执行完，后续还可以手动再唤醒队列。</p>
+<p>这两个方法是属于 <code>DispatchObject</code> 对象的方法，而这个对象是 <code>DispatchQueue</code>、<code>DispatchGroup</code>、<code>DispatchSource</code>、<code>DispatchIO</code>、<code>DispatchSemaphore</code> 这几个类的父类，但这两个方法只有 <code>DispatchQueue</code>、<code>DispatchSource</code> 支持，调用时需注意。</p>
+<p>挂起使用 <code>suspend()</code>，唤醒使用 <code>resume()</code>。对于队列，这两个方法调用时需配对，因为可以多次挂起，调用唤醒的次数应等于挂起的次数才能生效，唤醒的次数更多则会报错，所以使用时最好设置一个计数器，或者封装一个挂起、唤醒的方法，在方法内部进行检查。</p>
+<p>而对于 <code>DispatchSource</code> 则有所不同，它必须先调用 <code>resume()</code> 才能接收消息，所以此时唤醒的数量等于挂起的数量加一。</p>
+<h3 id="Swift5-5-新特性-async-x2F-await"><a href="#Swift5-5-新特性-async-x2F-await" class="headerlink" title="Swift5.5 新特性 async&#x2F;await"></a>Swift5.5 新特性 async&#x2F;await</h3>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Swift-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/" rel="prev" title="Swift-高阶函数">
+      <i class="fa fa-chevron-left"></i> Swift-高阶函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/%E6%BC%94%E5%91%98%E6%A8%A1%E5%9E%8B(actor%20model)/" rel="next" title="演员模型(actor model)">
+      演员模型(actor model) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD%E4%BB%BB%E5%8A%A1%E5%92%8C%E9%98%9F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">GCD任务和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GCD%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">GCD的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">任务的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">队列的概念</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%98%9F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">创建队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%98%9F%E5%88%97%EF%BC%88Main-queue%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">主队列（Main queue）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E9%98%9F%E5%88%97%EF%BC%88Global-queues%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">全局队列（Global queues）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%98%9F%E5%88%97%EF%BC%88custom-queues%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">自定义队列（custom queues）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97"><span class="nav-number">2.3.1.</span> <span class="nav-text">串行队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E9%98%9F%E5%88%97"><span class="nav-number">2.3.2.</span> <span class="nav-text">并行队列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">添加队列任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">同步任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E4%B8%AD%E6%96%B0%E5%A2%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.1.</span> <span class="nav-text">串行队列中新增同步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%B5%8C%E5%A5%97%E6%9C%AC%E9%98%9F%E5%88%97%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.2.</span> <span class="nav-text">串行队列任务中嵌套本队列的同步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E4%B8%AD%E5%B5%8C%E5%A5%97%E5%85%B6%E4%BB%96%E9%98%9F%E5%88%97%E7%9A%84%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.3.</span> <span class="nav-text">串行队列中嵌套其他队列的同步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E9%98%9F%E5%88%97%E4%B8%AD%E6%96%B0%E5%A2%9E%E5%90%8C%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.1.4.</span> <span class="nav-text">并行队列中新增同步任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.</span> <span class="nav-text">异步任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E9%98%9F%E5%88%97%E4%B8%AD%E6%96%B0%E5%A2%9E%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.1.</span> <span class="nav-text">并行队列中新增异步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E4%B8%AD%E6%96%B0%E5%A2%9E%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.2.</span> <span class="nav-text">串行队列中新增异步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E4%BB%BB%E5%8A%A1%E4%B8%AD%E5%B5%8C%E5%A5%97%E6%9C%AC%E9%98%9F%E5%88%97%E7%9A%84%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.2.3.</span> <span class="nav-text">串行队列任务中嵌套本队列的异步任务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%85%E6%A0%8F%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.3.</span> <span class="nav-text">栅栏任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E4%BB%BB%E5%8A%A1"><span class="nav-number">3.4.</span> <span class="nav-text">迭代任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%B8%B2%E8%A1%8C%E9%98%9F%E5%88%97%E5%B5%8C%E5%A5%97%E4%BB%BB%E5%8A%A1%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%A2%E8%AE%A8"><span class="nav-number">3.5.</span> <span class="nav-text">在串行队列嵌套任务的问题探讨</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%82%E8%B5%B7%E5%92%8C%E5%94%A4%E9%86%92%E9%98%9F%E5%88%97"><span class="nav-number">3.6.</span> <span class="nav-text">挂起和唤醒队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swift5-5-%E6%96%B0%E7%89%B9%E6%80%A7-async-x2F-await"><span class="nav-number">3.7.</span> <span class="nav-text">Swift5.5 新特性 async&#x2F;await</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王帅帅</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王帅帅</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
