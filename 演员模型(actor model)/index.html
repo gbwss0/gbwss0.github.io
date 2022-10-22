@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="-– title: 演员模型(actor model) date: 2021-10-24 09:41:00 tags:  -– 演员模型是一个处理并发计算的概念模型。它定义了系统组件的行为和相互交互的规则。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="瞎写写">
+<meta property="og:url" content="http://yoursite.com/%E6%BC%94%E5%91%98%E6%A8%A1%E5%9E%8B(actor%20model)/index.html">
+<meta property="og:site_name" content="瞎写写">
+<meta property="og:description" content="-– title: 演员模型(actor model) date: 2021-10-24 09:41:00 tags:  -– 演员模型是一个处理并发计算的概念模型。它定义了系统组件的行为和相互交互的规则。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/09/14/6pw8PoCiMeStqvs.png">
+<meta property="article:published_time" content="2021-09-14T10:15:19.000Z">
+<meta property="article:modified_time" content="2021-09-14T10:15:19.000Z">
+<meta property="article:author" content="王帅帅">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/09/14/6pw8PoCiMeStqvs.png">
+
+<link rel="canonical" href="http://yoursite.com/%E6%BC%94%E5%91%98%E6%A8%A1%E5%9E%8B(actor%20model)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title> | 瞎写写</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">瞎写写</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/%E6%BC%94%E5%91%98%E6%A8%A1%E5%9E%8B(actor%20model)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="王帅帅">
+      <meta itemprop="description" content="写点有意思的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞎写写">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-09-14 18:15:19" itemprop="dateCreated datePublished" datetime="2021-09-14T18:15:19+08:00">2021-09-14</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>-–</p>
+<p>title: 演员模型(actor model)</p>
+<p>date: 2021-10-24 09:41:00</p>
+<p>tags: </p>
+<p>-–</p>
+<p>演员模型是一个处理并发计算的概念模型。它定义了系统组件的行为和相互交互的规则。</p>
+<p><escape><span id="more"></span></escape></p>
+<h2 id="Actors"><a href="#Actors" class="headerlink" title="Actors"></a>Actors</h2><p>在演员模型中，演员（actor)是运算的的基础单元，他承担接受消息和进行所需要执行的操作的任务。</p>
+<p>actor之间彼此隔离，他们永远不会共享内存，并且<strong>actor可以维护一个永远不能被其他actor修改的私有状态</strong>。</p>
+<h2 id="One-ant-is-no-ant"><a href="#One-ant-is-no-ant" class="headerlink" title="One ant is no ant"></a>One ant is no ant</h2><p>一个actor并不能成为actor模型。actor是系统的组件，在actor模型中认为一切都是actor，他们需要有地址，异变可以相互发送消息。</p>
+<h2 id="Actors-have-mailboxes"><a href="#Actors-have-mailboxes" class="headerlink" title="Actors have mailboxes"></a>Actors have mailboxes</h2><p><img src="https://i.loli.net/2021/09/14/6pw8PoCiMeStqvs.png" alt="06094506_GM3W"></p>
+<p>理解这一点很重要，虽然actor是可以同时运行的，但是一个actor只会串行顺序处理接收到的消息。</p>
+<p>消息会被异步的发往actor，然后存储到mailbox中，直到他们被处理。</p>
+<h2 id="What-actors-do"><a href="#What-actors-do" class="headerlink" title="What actors do"></a>What actors do</h2><p>当一个actor接收消息时，通常做以下三件事情：</p>
+<ul>
+<li>创建更多的actors</li>
+<li>发送消息给其他actors</li>
+<li>指定如何处理接来下的消息</li>
+</ul>
+<p>前两条很直观，是actors模型的特点，但是最后一点就很有意思了。</p>
+<p>在前面说过，actor会维护一个私有状态，第三条的意思就是actor在准备处理接下来的消息前，他的这个私有状态如何改变。</p>
+<p>我们来举个例子，假设actor是个计算器，它里面有个原始值为<code>0</code>，然后如果actor收到一个<code>add(1)</code>的消息，那么他会维护他的这个私有状态为<code>1</code>，但是没有立刻去修改actor里面的原始值，在接收下一条消息之前，他的私有状态便是<code>1</code>，然后等这些消息都收完，最后再用被隔离的私有状态里面的值修改actor里面的初始值，这样才最大限度的保护了数据的安全性。</p>
+<h2 id="Fault-tolerance"><a href="#Fault-tolerance" class="headerlink" title="Fault tolerance"></a>Fault tolerance</h2><p>Erlang 引入了“让它崩溃”的哲学。 这个想法是你不应该防御性地编程，试图预测可能发生的所有可能的问题并找到处理它们的方法，仅仅因为没有办法考虑每一个故障点。Erlang 所做的只是让它崩溃，但是让这个关键代码由一个人监督，这个人唯一的责任是知道当这个崩溃发生时该怎么做（比如将这个代码单元重置为稳定状态），而让这一切成为可能的就是演员模型(actor model)。</p>
+<p>每段代码都是运行在某个进程中的。这些进程完全被隔离开来，以为这他们的状态将不会被其他进程影响。我们有一个监管者，仍然是一个进程（Actor），如果有进程崩溃了，监管者将采取相应的措施处理出错的情况。</p>
+<p>这使得创建一个“自愈”的系统成为可能，也就是说，即使有actor出现异常并崩溃了，无论什么原因，一个监管者始终能够采取措施使得该actor重回正轨（有很多方法可以做这件事情，最简单直接的方式是重启actor的内部状态）。</p>
+<h2 id="Distribution"><a href="#Distribution" class="headerlink" title="Distribution"></a>Distribution</h2><p>Actor 模型的另一个有趣方面是，我向其发送消息的 Actor 是在本地运行还是在另一个节点中运行并不重要。</p>
+<p>想一想，如果一个actor只是一个带有邮箱和内部状态的代码单元，它只是响应消息，谁在乎它实际运行在哪台机器上？ 只要我们能让消息到达那里，我们就没事。</p>
+<p>这使我们能够创建利用多台计算机的系统，并帮助我们在其中一台发生故障时进行恢复。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="计算机网络学习笔记">
+      <i class="fa fa-chevron-left"></i> 计算机网络学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/iOS-URLSession/" rel="next" title="iOS-URLSession">
+      iOS-URLSession <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Actors"><span class="nav-number">1.</span> <span class="nav-text">Actors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#One-ant-is-no-ant"><span class="nav-number">2.</span> <span class="nav-text">One ant is no ant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Actors-have-mailboxes"><span class="nav-number">3.</span> <span class="nav-text">Actors have mailboxes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-actors-do"><span class="nav-number">4.</span> <span class="nav-text">What actors do</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fault-tolerance"><span class="nav-number">5.</span> <span class="nav-text">Fault tolerance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Distribution"><span class="nav-number">6.</span> <span class="nav-text">Distribution</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">王帅帅</p>
+  <div class="site-description" itemprop="description">写点有意思的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王帅帅</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
