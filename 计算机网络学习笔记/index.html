@@ -32,7 +32,13 @@
 <meta property="og:image" content="https://s3.ax1x.com/2021/02/24/yXTPsO.png">
 <meta property="og:image" content="https://z3.ax1x.com/2021/04/08/cYLD6x.png">
 <meta property="og:image" content="https://z3.ax1x.com/2021/04/08/cYOKHO.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f4dd05f07ebb40d79f5d25d1fa1ed71c.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/6fee695315494239b676049209bd6db7.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/924eec59ceb7445cb02ff559dfe1643e.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/forthespada/mediaImage1@1.6.4.1/202103/QQ%E6%88%AA%E5%9B%BE20210317172225.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a7ae3fa9ea5b4198bdec7c9cc201a0fb.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/12b6d4c09a704e5abbf28333d707fc51.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/113dda52ffc044a3bc0df373a4d37e27.png">
 <meta property="og:image" content="https://z3.ax1x.com/2021/04/09/cNCT1O.png">
 <meta property="article:published_time" content="2021-03-23T08:16:55.000Z">
 <meta property="article:modified_time" content="2021-03-23T08:16:55.000Z">
@@ -208,18 +214,22 @@
 </blockquote>
 <h1 id="TCP-x2F-IP模型"><a href="#TCP-x2F-IP模型" class="headerlink" title="TCP&#x2F;IP模型"></a>TCP&#x2F;IP模型</h1><p>四层模型下: </p>
 <ul>
-<li>在四层，既传输层数据被称作<strong>段</strong>（Segments）；</li>
-<li>三层网络层数据被称做<strong>包</strong>（Packages）；</li>
-<li>二层数据链路层时数据被称为<strong>帧</strong>（Frames）；</li>
-<li>一层物理层时数据被称为<strong>比特流</strong>（Bits）。</li>
+<li>四层传输层 数据被称作<strong>段</strong>（Segments）；网络层以上的中继系统：网关</li>
+<li>三层网络层 数据被称做<strong>包</strong>（Packages）；中继系统：路由器</li>
+<li>二层数据链路层 数据被称为<strong>帧</strong>（Frames）；中继系统：网桥，交换机</li>
+<li>一层物理层 数据被称为<strong>比特流</strong>（Bits）；中继系统：中继器，集线器(Hub)</li>
 </ul>
 <h1 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h1><p>传输单位：比特流<br>物理设备：中继器（信号再生），集线器（HDB）</p>
-<h1 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h1><p>传输单位：帧<br>典型协议：SDLC，HDLC，PPP，STP<br>功能：链路管理，！差错控制，！流量控制，传输管理，介质访问控制（MAC）<br>物理设备：网桥，交换机 &#x2F;&#x2F;工作在MAC子层，隔离碰撞域</p>
+<h1 id="链路层"><a href="#链路层" class="headerlink" title="链路层"></a>链路层</h1><p>传输单位：帧<br>典型协议：SDLC，HDLC，PPP，STP<br>功能：链路管理，！差错控制，！流量控制(用滑动窗口），传输管理，介质访问控制（MAC）<br>物理设备：网桥，交换机 &#x2F;&#x2F;工作在MAC子层，隔离碰撞域</p>
 <h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><p>传输单位：数据报<br>典型协议：IP，ICMP（网际控制报文协议），IGMP（因特网组管理协议，用于组播）ARP，RARP，OSPF，CIDR</p>
 <blockquote>
-<p>DHCP（应用层，UDP：68），RIP（应用层，UDP），OSPF（网络层，IP），BGP（应用层，TCP）<br>功能：流量控制，！拥塞控制，差错控制<br>注意：OSI模型在网络层支持无连接和面向连接的通信，但在传输层仅有面向连接的通信。而TCP&#x2F;IP模型认为可靠性是端到端的问题，因此在网络层只支持无连接的通信模式，而在传输层支持面向连接和无连接两种模式。<br>物理设别：路由器</p>
+<p>DHCP（应用层，UDP：68），RIP（应用层，UDP），OSPF（网络层，IP），BGP（应用层，TCP）<br>功能：！拥塞控制，差错控制<br>注意：OSI模型在网络层支持无连接和面向连接的通信，但在传输层仅有面向连接的通信。而TCP&#x2F;IP模型认为可靠性是端到端的问题，因此在网络层只支持无连接的通信模式，而在传输层支持面向连接和无连接两种模式。<br>物理设别：路由器</p>
 </blockquote>
 <h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><p>传输单位：报文段（TCP），用户数据报（UDP）<br>典型协议：TCP，UDP<br>功能：端到端传输，流量控制，差错控制，拥塞控制，服务质量</p>
+<blockquote>
+<p>流量控制：链路层（点对点），传输层（端到端）</p>
+<p>拥塞控制：网络层，传输层（再往下感受不到拥塞）</p>
+</blockquote>
 <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="TCP如何保证可靠性"><a href="#TCP如何保证可靠性" class="headerlink" title="TCP如何保证可靠性"></a>TCP如何保证可靠性</h3><ol>
 <li>序列号、确认应答、超时重传</li>
 </ol>
@@ -277,10 +287,7 @@
 <h4 id="TCP-利用滑动窗口实现流量控制的机制"><a href="#TCP-利用滑动窗口实现流量控制的机制" class="headerlink" title="TCP 利用滑动窗口实现流量控制的机制"></a>TCP 利用滑动窗口实现流量控制的机制</h4><blockquote>
 <p>流量控制是为了控制发送方发送速率，保证接收方来得及接收。TCP 利用滑动窗口实现流量控制。</p>
 </blockquote>
-<p>TCP 中采用滑动窗口来进行传输控制，滑动窗口的大小意味着<strong>接收方还有多大的缓冲区可以用于接收数据</strong>。发送方可以通过滑动窗口的大小来确定应该发送多少字节的数据。当滑动窗口为 0 时，发送方一般不能再发送数据报，但有两种情况除外，一种情况是可以发送紧急数据。</p>
-<blockquote>
-<p>例如，允许用户终止在远端机上的运行进程。另一种情况是发送方可以发送一个 1 字节的数据报来通知接收方重新声明它希望接收的下一字节及发送方的滑动窗口大小。</p>
-</blockquote>
+<p>TCP 中采用滑动窗口来进行传输控制，滑动窗口的大小意味着<strong>接收方还有多大的缓冲区可以用于接收数据</strong>。发送方可以通过滑动窗口的大小来确定应该发送多少字节的数据。当滑动窗口为 0 时，发送方一般不能再发送数据报，但有两种情况除外，一种情况是可以发送紧急数据。（例如，允许用户终止在远端机上的运行进程）另一种情况是发送方可以发送一个 1 字节的数据报来通知接收方重新声明它希望接收的下一字节及发送方的滑动窗口大小。</p>
 <h3 id="拥塞控制原理"><a href="#拥塞控制原理" class="headerlink" title="拥塞控制原理"></a>拥塞控制原理</h3><ul>
 <li>拥塞控制目的是防止数据被过多注网络中导致网络资源（路由器、交换机等）过载。因为拥塞控制涉及网络链路全局，所以属于全局控制。控制拥塞使用拥塞窗口。</li>
 <li>TCP拥塞控制算法：<ul>
@@ -319,7 +326,7 @@
 <h4 id="常见TCP的连接状态有哪些？"><a href="#常见TCP的连接状态有哪些？" class="headerlink" title="常见TCP的连接状态有哪些？"></a>常见TCP的连接状态有哪些？</h4><ul>
 <li>CLOSED：初始状态。</li>
 <li>LISTEN：服务器处于监听状态。</li>
-<li>SYN_SEND：客户端socket执行CONNECT连接，发送SYN包，进入此状态。</li>
+<li>SYN_SENT：客户端socket执行CONNECT连接，发送SYN包，进入此状态。</li>
 <li>SYN_RECV：服务端收到SYN包并发送服务端SYN包，进入此状态。</li>
 <li>ESTABLISH：表示连接建立。客户端发送了最后一个ACK包后进入此状态，服务端接收到ACK包后进入此状态。</li>
 <li>FIN_WAIT_1：终止连接的一方（通常是客户机）发送了FIN报文后进入。等待对方FIN。</li>
@@ -379,22 +386,32 @@
 <blockquote>
 <p>MSS：(maximum segment size)最大分节大小:为TCP数据包每次传输的最大数据分段大小，一般由发送端向对端TCP通知对端在每个分节中能发送的最大TCP数据。MSS值为MTU值减去IPv4 Header（20 Byte）和TCP header（20 Byte）得到。</p>
 </blockquote>
-<h3 id="TCP粘包问题是什么？你会如何去解决它？"><a href="#TCP粘包问题是什么？你会如何去解决它？" class="headerlink" title="TCP粘包问题是什么？你会如何去解决它？"></a>TCP粘包问题是什么？你会如何去解决它？</h3><p>TCP粘包是指发送方发送的若干包数据到接收方接收时粘成一包，从接收缓冲区看，后一包数据的头紧接着前一包数据的尾。</p>
+<h3 id="TCP-半连接队列和全连接队列是什么？"><a href="#TCP-半连接队列和全连接队列是什么？" class="headerlink" title="TCP 半连接队列和全连接队列是什么？"></a><strong>TCP</strong> <strong>半连接队列和全连接队列是什么？</strong></h3><p><img src="https://img-blog.csdnimg.cn/f4dd05f07ebb40d79f5d25d1fa1ed71c.png" alt="img"></p>
+<p>服务端收到客户端发出的 SYN 请求后，会把这个连接信息存储到半链接队列(SYN 队列)。</p>
+<p>服务端收到第三次握⼿的 ACK 后，内核会把连接从半连接队列移除，然后创建新的完全的连接，并将其添加到全连接队列(accept 队列)，等待进程调⽤ accept 函数时把连接取出来。</p>
+<p>这两个队列都是有大小限制的，当超过容量后就会将链接丢弃，或者返回 <strong>RST 包</strong>。</p>
+<h3 id="粘包-x2F-拆包是怎么发生的？怎么解决这个问题？"><a href="#粘包-x2F-拆包是怎么发生的？怎么解决这个问题？" class="headerlink" title="粘包&#x2F;拆包是怎么发生的？怎么解决这个问题？"></a>粘包&#x2F;拆包是怎么发生的？怎么解决这个问题？</h3><p>TCP 发送数据时会根据 TCP 缓冲区的实际情况进行包的划分，一个完整的包可能会被 TCP 拆分成多个包进行发送，也有可能把多个小的包封装成一个大的数据包发送，这就是 TCP 粘包和拆包问题。</p>
+<p><img src="https://img-blog.csdnimg.cn/6fee695315494239b676049209bd6db7.png" alt="img"></p>
+<p>发生 TCP 粘包的原因:</p>
 <ul>
-<li>由TCP连接复用造成的粘包问题。</li>
-<li>因为TCP默认会使用Nagle算法，此算法会导致粘包问题。</li>
-<li>只有上一个分组得到确认，才会发送下一个分组；</li>
-<li>收集多个小分组，在一个确认到来时一起发送。</li>
-<li>数据包过大造成的粘包问题。</li>
-<li>流量控制，拥塞控制也可能导致粘包。</li>
-<li>接收方不及时接收缓冲区的包，造成多个包接收</li>
+<li><p>1.发送的数据小于 TCP 缓冲区大小，TCP将缓冲区中的数据(数据属于多条业务内容)一次发送出去可能就会发生粘包。</p>
+</li>
+<li><p>2.接收数据端的应用层没有及时读取接收缓冲区中的数据，将发生粘包。</p>
+</li>
 </ul>
-<p><strong>解决</strong>：</p>
+<p>发生 TCP 拆包的原因:</p>
 <ul>
-<li>Nagle算法问题导致的，需要结合应用场景适当关闭该算法</li>
-<li><strong>尾部标记序列</strong>.通过特殊标识符表示数据包的边界，例如\n\r，\t，或者一些隐藏字符。</li>
-<li><strong>头部标记分步接收</strong>.在TCP报文的头部加上表示数据长度。</li>
-<li>应用层发送数据时定长发送。</li>
+<li><p>1.待发送数据大于最大报文长度，TCP 在传输前将进行拆包。</p>
+</li>
+<li><p>2.发送的数据大于 TCP 发送缓冲区剩余空间大小，将会发生拆包。</p>
+</li>
+</ul>
+<p>解决方案:</p>
+<p><img src="https://img-blog.csdnimg.cn/924eec59ceb7445cb02ff559dfe1643e.png" alt="img"></p>
+<ul>
+<li>1.发送端给每个数据包添加包首部，首部中包含数据包的长度，这样接收端在接收到数据后，通过该字段就可以知道每个数据包的实际长度了。（也就是在TCP首部的额外字段添加信息）</li>
+<li>2.发送端将每个数据包设置固定长度，这样接收端每次从读取固定长度的数据把每个数据包拆分开。</li>
+<li>3.可以在数据包之间设置边界，如添加特殊符号，接收端可以通过这个特殊符号来拆分包。</li>
 </ul>
 <h3 id="DDos-攻击了解吗？"><a href="#DDos-攻击了解吗？" class="headerlink" title="DDos 攻击了解吗？"></a>DDos 攻击了解吗？</h3><p>客户端向服务端发送请求链接数据包，服务端向客户端发送确认数据包，客户端不向服务端发送确认数据包，服务器一直等待来自客户端的确认<br>没有彻底根治的办法，除非不使用TCP<br>DDos 预防：<br>1）限制同时打开SYN半链接的数目<br>2）缩短SYN半链接的Time out 时间<br>3）关闭不必要的服务</p>
 <h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><h3 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h3><p>1、TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接</p>
@@ -409,7 +426,7 @@
 <blockquote>
 <p>《TCP数据段格式+UDP数据段格式详解》：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/love-jelly-pig/p/8471181.html">https://www.cnblogs.com/love-jelly-pig/p/8471181.html</a></p>
 </blockquote>
-<h4 id="UDP的特点有哪些（附赠TCP的特点）"><a href="#UDP的特点有哪些（附赠TCP的特点）" class="headerlink" title="UDP的特点有哪些（附赠TCP的特点）"></a>UDP的特点有哪些（附赠TCP的特点）</h4><ul>
+<h4 id="UDP的特点有哪些（附TCP的特点）"><a href="#UDP的特点有哪些（附TCP的特点）" class="headerlink" title="UDP的特点有哪些（附TCP的特点）"></a>UDP的特点有哪些（附TCP的特点）</h4><ul>
 <li>UDP是<strong>无连接的</strong>；</li>
 <li>UDP使用<strong>尽最大努力交付</strong>，即不保证可靠交付，因此主机不需要维持复杂的链接状态（这里面有许多参数）；</li>
 <li>UDP是<strong>面向报文</strong>的；</li>
@@ -425,7 +442,7 @@
 <li>TCP<strong>提供全双工通信</strong>。TCP允许通信双方的应用进程在任何时候都能发送数据。TCP连接的两端都设有发送缓存和接收缓存，用来临时存放双方通信的数据；</li>
 <li><strong>面向字节流</strong>。TCP中的“流”（stream）指的是流入进程或从进程流出的字节序列。“面向字节流”的含义是：虽然应用程序和TCP的交互是一次一个数据块（大小不等），但TCP把应用程序交下来的数据仅仅看成是一连串的无结构的字节流。</li>
 </ul>
-<h3 id="TCP对应的应用层协议"><a href="#TCP对应的应用层协议" class="headerlink" title="TCP对应的应用层协议"></a>TCP对应的应用层协议</h3><p>FTP：定义了文件传输协议，使用21端口.<br>Telnet：它是一种用于远程登陆的端口,23端口<br>SMTP：定义了简单邮件传送协议，服务器开放的是25号端口。<br>POP3：它是和SMTP对应，POP3用于接收邮件。</p>
+<h3 id="TCP对应的应用层协议"><a href="#TCP对应的应用层协议" class="headerlink" title="TCP对应的应用层协议"></a>TCP对应的应用层协议</h3><p>FTP：定义了文件传输协议，使用21端口(控制),20端口(传输).<br>Telnet：它是一种用于远程登陆的端口,23端口<br>SMTP：定义了简单邮件传送协议，服务器开放的是25号端口。<br>POP3：它是和SMTP对应，POP3用于接收邮件。</p>
 <h3 id="UDP对应的应用层协议"><a href="#UDP对应的应用层协议" class="headerlink" title="UDP对应的应用层协议"></a>UDP对应的应用层协议</h3><p>DNS：用于域名解析服务，用的是53号端口<br>SNMP：简单网络管理协议，使用161号端口<br>TFTP(Trival File Transfer Protocal)：简单文件传输协议，69</p>
 <h3 id="在进行UDP编程的时候，一次发送多少bytes好"><a href="#在进行UDP编程的时候，一次发送多少bytes好" class="headerlink" title="在进行UDP编程的时候，一次发送多少bytes好"></a>在进行UDP编程的时候，一次发送多少bytes好</h3><p>当然,这个没有唯一答案，相对于不同的系统,不同的要求,其得到的答案是不一样的。</p>
 <p>我这里仅对像ICQ一类的发送聊天消息的情况作分析，对于其他情况，你或许也能得到一点帮助:首先,我们知道,TCP&#x2F;IP通常被认为是一个四层协议系统,包括链路层,网络层,运输层,应用层.UDP属于运输层,</p>
@@ -445,7 +462,6 @@
 <li>HTTP协议：<br>HTTP协议是Hyper Text Transfer Protocol（超文本传输协议）的缩写，是用于从万维网（WWW:World Wide Web）服务器传输超文本到本地浏览器的传送协议。</li>
 </ol>
 <p>HTTP是一个基于TCP&#x2F;IP通信协议来传递数据（HTML 文件，图片文件，查询结果等）。</p>
-<p>HTTP是一个属于应用层的面向对象的协议，由于其简捷、快速的方式，适用于分布式超媒体信息系统。它于1990年提出，经过几年的使用与发展，得到不断地完善和扩展。目前在WWW中使用的是HTTP&#x2F;1.0的第六版，HTTP&#x2F;1.1的规范化工作正在进行之中，而且HTTP-NG（Next Generation of HTTP）的建议已经提出。</p>
 <p>HTTP协议工作于客户端-服务端架构为上。浏览器作为HTTP客户端通过URL向HTTP服务端即WEB服务器发送所有请求。Web服务器根据接收到的请求后，向客户端发送响应信息。</p>
 <ol>
 <li>HTTP协议特点</li>
@@ -545,12 +561,169 @@
 <td align="left">是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
 </tr>
 </tbody></table>
+<p>GET和POST的区别</p>
+<table>
+<thead>
+<tr>
+<th><strong>区别</strong></th>
+<th><strong>GET</strong></th>
+<th><strong>POST</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据传输方式</td>
+<td>从服务器获取数据</td>
+<td>向服务器提交数据</td>
+</tr>
+<tr>
+<td>对数据长度的限制</td>
+<td>当发送数据时，GET 方法向 URL 添加数据；URL 的长度是受限制的（URL 的最大长度是 2048 个字符）</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>对数据类型的限制</td>
+<td>只允许 ASCII 字符</td>
+<td>无限制</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>较差，所发送的数据是 URL 的一部分，会显示在网页上</td>
+<td>较好 参数不会被保存在浏览器历史或 WEB 服务器日志中</td>
+</tr>
+<tr>
+<td>可见性</td>
+<td>显示在 URL 上</td>
+<td>不显示</td>
+</tr>
+<tr>
+<td>收藏为书签</td>
+<td>可以</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>历史记录</td>
+<td>可以被保留在历史记录当中</td>
+<td>不可以被保留</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>能被缓存</td>
+<td>不可以被缓存</td>
+</tr>
+</tbody></table>
+<h3 id="HTTP的不同版本"><a href="#HTTP的不同版本" class="headerlink" title="HTTP的不同版本"></a>HTTP的不同版本</h3><h4 id="HTTP1-1-和-HTTP1-0-的区别有哪些？"><a href="#HTTP1-1-和-HTTP1-0-的区别有哪些？" class="headerlink" title="HTTP1.1 和 HTTP1.0 的区别有哪些？"></a><strong>HTTP1.1</strong> <strong>和</strong> <strong>HTTP1.0</strong> <strong>的区别有哪些？</strong></h4><p><img src="https://img-blog.csdnimg.cn/a7ae3fa9ea5b4198bdec7c9cc201a0fb.png" alt="img"></p>
+<ul>
+<li><p>1.<strong>长链接</strong></p>
+<ul>
+<li><p>早期 HTTP1.0 的每一次请求都伴随着一次三次握手的过程，并且是串行的请求，增加了不必要的性能开销</p>
+</li>
+<li><p>HTTP1.1 新增了长链接的通讯方式，减少了性能损耗</p>
+</li>
+</ul>
+</li>
+<li><p>2.管道</p>
+<ul>
+<li><p>HTTP1.0 只有串行发送，没有管道</p>
+</li>
+<li><p>HTTP1.1 增加了管道的概念，使得在同一个 TCP 链接当中可以同时发出多个请求</p>
+</li>
+</ul>
+</li>
+<li><p>3.<strong>断点续传</strong></p>
+<ul>
+<li><p>HTTP1.0 不支持断点续传</p>
+</li>
+<li><p>HTTP1.1 新增了 <strong>range 字段</strong>，用来指定数据字节位置，开启了断点续传的时代</p>
+</li>
+</ul>
+</li>
+<li><p>4.<strong>Host头处理</strong></p>
+<ul>
+<li><p>HTTP1.0 任务主机只有一个节点，所以并没有传 HOST</p>
+</li>
+<li><p>HTTP1.1 时代，虚拟机技术越来越发达，一台机器上也有可能有很多节点，故增加了 HOST 信息</p>
+</li>
+</ul>
+</li>
+<li><p>5.缓存处理</p>
+<ul>
+<li><p>在HTTP1.0中主要使用header里的If-Modified-Since,Expires来做为缓存判断的标准</p>
+</li>
+<li><p>HTTP1.1则引入了更多的缓存控制策略例如Entity tag，If-Unmodified-Since, If-Match, If-None-Match等更多可供选择的缓存头来控制缓存策略。</p>
+</li>
+</ul>
+</li>
+<li><p>6.<strong>错误状态响应码</strong></p>
+<ul>
+<li>在HTTP1.1中新增了24个错误状态响应码，如410（Gone）表示服务器上的某个资源被永久性的删除等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="HTTP2-和-HTTP1-1-的区别是什么？"><a href="#HTTP2-和-HTTP1-1-的区别是什么？" class="headerlink" title="HTTP2 和 HTTP1.1 的区别是什么？"></a><strong>HTTP2</strong> <strong>和</strong> <strong>HTTP1.1</strong> <strong>的区别是什么？</strong></h4><p><img src="https://img-blog.csdnimg.cn/12b6d4c09a704e5abbf28333d707fc51.png" alt="img"></p>
+<ul>
+<li><p>1.<strong>头部压缩</strong></p>
+<ul>
+<li>在 HTTP2 当中，如果你发出了多个请求，并且它们的头部(header)是相同的，那么 HTTP2 协议会帮你消除同样的部分。(其实就是在客户端和服务端维护一张索引表来实现)</li>
+</ul>
+</li>
+<li><p>2.<strong>二进制格式</strong></p>
+<ul>
+<li><p>HTTP1.1 采用明文的形式</p>
+</li>
+<li><p>HTTP&#x2F;2 全⾯采⽤了⼆进制格式，头信息和数据体都是⼆进制</p>
+</li>
+</ul>
+</li>
+<li><p>3.<strong>数据流</strong></p>
+<ul>
+<li>HTTP&#x2F;2 的数据包<strong>不是按顺序</strong>发送的，同⼀个连接⾥⾯连续的数据包，可能属于不同的回应。(对数据包做了标记，标志其属于哪一个请求，其中规定客户端发出的数据流编号为奇数，服务器发出的数据流编号为偶数。客户端还可以指定数据流的优先级，优先级⾼的请求，服务器就先响应该请求)</li>
+</ul>
+</li>
+<li><p>4.<strong>IO多路复用</strong></p>
+<ul>
+<li><p>如:在⼀个连接中，服务器收到了客户端 A 和 B 的两个请求，但是发现在处理 A 的过程中⾮常耗时，索性就先回应 A 已经处理好的部分，再接着回应 B 请求，最后再回应 A 请求剩下的部分。</p>
+</li>
+<li><p>HTTP&#x2F;2 可以在⼀个连接中并发多个请求或回应。</p>
+</li>
+</ul>
+</li>
+<li><p>5.<strong>服务器推送</strong></p>
+<ul>
+<li>服务器可以主动向客户端发送请求</li>
+</ul>
+</li>
+</ul>
+<h4 id="HTTP3-和-HTTP2-的区别是什么？"><a href="#HTTP3-和-HTTP2-的区别是什么？" class="headerlink" title="HTTP3 和 HTTP2 的区别是什么？"></a><strong>HTTP3</strong> <strong>和</strong> <strong>HTTP2</strong> <strong>的区别是什么？</strong></h4><p><img src="https://img-blog.csdnimg.cn/113dda52ffc044a3bc0df373a4d37e27.png" alt="img"></p>
+<ul>
+<li><p>1.协议不同</p>
+<ul>
+<li><p>HTTP2 是基于 TCP 协议实现的</p>
+</li>
+<li><p>HTTP3 是基于 UDP 协议实现的</p>
+</li>
+</ul>
+</li>
+<li><p>2.QUIC</p>
+<ul>
+<li>HTTP3 新增了 QUIC 协议来实现可靠性的传输</li>
+</ul>
+</li>
+<li><p>3.握手次数</p>
+<ul>
+<li><p>HTTP2 是基于 HTTPS 实现的，建立连接需要先进行 TCP 3次握手，然后再进行 <strong>TLS 3次握手</strong>，总共6次握手</p>
+</li>
+<li><p>HTTP3 只需要 QUIC 的3次握手</p>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="HTTP和HTTPS的区别"><a href="#HTTP和HTTPS的区别" class="headerlink" title="HTTP和HTTPS的区别"></a>HTTP和HTTPS的区别</h3><ol>
 <li>HTTP协议是以明文的方式在网络中传输数据，而HTTPS协议传输的数据则是经过TLS加密后的，HTTPS具有更高的安全性</li>
 <li>HTTPS在TCP三次握手阶段之后，还需要进行SSL的handshake，协商加密使用的对称加密密钥</li>
 <li>HTTPS协议需要服务端申请证书，浏览器端安装对应的根证书</li>
 <li>HTTP协议端口是80，HTTPS协议端口是443</li>
 </ol>
+<h3 id="QUIC"><a href="#QUIC" class="headerlink" title="QUIC"></a>QUIC</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/405387352">https://zhuanlan.zhihu.com/p/405387352</a></p>
 <h3 id="对称-x2F-非对称加密算法在HTTPS协议中的应用"><a href="#对称-x2F-非对称加密算法在HTTPS协议中的应用" class="headerlink" title="对称&#x2F;非对称加密算法在HTTPS协议中的应用"></a>对称&#x2F;非对称加密算法在HTTPS协议中的应用</h3><ol>
 <li><strong>客户端发起HTTPS请求</strong><br>这个没什么好说的，就是用户在浏览器里输入一个https网址，然后连接到server的443端口。</li>
 <li><strong>服务端的配置</strong><br>采用HTTPS协议的服务器必须要有一套数字证书，可以自己制作，也可以向组织申请。区别就是自己颁发的证书需要客户端验证通过，才可以继续访问，而使用受信任的公司申请的证书则不会弹出提示页面(startssl就是个不错的选择，有1年的免费服务)。这套证书其实就是一对公钥和私钥。如果对公钥和私钥不太理解，可以想象成一把钥匙和一个锁头，只是全世界只有你一个人有这把钥匙，你可以把锁头给别人，别人可以用这个锁把重要的东西锁起来，然后发给你，因为只有你一个人有这把钥匙，所以只有你才能看到被这把锁锁起来的东西。</li>
@@ -592,19 +765,6 @@
 <p>非对称加密</p>
 <h4 id="HTTPS缺点："><a href="#HTTPS缺点：" class="headerlink" title="HTTPS缺点："></a>HTTPS缺点：</h4><p>HTTPS握手阶段延时较高：由于在进行HTTP会话之前还需要进行SSL握手，因此HTTPS协议握手阶段延时增加</p>
 <p>HTTPS部署成本高：一方面HTTPS协议需要使用证书来验证自身的安全性，所以需要购买CA证书；另一方面由于采用HTTPS协议需要进行加解密的计算，占用CPU资源较多，需要的服务器配置或数目高</p>
-<h3 id="GET和POST的区别"><a href="#GET和POST的区别" class="headerlink" title="GET和POST的区别"></a>GET和POST的区别</h3><p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
-<p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）</p>
-<p>区别：</p>
-<ol>
-<li>get参数通过url传递，post放在request body中。</li>
-<li>get请求在url中传递的参数是有长度限制的，而post没有。</li>
-<li>get比post更不安全，因为参数直接暴露在url中，所以不能用来传递敏感信息。</li>
-<li>get请求只能进行url编码，而post支持多种编码方式。</li>
-<li>get请求会浏览器主动cache，而post支持多种编码方式。</li>
-<li>get请求参数会被完整保留在浏览历史记录里，而post中的参数不会被保留。</li>
-<li>GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器&#x2F;服务器的限制，导致他们在应用过程中体现出一些不同。</li>
-<li>GET产生一个TCP数据包；POST产生两个TCP数据包。</li>
-</ol>
 <h3 id="HTTP返回码"><a href="#HTTP返回码" class="headerlink" title="HTTP返回码"></a>HTTP返回码</h3><table>
 <thead>
 <tr>
@@ -681,26 +841,26 @@
 <li>SYN cookies技术</li>
 </ul>
 <h2 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h2><p><img src="https://z3.ax1x.com/2021/04/09/cNCT1O.png" alt="cNCT1O.png"></p>
-<h1 id="总体问题"><a href="#总体问题" class="headerlink" title="总体问题"></a>总体问题</h1><h2 id="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><a href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的" class="headerlink" title="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"></a>搜索baidu，会用到计算机网络中的什么层？每层是干什么的</h2><p>浏览器中输入URL<br>浏览器要将URL解析为IP地址，解析域名就要用到DNS协议，首先主机会查询DNS的缓存，如果没有就给本地DNS发送查询请求。DNS查询分为两种方式，一种是递归查询，一种是迭代查询。如果是迭代查询，本地的DNS服务器，向根域名服务器发送查询请求，根域名服务器告知该域名的一级域名服务器，然后本地服务器给该一级域名服务器发送查询请求，然后依次类推直到查询到该域名的IP地址。DNS服务器是基于UDP的，因此会用到UDP协议。</p>
-<p>得到IP地址后，浏览器就要与服务器建立一个http连接。因此要用到http协议，http协议报文格式上面已经提到。http生成一个get请求报文，将该报文传给TCP层处理，所以还会用到TCP协议。如果采用https还会使用https协议先对http数据进行加密。TCP层如果有需要先将HTTP数据包分片，分片依据路径MTU和MSS。TCP的数据包然后会发送给IP层，用到IP协议。IP层通过路由选路，一跳一跳发送到目的地址。当然在一个网段内的寻址是通过以太网协议实现(也可以是其他物理层协议，比如PPP，SLIP)，以太网协议需要直到目的IP地址的物理地址，有需要ARP协议。</p>
+<h1 id="总体问题"><a href="#总体问题" class="headerlink" title="总体问题"></a>总体问题</h1><h2 id="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"><a href="#搜索baidu，会用到计算机网络中的什么层？每层是干什么的" class="headerlink" title="搜索baidu，会用到计算机网络中的什么层？每层是干什么的"></a>搜索baidu，会用到计算机网络中的什么层？每层是干什么的</h2><p>浏览器中输入URL<br>浏览器要将URL解析为IP地址，解析域名就要用到DNS协议，首先主机会查询DNS的缓存，如果没有就给本地DNS发送查询请求。DNS查询分为两种方式，一种是<strong>递归查询</strong>，一种是<strong>迭代查询</strong>。如果是迭代查询，本地的DNS服务器，向根域名服务器发送查询请求，根域名服务器告知该域名的一级域名服务器，然后本地服务器给该一级域名服务器发送查询请求，然后依次类推直到查询到该域名的IP地址。DNS服务器是基于UDP的，因此会用到UDP协议。</p>
+<p>得到IP地址后，浏览器就要与服务器建立一个http连接。因此要用到http协议，http协议报文格式上面已经提到。http生成一个get请求报文，将该报文传给TCP层处理，所以还会用到TCP协议。如果采用https还会使用https协议先对http数据进行加密。TCP层如果有需要先将HTTP数据包分片，分片依据路径MTU和MSS。TCP的数据包然后会发送给IP层，用到IP协议。IP层通过<strong>路由选路</strong>，一跳一跳发送到目的地址。当然在一个网段内的寻址是通过以<strong>太网协议实现</strong>(也可以是其他物理层协议，比如PPP，SLIP)，以太网协议需要知道目的IP地址的物理地址，有需要<strong>ARP协议</strong>。</p>
 <p>其中：</p>
 <ol>
 <li>DNS协议，http协议，https协议属于应用层</li>
 </ol>
 <p>应用层是体系结构中的最高层。应用层确定进程之间通信的性质以满足用户的需要。这里的进程就是指正在运行的程序。应用层不仅要提供应用进程所需要的信息交换和远地操作，而且还要作为互相作用的应用进程的用户代理，来完成一些为进行语义上有意义的信息交换所必须的功能。应用层直接为用户的应用进程提供服务。</p>
-<ol>
+<ol start="2">
 <li>TCP&#x2F;UDP属于传输层</li>
 </ol>
 <p>传输层的任务就是负责主机中两个进程之间的通信。因特网的传输层可使用两种不同协议：即面向连接的传输控制协议TCP，和无连接的用户数据报协议UDP。面向连接的服务能够提供可靠的交付，但无连接服务则不保证提供可靠的交付，它只是“尽最大努力交付”。这两种服务方式都很有用，备有其优缺点。在分组交换网内的各个交换结点机都没有传输层。</p>
-<ol>
+<ol start="3">
 <li>IP协议，ARP协议属于网络层</li>
 </ol>
 <p>网络层负责为分组交换网上的不同主机提供通信。在发送数据时，网络层将运输层产生的报文段或用户数据报封装成分组或包进行传送。在TCP&#x2F;IP体系中，分组也叫作IP数据报，或简称为数据报。网络层的另一个任务就是要选择合适的路由，使源主机运输层所传下来的分组能够交付到目的主机。</p>
-<ol>
+<ol start="4">
 <li>数据链路层</li>
 </ol>
 <p>当发送数据时，数据链路层的任务是将在网络层交下来的IP数据报组装成帧，在两个相邻结点间的链路上传送以帧为单位的数据。每一帧包括数据和必要的控制信息（如同步信息、地址信息、差错控制、以及流量控制信息等）。控制信息使接收端能够知道—个帧从哪个比特开始和到哪个比特结束。控制信息还使接收端能够检测到所收到的帧中有无差错。</p>
-<ol>
+<ol start="5">
 <li>物理层</li>
 </ol>
 <p>物理层的任务就是透明地传送比特流。在物理层上所传数据的单位是比特。传递信息所利用的一些物理媒体，如双绞线、同轴电缆、光缆等，并不在物理层之内而是在物理层的下面。因此也有人把物理媒体当做第0层。</p>
@@ -791,7 +951,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-x2F-IP%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">5.</span> <span class="nav-text">传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">5.1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">5.1.1.</span> <span class="nav-text">TCP如何保证可靠性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">第一种回答</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">第二种回答</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.3.</span> <span class="nav-text">第三种回答</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.2.</span> <span class="nav-text">流量控制原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-%E5%88%A9%E7%94%A8%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%AE%9E%E7%8E%B0%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">TCP 利用滑动窗口实现流量控制的机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.3.</span> <span class="nav-text">拥塞控制原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%92%8C%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">5.1.4.</span> <span class="nav-text">如何区分流量控制和拥塞控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%A4%B4%E9%83%A8"><span class="nav-number">5.1.5.</span> <span class="nav-text">TCP头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-number">5.1.6.</span> <span class="nav-text">TCP的三次握手四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81TCP%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">5.1.6.1.</span> <span class="nav-text">常见TCP的连接状态有哪些？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%9A"><span class="nav-number">5.1.6.2.</span> <span class="nav-text">三次握手：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">5.1.6.3.</span> <span class="nav-text">三次握手的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SYN%E6%94%BB%E5%87%BB"><span class="nav-number">5.1.6.4.</span> <span class="nav-text">SYN攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%9A"><span class="nav-number">5.1.6.5.</span> <span class="nav-text">四次挥手：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">5.1.6.6.</span> <span class="nav-text">四次挥手的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E9%87%8A%E6%94%BE%E8%BF%9E%E6%8E%A5%E6%97%B6%EF%BC%8C%E7%AD%89%E5%BE%852MSL%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">5.1.6.7.</span> <span class="nav-text">四次挥手释放连接时，等待2MSL的意义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E7%B2%98%E5%8C%85%E9%97%AE%E9%A2%98%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E4%BD%A0%E4%BC%9A%E5%A6%82%E4%BD%95%E5%8E%BB%E8%A7%A3%E5%86%B3%E5%AE%83%EF%BC%9F"><span class="nav-number">5.1.7.</span> <span class="nav-text">TCP粘包问题是什么？你会如何去解决它？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDos-%E6%94%BB%E5%87%BB%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="nav-number">5.1.8.</span> <span class="nav-text">DDos 攻击了解吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">5.2.</span> <span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.2.1.</span> <span class="nav-text">TCP和UDP的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP%E7%9A%84%E7%89%B9%E7%82%B9%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%88%E9%99%84%E8%B5%A0TCP%E7%9A%84%E7%89%B9%E7%82%B9%EF%BC%89"><span class="nav-number">5.2.1.1.</span> <span class="nav-text">UDP的特点有哪些（附赠TCP的特点）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.2.2.</span> <span class="nav-text">TCP对应的应用层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.2.3.</span> <span class="nav-text">UDP对应的应用层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%BF%9B%E8%A1%8CUDP%E7%BC%96%E7%A8%8B%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E4%B8%80%E6%AC%A1%E5%8F%91%E9%80%81%E5%A4%9A%E5%B0%91bytes%E5%A5%BD"><span class="nav-number">5.2.4.</span> <span class="nav-text">在进行UDP编程的时候，一次发送多少bytes好</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">6.1.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">6.1.1.</span> <span class="nav-text">DNS是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">6.1.2.</span> <span class="nav-text">工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">6.2.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">6.2.1.</span> <span class="nav-text">HTTP请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E5%92%8CHTTPS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.2.2.</span> <span class="nav-text">HTTP和HTTPS的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0-x2F-%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E5%9C%A8HTTPS%E5%8D%8F%E8%AE%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.2.3.</span> <span class="nav-text">对称&#x2F;非对称加密算法在HTTPS协议中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET-%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E5%86%99%E6%B3%95%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%9A%84%E5%90%97%EF%BC%9F"><span class="nav-number">6.2.4.</span> <span class="nav-text">GET 方法参数写法是固定的吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET-%E6%96%B9%E6%B3%95%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6%E6%98%AF%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B%EF%BC%9F"><span class="nav-number">6.2.5.</span> <span class="nav-text">GET 方法的长度限制是怎么回事？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST-%E6%96%B9%E6%B3%95%E6%AF%94-GET-%E6%96%B9%E6%B3%95%E5%AE%89%E5%85%A8%EF%BC%9F"><span class="nav-number">6.2.6.</span> <span class="nav-text">POST 方法比 GET 方法安全？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST-%E6%96%B9%E6%B3%95%E4%BC%9A%E4%BA%A7%E7%94%9F%E4%B8%A4%E4%B8%AA-TCP-%E6%95%B0%E6%8D%AE%E5%8C%85%EF%BC%9F%E4%BD%A0%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="nav-number">6.2.7.</span> <span class="nav-text">POST 方法会产生两个 TCP 数据包？你了解吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET%E4%B8%8EPOST%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%80%E5%A4%A7%E9%95%BF%E5%BA%A6%E8%83%BD%E5%A4%9F%E8%BE%BE%E5%88%B0%E5%A4%9A%E5%B0%91%E5%91%A2"><span class="nav-number">6.2.8.</span> <span class="nav-text">GET与POST传递数据的最大长度能够达到多少呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E4%B8%8ESession%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">6.2.9.</span> <span class="nav-text">Cookie与Session的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie"><span class="nav-number">6.2.9.1.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session"><span class="nav-number">6.2.9.2.</span> <span class="nav-text">Session</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">6.2.10.</span> <span class="nav-text">HTTPS的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="nav-number">6.2.10.1.</span> <span class="nav-text">HTTPS优点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-number">6.2.10.2.</span> <span class="nav-text">HTTPS缺点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET%E5%92%8CPOST%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.2.11.</span> <span class="nav-text">GET和POST的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E8%BF%94%E5%9B%9E%E7%A0%81"><span class="nav-number">6.2.12.</span> <span class="nav-text">HTTP返回码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1xx-%E4%BF%A1%E6%81%AF"><span class="nav-number">6.2.12.1.</span> <span class="nav-text">1xx 信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2xx-%E6%88%90%E5%8A%9F"><span class="nav-number">6.2.12.2.</span> <span class="nav-text">2xx 成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3xx-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">6.2.12.3.</span> <span class="nav-text">3xx 重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4xx-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%94%99%E8%AF%AF"><span class="nav-number">6.2.12.4.</span> <span class="nav-text">4xx 客户端错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5xx-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%94%99%E8%AF%AF"><span class="nav-number">6.2.12.5.</span> <span class="nav-text">5xx 服务器错误</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-number">6.3.</span> <span class="nav-text">安全相关问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS%E6%94%BB%E5%87%BB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.3.1.</span> <span class="nav-text">XSS攻击是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF%E6%94%BB%E5%87%BB%EF%BC%9F%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F"><span class="nav-number">6.3.2.</span> <span class="nav-text">CSRF攻击？你知道吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E8%8C%83CSRF%E6%94%BB%E5%87%BB"><span class="nav-number">6.3.3.</span> <span class="nav-text">如何防范CSRF攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%98%AF%E5%A6%82%E4%BD%95%E5%8F%91%E7%94%9F%E7%9A%84%EF%BC%9F%E4%BD%A0%E6%9C%89%E7%BB%8F%E5%8E%86%E8%BF%87%E5%90%97%EF%BC%9F"><span class="nav-number">6.3.4.</span> <span class="nav-text">文件上传漏洞是如何发生的？你有经历过吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E8%8C%83%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E"><span class="nav-number">6.3.5.</span> <span class="nav-text">如何防范文件上传漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDos-%E6%94%BB%E5%87%BB%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F-1"><span class="nav-number">6.3.6.</span> <span class="nav-text">DDos 攻击了解吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SYN%E6%94%BB%E5%87%BB-1"><span class="nav-number">6.3.7.</span> <span class="nav-text">SYN攻击</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">6.4.</span> <span class="nav-text">DHCP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">总体问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2baidu%EF%BC%8C%E4%BC%9A%E7%94%A8%E5%88%B0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E4%BB%80%E4%B9%88%E5%B1%82%EF%BC%9F%E6%AF%8F%E5%B1%82%E6%98%AF%E5%B9%B2%E4%BB%80%E4%B9%88%E7%9A%84"><span class="nav-number">7.1.</span> <span class="nav-text">搜索baidu，会用到计算机网络中的什么层？每层是干什么的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E5%B1%82%E8%A1%A8%E7%A4%BA%E5%B1%82"><span class="nav-number">7.2.</span> <span class="nav-text">会话层表示层</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-x2F-IP%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">链路层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">5.</span> <span class="nav-text">传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">5.1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">5.1.1.</span> <span class="nav-text">TCP如何保证可靠性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">第一种回答</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">第二种回答</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%A7%8D%E5%9B%9E%E7%AD%94"><span class="nav-number">5.1.1.3.</span> <span class="nav-text">第三种回答</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.2.</span> <span class="nav-text">流量控制原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP-%E5%88%A9%E7%94%A8%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%AE%9E%E7%8E%B0%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">TCP 利用滑动窗口实现流量控制的机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86"><span class="nav-number">5.1.3.</span> <span class="nav-text">拥塞控制原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8C%BA%E5%88%86%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6%E5%92%8C%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">5.1.4.</span> <span class="nav-text">如何区分流量控制和拥塞控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%A4%B4%E9%83%A8"><span class="nav-number">5.1.5.</span> <span class="nav-text">TCP头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E7%9A%84%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-number">5.1.6.</span> <span class="nav-text">TCP的三次握手四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81TCP%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">5.1.6.1.</span> <span class="nav-text">常见TCP的连接状态有哪些？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%9A"><span class="nav-number">5.1.6.2.</span> <span class="nav-text">三次握手：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">5.1.6.3.</span> <span class="nav-text">三次握手的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SYN%E6%94%BB%E5%87%BB"><span class="nav-number">5.1.6.4.</span> <span class="nav-text">SYN攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%9A"><span class="nav-number">5.1.6.5.</span> <span class="nav-text">四次挥手：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">5.1.6.6.</span> <span class="nav-text">四次挥手的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E9%87%8A%E6%94%BE%E8%BF%9E%E6%8E%A5%E6%97%B6%EF%BC%8C%E7%AD%89%E5%BE%852MSL%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">5.1.6.7.</span> <span class="nav-text">四次挥手释放连接时，等待2MSL的意义</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">5.1.7.</span> <span class="nav-text">TCP 半连接队列和全连接队列是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%98%E5%8C%85-x2F-%E6%8B%86%E5%8C%85%E6%98%AF%E6%80%8E%E4%B9%88%E5%8F%91%E7%94%9F%E7%9A%84%EF%BC%9F%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E8%BF%99%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">5.1.8.</span> <span class="nav-text">粘包&#x2F;拆包是怎么发生的？怎么解决这个问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDos-%E6%94%BB%E5%87%BB%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="nav-number">5.1.9.</span> <span class="nav-text">DDos 攻击了解吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">5.2.</span> <span class="nav-text">UDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.2.1.</span> <span class="nav-text">TCP和UDP的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UDP%E7%9A%84%E7%89%B9%E7%82%B9%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%88%E9%99%84TCP%E7%9A%84%E7%89%B9%E7%82%B9%EF%BC%89"><span class="nav-number">5.2.1.1.</span> <span class="nav-text">UDP的特点有哪些（附TCP的特点）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.2.2.</span> <span class="nav-text">TCP对应的应用层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP%E5%AF%B9%E5%BA%94%E7%9A%84%E5%BA%94%E7%94%A8%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.2.3.</span> <span class="nav-text">UDP对应的应用层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E8%BF%9B%E8%A1%8CUDP%E7%BC%96%E7%A8%8B%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E4%B8%80%E6%AC%A1%E5%8F%91%E9%80%81%E5%A4%9A%E5%B0%91bytes%E5%A5%BD"><span class="nav-number">5.2.4.</span> <span class="nav-text">在进行UDP编程的时候，一次发送多少bytes好</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">应用层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS"><span class="nav-number">6.1.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">6.1.1.</span> <span class="nav-text">DNS是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">6.1.2.</span> <span class="nav-text">工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">6.2.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">6.2.1.</span> <span class="nav-text">HTTP请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E7%9A%84%E4%B8%8D%E5%90%8C%E7%89%88%E6%9C%AC"><span class="nav-number">6.2.2.</span> <span class="nav-text">HTTP的不同版本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP1-1-%E5%92%8C-HTTP1-0-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">6.2.2.1.</span> <span class="nav-text">HTTP1.1 和 HTTP1.0 的区别有哪些？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP2-%E5%92%8C-HTTP1-1-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.2.2.2.</span> <span class="nav-text">HTTP2 和 HTTP1.1 的区别是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP3-%E5%92%8C-HTTP2-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.2.2.3.</span> <span class="nav-text">HTTP3 和 HTTP2 的区别是什么？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E5%92%8CHTTPS%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">6.2.3.</span> <span class="nav-text">HTTP和HTTPS的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QUIC"><span class="nav-number">6.2.4.</span> <span class="nav-text">QUIC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0-x2F-%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E5%9C%A8HTTPS%E5%8D%8F%E8%AE%AE%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.2.5.</span> <span class="nav-text">对称&#x2F;非对称加密算法在HTTPS协议中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET-%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E5%86%99%E6%B3%95%E6%98%AF%E5%9B%BA%E5%AE%9A%E7%9A%84%E5%90%97%EF%BC%9F"><span class="nav-number">6.2.6.</span> <span class="nav-text">GET 方法参数写法是固定的吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET-%E6%96%B9%E6%B3%95%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6%E6%98%AF%E6%80%8E%E4%B9%88%E5%9B%9E%E4%BA%8B%EF%BC%9F"><span class="nav-number">6.2.7.</span> <span class="nav-text">GET 方法的长度限制是怎么回事？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST-%E6%96%B9%E6%B3%95%E6%AF%94-GET-%E6%96%B9%E6%B3%95%E5%AE%89%E5%85%A8%EF%BC%9F"><span class="nav-number">6.2.8.</span> <span class="nav-text">POST 方法比 GET 方法安全？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POST-%E6%96%B9%E6%B3%95%E4%BC%9A%E4%BA%A7%E7%94%9F%E4%B8%A4%E4%B8%AA-TCP-%E6%95%B0%E6%8D%AE%E5%8C%85%EF%BC%9F%E4%BD%A0%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="nav-number">6.2.9.</span> <span class="nav-text">POST 方法会产生两个 TCP 数据包？你了解吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET%E4%B8%8EPOST%E4%BC%A0%E9%80%92%E6%95%B0%E6%8D%AE%E7%9A%84%E6%9C%80%E5%A4%A7%E9%95%BF%E5%BA%A6%E8%83%BD%E5%A4%9F%E8%BE%BE%E5%88%B0%E5%A4%9A%E5%B0%91%E5%91%A2"><span class="nav-number">6.2.10.</span> <span class="nav-text">GET与POST传递数据的最大长度能够达到多少呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E4%B8%8ESession%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">6.2.11.</span> <span class="nav-text">Cookie与Session的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cookie"><span class="nav-number">6.2.11.1.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Session"><span class="nav-number">6.2.11.2.</span> <span class="nav-text">Session</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">6.2.12.</span> <span class="nav-text">HTTPS的优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="nav-number">6.2.12.1.</span> <span class="nav-text">HTTPS优点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTPS%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-number">6.2.12.2.</span> <span class="nav-text">HTTPS缺点：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E8%BF%94%E5%9B%9E%E7%A0%81"><span class="nav-number">6.2.13.</span> <span class="nav-text">HTTP返回码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1xx-%E4%BF%A1%E6%81%AF"><span class="nav-number">6.2.13.1.</span> <span class="nav-text">1xx 信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2xx-%E6%88%90%E5%8A%9F"><span class="nav-number">6.2.13.2.</span> <span class="nav-text">2xx 成功</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3xx-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">6.2.13.3.</span> <span class="nav-text">3xx 重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4xx-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%94%99%E8%AF%AF"><span class="nav-number">6.2.13.4.</span> <span class="nav-text">4xx 客户端错误</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5xx-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%94%99%E8%AF%AF"><span class="nav-number">6.2.13.5.</span> <span class="nav-text">5xx 服务器错误</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="nav-number">6.3.</span> <span class="nav-text">安全相关问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XSS%E6%94%BB%E5%87%BB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.3.1.</span> <span class="nav-text">XSS攻击是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF%E6%94%BB%E5%87%BB%EF%BC%9F%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F"><span class="nav-number">6.3.2.</span> <span class="nav-text">CSRF攻击？你知道吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E8%8C%83CSRF%E6%94%BB%E5%87%BB"><span class="nav-number">6.3.3.</span> <span class="nav-text">如何防范CSRF攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%98%AF%E5%A6%82%E4%BD%95%E5%8F%91%E7%94%9F%E7%9A%84%EF%BC%9F%E4%BD%A0%E6%9C%89%E7%BB%8F%E5%8E%86%E8%BF%87%E5%90%97%EF%BC%9F"><span class="nav-number">6.3.4.</span> <span class="nav-text">文件上传漏洞是如何发生的？你有经历过吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E8%8C%83%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E"><span class="nav-number">6.3.5.</span> <span class="nav-text">如何防范文件上传漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DDos-%E6%94%BB%E5%87%BB%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F-1"><span class="nav-number">6.3.6.</span> <span class="nav-text">DDos 攻击了解吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SYN%E6%94%BB%E5%87%BB-1"><span class="nav-number">6.3.7.</span> <span class="nav-text">SYN攻击</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-number">6.4.</span> <span class="nav-text">DHCP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E9%97%AE%E9%A2%98"><span class="nav-number">7.</span> <span class="nav-text">总体问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2baidu%EF%BC%8C%E4%BC%9A%E7%94%A8%E5%88%B0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E4%BB%80%E4%B9%88%E5%B1%82%EF%BC%9F%E6%AF%8F%E5%B1%82%E6%98%AF%E5%B9%B2%E4%BB%80%E4%B9%88%E7%9A%84"><span class="nav-number">7.1.</span> <span class="nav-text">搜索baidu，会用到计算机网络中的什么层？每层是干什么的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E5%B1%82%E8%A1%A8%E7%A4%BA%E5%B1%82"><span class="nav-number">7.2.</span> <span class="nav-text">会话层表示层</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
